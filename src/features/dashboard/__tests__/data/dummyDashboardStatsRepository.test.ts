@@ -28,7 +28,7 @@ const snapshots: DailyDashboardSnapshot[] = [
 describe("DummyDashboardStatsRepository", () => {
   it("returns only snapshots inside the requested range", async () => {
     const repository = new DummyDashboardStatsRepository(snapshots);
-    const result = await repository.getDailySnapshots({
+    const result = await repository.getDailySnapshots(42, {
       preset: "last_7_days",
       fromDate: "2026-08-11",
       toDate: "2026-08-12",

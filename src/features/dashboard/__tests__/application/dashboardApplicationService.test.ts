@@ -30,7 +30,7 @@ describe("DashboardApplicationService", () => {
   });
 
   it("aggregates rates, sales, and series from current and previous snapshots", async () => {
-    repository.getDailySnapshots.mockImplementation(async (range) => {
+    repository.getDailySnapshots.mockImplementation(async (_partnerId, range) => {
       if (range.fromDate === "2026-08-12") {
         return [
           snapshot("2026-08-12", {
@@ -64,7 +64,7 @@ describe("DashboardApplicationService", () => {
       ];
     });
 
-    const overview = await service.getOverview({
+    const overview = await service.getOverview(42, {
       preset: "last_7_days",
       fromDate: "2026-08-12",
       toDate: "2026-08-13",
@@ -83,11 +83,21 @@ describe("DashboardApplicationService", () => {
 
   it("rejects an inverted date range", async () => {
     await expect(
-      service.getOverview({
+      service.getOverview(42, {
         preset: "last_7_days",
         fromDate: "2026-08-18",
         toDate: "2026-08-01",
       })
     ).rejects.toMatchObject({ code: "DASHBOARD_RANGE_INVALID" });
+  });
+
+  it("rejects a missing partner id", async () => {
+    await expect(
+      service.getOverview(0, {
+        preset: "last_7_days",
+        fromDate: "2026-08-01",
+        toDate: "2026-08-07",
+      })
+    ).rejects.toMatchObject({ code: "DASHBOARD_PARTNER_REQUIRED" });
   });
 });

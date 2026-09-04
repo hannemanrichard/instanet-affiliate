@@ -1,0 +1,3 @@
+{
+  "installCommand": "echo \"//npm.hugeicons.com/:_authToken=${NPM_TOKEN}\" >> .npmrc && yarn install"
+}

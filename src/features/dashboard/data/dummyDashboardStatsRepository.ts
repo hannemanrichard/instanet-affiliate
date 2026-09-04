@@ -10,12 +10,14 @@ const isWithinRange = (
   range: DashboardDateRange
 ) => date >= range.fromDate && date <= range.toDate;
 
+/** Test/fixture repository — not used in production. */
 export class DummyDashboardStatsRepository implements DashboardStatsRepository {
   constructor(
     private readonly snapshots: DailyDashboardSnapshot[] = DUMMY_DAILY_SNAPSHOTS
   ) {}
 
   async getDailySnapshots(
+    _partnerId: number,
     range: DashboardDateRange
   ): Promise<DailyDashboardSnapshot[]> {
     return this.snapshots.filter((snapshot) =>

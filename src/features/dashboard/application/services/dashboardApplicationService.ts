@@ -1,4 +1,4 @@
-import { DummyDashboardStatsRepository } from "../../data";
+import { SupabaseDashboardStatsRepository } from "../../data";
 import type {
   DailyDashboardSnapshot,
   DashboardDateRange,
@@ -80,8 +80,18 @@ const buildSalesStat = (
 export class DashboardApplicationService {
   constructor(private readonly statsRepository: DashboardStatsRepository) {}
 
-  async getOverview(range: DashboardDateRange): Promise<DashboardOverview> {
+  async getOverview(
+    partnerId: number,
+    range: DashboardDateRange
+  ): Promise<DashboardOverview> {
     try {
+      if (!partnerId) {
+        throw new DashboardError(
+          "Partner id is required",
+          "DASHBOARD_PARTNER_REQUIRED"
+        );
+      }
+
       if (!range.fromDate || !range.toDate) {
         throw new DashboardError(
           "A date range is required",
@@ -98,8 +108,8 @@ export class DashboardApplicationService {
 
       const previousRange = getPreviousDashboardDateRange(range);
       const [currentSnapshots, previousSnapshots] = await Promise.all([
-        this.statsRepository.getDailySnapshots(range),
-        this.statsRepository.getDailySnapshots(previousRange),
+        this.statsRepository.getDailySnapshots(partnerId, range),
+        this.statsRepository.getDailySnapshots(partnerId, previousRange),
       ]);
 
       return {
@@ -136,8 +146,8 @@ export class DashboardApplicationService {
   }
 }
 
-const dummyStatsRepository = new DummyDashboardStatsRepository();
+const statsRepository = new SupabaseDashboardStatsRepository();
 
 export const dashboardApplicationService = new DashboardApplicationService(
-  dummyStatsRepository
+  statsRepository
 );
