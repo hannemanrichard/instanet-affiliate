@@ -1,0 +1,221 @@
+@import "../design-system/tokens.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  :root {
+    --font-ui: var(--font-montserrat);
+    --font-ui-display: var(--font-montserrat);
+    --font-ui-serif: var(--font-source-serif);
+  }
+
+  /* Arabic: Cairo for every UI face (sans, display, serif utilities). */
+  :root:lang(ar),
+  html[lang="ar"] {
+    --font-ui: var(--font-cairo);
+    --font-ui-display: var(--font-cairo);
+    --font-ui-serif: var(--font-cairo);
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-ui), system-ui, sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-ui-display), system-ui, sans-serif;
+  }
+
+  code,
+  kbd,
+  pre,
+  samp {
+    font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  }
+}
+
+/* Ensure Tailwind font utilities also resolve to Montserrat for en/fr */
+html[lang="en"],
+html[lang="en"] body,
+html[lang="en"] .font-sans,
+html[lang="en"] .font-display,
+html[lang="fr"],
+html[lang="fr"] body,
+html[lang="fr"] .font-sans,
+html[lang="fr"] .font-display {
+  font-family: var(--font-montserrat), system-ui, sans-serif;
+}
+
+/* Ensure Tailwind font utilities also resolve to Cairo in Arabic */
+html[lang="ar"],
+html[lang="ar"] body,
+html[lang="ar"] .font-sans,
+html[lang="ar"] .font-display,
+html[lang="ar"] .font-serif,
+html[lang="ar"] .font-arabic {
+  font-family: var(--font-cairo), system-ui, sans-serif !important;
+}
+
+/* RTL Support */
+[dir="rtl"] {
+  direction: rtl;
+}
+
+[dir="rtl"] .sidebar {
+  right: 0;
+  left: auto;
+}
+
+/* RTL Sidebar positioning */
+[dir="rtl"] [data-side="right"] {
+  right: 0;
+  left: auto;
+}
+
+[dir="rtl"] [data-side="left"] {
+  left: 0;
+  right: auto;
+}
+
+[dir="rtl"] .ml-auto {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+[dir="rtl"] .mr-auto {
+  margin-right: 0;
+  margin-left: auto;
+}
+
+[dir="rtl"] .pl-4 {
+  padding-left: 0;
+  padding-right: 1rem;
+}
+
+[dir="rtl"] .pr-4 {
+  padding-right: 0;
+  padding-left: 1rem;
+}
+
+[dir="rtl"] .pl-6 {
+  padding-left: 0;
+  padding-right: 1.5rem;
+}
+
+[dir="rtl"] .pr-6 {
+  padding-right: 0;
+  padding-left: 1.5rem;
+}
+
+[dir="rtl"] .ml-2 {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+[dir="rtl"] .mr-2 {
+  margin-right: 0;
+  margin-left: 0.5rem;
+}
+
+[dir="rtl"] .ml-4 {
+  margin-left: 0;
+  margin-right: 1rem;
+}
+
+[dir="rtl"] .mr-4 {
+  margin-right: 0;
+  margin-left: 1rem;
+}
+
+/* RTL-specific spacing adjustments */
+[dir="rtl"] .space-x-2 > * + * {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+[dir="rtl"] .space-x-4 > * + * {
+  margin-left: 0;
+  margin-right: 1rem;
+}
+
+[dir="rtl"] .space-x-6 > * + * {
+  margin-left: 0;
+  margin-right: 1.5rem;
+}
+
+/* RTL text alignment for legacy physical utilities */
+[dir="rtl"] .text-left {
+  text-align: right;
+}
+
+[dir="rtl"] .text-right {
+  text-align: left;
+}
+
+/* Hide Vercel Toolbar floating circle */
+vercel-live-feedback,
+#vercel-live-feedback,
+[data-vercel-toolbar],
+iframe[src*="vercel.live"] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Equalizer-style loading bars (primary) */
+.ba-loader {
+  --color-1: hsl(var(--primary));
+  --size: 0.75px;
+
+  color: var(--color-1);
+  position: relative;
+  display: inline-block;
+  font-size: calc(11 * var(--size));
+  background: var(--color-1);
+  animation: ba-escale-y 1s infinite ease-in-out;
+  width: 1em;
+  height: 4em;
+  animation-delay: -0.16s;
+}
+
+.ba-loader::before,
+.ba-loader::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 2em;
+  background: var(--color-1);
+  width: 1em;
+  height: 4em;
+  animation: ba-escale-y 1s infinite ease-in-out;
+}
+
+.ba-loader::before {
+  left: -2em;
+  animation-delay: -0.32s;
+}
+
+@keyframes ba-escale-y {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 0;
+    height: 4em;
+  }
+  40% {
+    box-shadow: 0 -2em;
+    height: 5em;
+  }
+}
+

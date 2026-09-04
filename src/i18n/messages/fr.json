@@ -1,0 +1,1360 @@
+{
+  "navigation": {
+    "home": "Accueil",
+    "dashboard": "Tableau de bord",
+    "back": "Retour",
+    "leads": "Prospects",
+    "partners": "Partenaires",
+    "products": "Produits",
+    "orders": "Commandes",
+    "earnings": "Gains",
+    "parcels": "Colis",
+    "stats": "Statistiques",
+    "balance": "Solde",
+    "balanceAria": "Solde disponible {amount} {currency}",
+    "settings": "Paramètres",
+    "profile": "Profil",
+    "tracking": "Suivi",
+    "productPages": "Pages produits",
+    "inventory": "Inventaire",
+    "workspace": "Espace de travail",
+    "admin": "Admin",
+    "account": "Compte",
+    "logout": "Se déconnecter",
+    "upgradeTitle": "Augmentez vos gains",
+    "upgradeDescription": "Parcourez les produits et créez des commandes pour plus de commissions.",
+    "upgradeCta": "Voir les produits",
+    "profileDescription": "Gérez vos informations de profil.",
+    "settingsDescription": "Gérez vos paramètres de profil et préférences."
+  },
+  "auth": {
+    "signIn": {
+      "title": "Bon retour",
+      "subtitle": "Connectez-vous à votre compte affilié Instanet avec Google.",
+      "submit": "Se connecter",
+      "submitting": "Connexion...",
+      "noAccount": "Pas encore de compte ?",
+      "signUpLink": "Créer un compte"
+    },
+    "signUp": {
+      "title": "Créer votre compte",
+      "subtitle": "Rejoignez Instanet avec Google et commencez à gagner avec l'affiliation.",
+      "submit": "Créer un compte",
+      "submitting": "Création du compte...",
+      "hasAccount": "Vous avez déjà un compte ?",
+      "signInLink": "Se connecter"
+    },
+    "google": {
+      "continue": "Continuer avec Google",
+      "submitting": "Connexion à Google...",
+      "aria": "Continuer avec Google"
+    },
+    "verify": {
+      "title": "Vérifiez votre e-mail",
+      "subtitle": "Entrez le code envoyé à {email}.",
+      "submit": "Vérifier l'e-mail",
+      "submitting": "Vérification..."
+    },
+    "fields": {
+      "email": "E-mail",
+      "emailPlaceholder": "vous@exemple.com",
+      "password": "Mot de passe",
+      "passwordPlaceholder": "Entrez votre mot de passe",
+      "passwordHint": "Utilisez au moins 8 caractères.",
+      "showPassword": "Afficher le mot de passe",
+      "hidePassword": "Masquer le mot de passe",
+      "firstName": "Prénom",
+      "firstNamePlaceholder": "Prénom",
+      "lastName": "Nom",
+      "lastNamePlaceholder": "Nom",
+      "verificationCode": "Code de vérification",
+      "verificationCodePlaceholder": "123456"
+    },
+    "errors": {
+      "signInFailed": "Impossible de se connecter avec Google. Réessayez.",
+      "signUpFailed": "Impossible de créer le compte avec Google. Réessayez.",
+      "verificationFailed": "Code de vérification invalide ou expiré.",
+      "incompleteSignIn": "Une vérification supplémentaire est requise pour terminer la connexion.",
+      "incompleteSignUp": "Des étapes supplémentaires sont requises pour terminer l'inscription."
+    }
+  },
+  "landing": {
+    "nav": {
+      "howItWorks": "Comment ça marche",
+      "features": "Fonctionnalités",
+      "terms": "Conditions",
+      "signIn": "Se connecter",
+      "getStarted": "Commencer",
+      "dashboard": "Tableau de bord",
+      "openMenu": "Ouvrir le menu de navigation"
+    },
+    "hero": {
+      "badge": "Programme d'affiliation",
+      "headline": "Gagnez des commissions en vendant des produits de confiance",
+      "subheadline": "Rejoignez Instanet, partagez des pages produits prêtes à l'emploi, capturez des prospects et soyez payé à la livraison — le tout en paiement à la livraison, sans frais initiaux.",
+      "ctaPrimary": "Commencer à gagner",
+      "ctaSecondary": "Se connecter",
+      "ctaDashboard": "Aller au tableau de bord",
+      "trustLine": "Inscription gratuite · Livraison COD · Suivi en temps réel"
+    },
+    "howItWorks": {
+      "title": "Comment ça marche",
+      "subtitle": "Trois étapes simples vers votre première commission",
+      "steps": {
+        "1": {
+          "title": "Inscrivez-vous gratuitement",
+          "description": "Créez votre compte affilié en quelques minutes avec Google."
+        },
+        "2": {
+          "title": "Choisissez une page produit",
+          "description": "Sélectionnez parmi des pages optimisées pour convertir les visiteurs en commandes COD."
+        },
+        "3": {
+          "title": "Gagnez à la livraison",
+          "description": "Partagez votre page, créez des commandes et touchez votre commission à la livraison."
+        }
+      }
+    },
+    "features": {
+      "title": "Conçu pour la réussite des affiliés",
+      "subtitle": "Tout ce qu'il faut pour grandir sans gérer stock ni logistique",
+      "items": {
+        "commissions": {
+          "title": "Commissions transparentes",
+          "description": "Voyez exactement ce que vous gagnez par produit. Les commissions sont verrouillées à la création de la commande."
+        },
+        "pages": {
+          "title": "Pages prêtes à convertir",
+          "description": "Pages produits préconstruites avec formulaires adaptés au marché COD algérien."
+        },
+        "orders": {
+          "title": "Création de commandes en un clic",
+          "description": "Créez les commandes clients depuis votre tableau de bord — nous gérons la livraison via ZR Express."
+        },
+        "tracking": {
+          "title": "Suivez chaque colis",
+          "description": "Surveillez le statut des commandes et la progression des livraisons depuis un seul tableau de bord."
+        }
+      }
+    },
+    "stats": {
+      "cod": "Prêt pour le COD",
+      "codDesc": "Aucune passerelle de paiement requise",
+      "delivery": "Livraison nationale",
+      "deliveryDesc": "Intégration ZR Express",
+      "free": "Zéro risque de stock",
+      "freeDesc": "Nous livrons — vous vendez"
+    },
+    "cta": {
+      "title": "Prêt à commencer à gagner ?",
+      "subtitle": "Rejoignez Instanet et commencez à vendre en quelques minutes. L'inscription est gratuite et prend moins d'une minute.",
+      "button": "Créer un compte gratuit"
+    },
+    "footer": {
+      "description": "La plateforme d'affiliation pour les partenaires qui vendent mode et lifestyle en paiement à la livraison.",
+      "links": {
+        "terms": "Conditions",
+        "signIn": "Se connecter",
+        "dashboard": "Tableau de bord"
+      },
+      "supportPrompt": "Besoin d'aide ?",
+      "supportEmail": "support@bellami.fashion",
+      "copyright": "© {year} Instanet. Tous droits réservés."
+    }
+  },
+  "forms": {
+    "labels": {
+      "firstName": "Prénom",
+      "lastName": "Nom de famille",
+      "phone": "Téléphone",
+      "email": "E-mail",
+      "name": "Nom",
+      "description": "Description",
+      "category": "Catégorie",
+      "price": "Prix",
+      "quantity": "Quantité",
+      "status": "Statut"
+    },
+    "placeholders": {
+      "enterFirstName": "Entrez le prénom",
+      "enterLastName": "Entrez le nom de famille",
+      "enterPhone": "Entrez le numéro de téléphone",
+      "enterEmail": "Entrez l'adresse e-mail",
+      "enterName": "Entrez le nom",
+      "enterDescription": "Entrez la description",
+      "selectCategory": "Sélectionnez la catégorie",
+      "enterPrice": "Entrez le prix",
+      "enterQuantity": "Entrez la quantité"
+    },
+    "validation": {
+      "required": "Ce champ est requis",
+      "minLength": "Doit contenir au moins {min} caractères",
+      "maxLength": "Doit contenir au plus {max} caractères",
+      "invalidEmail": "Format d'e-mail invalide",
+      "invalidPhone": "Numéro de téléphone invalide",
+      "invalidPrice": "Format de prix invalide",
+      "invalidQuantity": "Format de quantité invalide",
+      "invalidUrl": "Format d'URL invalide",
+      "invalidDate": "Format de date invalide",
+      "firstNameRequired": "Le prénom est requis",
+      "lastNameRequired": "Le nom de famille est requis",
+      "phoneRequired": "Le numéro de téléphone est requis",
+      "emailRequired": "L'e-mail est requis",
+      "nameRequired": "Le nom est requis",
+      "descriptionRequired": "La description est requise",
+      "categoryRequired": "La catégorie est requise",
+      "priceRequired": "Le prix est requis",
+      "quantityRequired": "La quantité est requise",
+      "productRequired": "Le produit est requis",
+      "colorRequired": "La couleur est requise",
+      "sizeRequired": "La taille est requise",
+      "wilayaRequired": "La wilaya est requise",
+      "communeRequired": "La commune est requise",
+      "agencyRequired": "L'agence est requise",
+      "retailPriceRequired": "Le prix de détail est requis",
+      "wholesalePriceRequired": "Le prix de gros est requis",
+      "retailCommissionRequired": "La commission de détail est requise",
+      "wholesaleCommissionRequired": "La commission de gros est requise",
+      "weightRequired": "Le poids est requis",
+      "trackingRequired": "Le numéro de suivi est requis",
+      "firstNamePositive": "Le prénom doit être positif",
+      "lastNamePositive": "Le nom de famille doit être positif",
+      "phonePositive": "Le téléphone doit être positif",
+      "emailPositive": "L'e-mail doit être positif",
+      "namePositive": "Le nom doit être positif",
+      "descriptionPositive": "La description doit être positive",
+      "categoryPositive": "La catégorie doit être positive",
+      "pricePositive": "Le prix doit être positif",
+      "quantityPositive": "La quantité doit être positive",
+      "productPositive": "Le produit doit être positif",
+      "colorPositive": "La couleur doit être positive",
+      "sizePositive": "La taille doit être positive",
+      "wilayaPositive": "La wilaya doit être positive",
+      "communePositive": "La commune doit être positive",
+      "agencyPositive": "L'agence doit être positive",
+      "retailPricePositive": "Le prix de détail doit être positif",
+      "wholesalePricePositive": "Le prix de gros doit être positif",
+      "retailCommissionPositive": "La commission de détail doit être positive",
+      "wholesaleCommissionPositive": "La commission de gros doit être positive",
+      "weightPositive": "Le poids doit être positif",
+      "trackingPositive": "Le numéro de suivi doit être positif",
+      "firstNameMin": "Le prénom doit être au moins {min}",
+      "lastNameMin": "Le nom de famille doit être au moins {min}",
+      "phoneMin": "Le téléphone doit être au moins {min}",
+      "emailMin": "L'e-mail doit être au moins {min}",
+      "nameMin": "Le nom doit être au moins {min}",
+      "descriptionMin": "La description doit être au moins {min}",
+      "categoryMin": "La catégorie doit être au moins {min}",
+      "priceMin": "Le prix doit être au moins {min}",
+      "quantityMin": "La quantité doit être au moins {min}",
+      "productMin": "Le produit doit être au moins {min}",
+      "colorMin": "La couleur doit être au moins {min}",
+      "sizeMin": "La taille doit être au moins {min}",
+      "wilayaMin": "La wilaya doit être au moins {min}",
+      "communeMin": "La commune doit être au moins {min}",
+      "agencyMin": "L'agence doit être au moins {min}",
+      "retailPriceMin": "Le prix de détail doit être au moins {min}",
+      "wholesalePriceMin": "Le prix de gros doit être au moins {min}",
+      "retailCommissionMin": "La commission de détail doit être au moins {min}",
+      "wholesaleCommissionMin": "La commission de gros doit être au moins {min}",
+      "weightMin": "Le poids doit être au moins {min}",
+      "trackingMin": "Le numéro de suivi doit être au moins {min}"
+    }
+  },
+  "actions": {
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "create": "Créer",
+    "update": "Mettre à jour",
+    "view": "Voir",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "export": "Exporter",
+    "import": "Importer",
+    "refresh": "Actualiser",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "submit": "Soumettre",
+    "reset": "Réinitialiser",
+    "close": "Fermer",
+    "confirm": "Confirmer"
+  },
+  "messages": {
+    "success": {
+      "saved": "Enregistré avec succès",
+      "created": "Créé avec succès",
+      "updated": "Mis à jour avec succès",
+      "deleted": "Supprimé avec succès",
+      "exported": "Exporté avec succès",
+      "imported": "Importé avec succès"
+    },
+    "error": {
+      "generic": "Une erreur s'est produite",
+      "network": "Erreur réseau",
+      "validation": "Erreur de validation",
+      "notFound": "Ressource non trouvée",
+      "unauthorized": "Accès non autorisé",
+      "forbidden": "Accès interdit",
+      "serverError": "Erreur serveur"
+    },
+    "loading": "Chargement...",
+    "noData": "Aucune donnée disponible",
+    "noResults": "Aucun résultat trouvé"
+  },
+  "dialogs": {
+    "leadCreation": {
+      "title": "Ajouter un prospect",
+      "description": "Créer un nouveau prospect pour votre client.",
+      "success": "Prospect créé avec succès",
+      "error": "Échec de la création du prospect"
+    },
+    "leadDetails": {
+      "title": "Détails du prospect",
+      "description": "Voir les informations détaillées sur ce prospect.",
+      "edit": "Modifier le prospect",
+      "delete": "Supprimer le prospect"
+    },
+    "leadDeletion": {
+      "title": "Supprimer le prospect",
+      "description": "Êtes-vous sûr de vouloir supprimer ce prospect ? Cette action ne peut pas être annulée.",
+      "confirm": "Oui, supprimer le prospect",
+      "cancel": "Annuler",
+      "success": "Prospect supprimé avec succès",
+      "error": "Échec de la suppression du prospect",
+      "loading": "Suppression..."
+    },
+    "bulkDeletion": {
+      "title": "Supprimer les prospects sélectionnés",
+      "description": "Êtes-vous sûr de vouloir supprimer {count} prospects sélectionnés ? Cette action ne peut pas être annulée.",
+      "confirm": "Oui, supprimer {count} prospects",
+      "cancel": "Annuler",
+      "success": "{count} prospects supprimés avec succès",
+      "error": "Échec de la suppression des prospects",
+      "loading": "Suppression..."
+    },
+    "orderDetails": {
+      "title": "Détails de la commande",
+      "description": "Voir les informations détaillées sur cette commande.",
+      "trackOrder": "Suivre la commande",
+      "updateStatus": "Mettre à jour le statut"
+    },
+    "orderTracking": {
+      "title": "Suivi de commande",
+      "description": "Suivre le statut de livraison de cette commande.",
+      "trackingNumber": "Numéro de suivi",
+      "currentStatus": "Statut actuel",
+      "estimatedDelivery": "Livraison estimée",
+      "deliveryHistory": "Historique de livraison"
+    },
+    "productCreation": {
+      "title": "Ajouter un produit",
+      "description": "Créer un nouveau produit pour votre catalogue.",
+      "success": "Produit créé avec succès",
+      "error": "Échec de la création du produit"
+    },
+    "productDetails": {
+      "title": "Détails du produit",
+      "description": "Voir les informations détaillées sur ce produit.",
+      "edit": "Modifier le produit",
+      "delete": "Supprimer le produit"
+    },
+    "parcelDetails": {
+      "title": "Détails du colis",
+      "description": "Voir les informations détaillées sur ce colis.",
+      "trackParcel": "Suivre le colis",
+      "updateStatus": "Mettre à jour le statut"
+    },
+    "withdrawRequest": {
+      "title": "Demander un retrait",
+      "description": "Demander un retrait de vos gains.",
+      "amount": "Montant",
+      "bankAccount": "Compte bancaire",
+      "confirm": "Demander le retrait",
+      "cancel": "Annuler",
+      "success": "Demande de retrait soumise avec succès",
+      "error": "Échec de la soumission de la demande de retrait"
+    }
+  },
+  "tables": {
+    "columns": {
+      "fullName": "Nom complet",
+      "firstName": "Prénom",
+      "lastName": "Nom de famille",
+      "phone": "Téléphone",
+      "email": "Email",
+      "wilaya": "Wilaya",
+      "commune": "Commune",
+      "product": "Produit",
+      "status": "Statut",
+      "createdAt": "Date de création",
+      "updatedAt": "Date de mise à jour",
+      "actions": "Actions",
+      "orderNumber": "Numéro de commande",
+      "customer": "Client",
+      "total": "Total",
+      "trackingNumber": "Numéro de suivi",
+      "deliveryStatus": "Statut de livraison",
+      "partner": "Partenaire",
+      "commission": "Commission",
+      "weight": "Poids",
+      "category": "Catégorie",
+      "price": "Prix",
+      "quantity": "Quantité",
+      "inventory": "Inventaire",
+      "description": "Description",
+      "thumbnail": "Miniature",
+      "library": "Bibliothèque",
+      "retailPrice": "Prix de détail",
+      "wholesalePrice": "Prix de gros",
+      "retailCommission": "Commission de détail",
+      "wholesaleCommission": "Commission de gros",
+      "retailMinPrice": "Prix minimum de détail",
+      "wholesaleMinPrice": "Prix minimum de gros"
+    },
+    "actions": {
+      "view": "Voir",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "duplicate": "Dupliquer",
+      "export": "Exporter",
+      "import": "Importer",
+      "refresh": "Actualiser",
+      "selectAll": "Tout sélectionner",
+      "deselectAll": "Tout désélectionner",
+      "bulkDelete": "Suppression en masse",
+      "bulkEdit": "Modification en masse",
+      "trackOrder": "Suivre la commande",
+      "viewDetails": "Voir les détails",
+      "addLead": "Ajouter un prospect"
+    },
+    "filters": {
+      "search": "Rechercher",
+      "searchPlaceholder": "Rechercher...",
+      "status": "Statut",
+      "all": "Tous",
+      "initial": "Initial",
+      "notResponding": "Ne répond pas",
+      "unreachable": "Injoignable",
+      "other": "Autre",
+      "confirmed": "Confirmé",
+      "busy": "Occupé",
+      "canceled": "Annulé",
+      "processing": "En cours",
+      "delivered": "Livré",
+      "returned": "Retourné",
+      "partner": "Partenaire",
+      "dateRange": "Plage de dates",
+      "clearFilters": "Effacer les filtres",
+      "applyFilters": "Appliquer les filtres"
+    },
+    "loading": {
+      "error": "Erreur lors du chargement des données"
+    }
+  },
+  "dashboard": {
+    "overview": {
+      "title": "Aperçu du tableau de bord",
+      "welcome": "Bon retour",
+      "totalLeads": "Total des prospects",
+      "totalOrders": "Total des commandes",
+      "totalRevenue": "Revenus totaux",
+      "totalCommissions": "Commissions totales",
+      "recentActivity": "Activité récente",
+      "quickActions": "Actions rapides",
+      "statistics": "Statistiques",
+      "performance": "Performance",
+      "leads": "Prospects",
+      "orders": "Commandes",
+      "multilingual": "Démo multilingue"
+    }
+  },
+  "common": {
+    "language": "Langue",
+    "theme": "Thème",
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système",
+    "yes": "Oui",
+    "no": "Non",
+    "ok": "OK",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "warning": "Avertissement",
+    "info": "Information"
+  },
+  "products": {
+    "labels": {
+      "name": "Nom",
+      "description": "Description",
+      "category": "Catégorie",
+      "retailPrice": "Prix de détail",
+      "wholesalePrice": "Prix de gros",
+      "retailCommission": "Commission de détail",
+      "wholesaleCommission": "Commission de gros",
+      "retailMinPrice": "Prix minimum de détail",
+      "wholesaleMinPrice": "Prix minimum de gros",
+      "weight": "Poids (kg)",
+      "productImage": "Image du produit",
+      "productGallery": "Galerie du produit",
+      "commission": "Commission",
+      "actions": "Actions",
+      "color": "Couleur",
+      "size": "Taille",
+      "inventory": "Inventaire",
+      "noImage": "Aucune image",
+      "gallery": "Galerie",
+      "retail": "Détail",
+      "wholesale": "Gros",
+      "price": "Prix",
+      "productDetails": "Détails du produit"
+    },
+    "placeholders": {
+      "enterName": "Entrez le nom du produit",
+      "enterDescription": "Entrez la description du produit",
+      "selectCategory": "Sélectionnez une catégorie",
+      "enterRetailPrice": "Entrez le prix de détail",
+      "enterWholesalePrice": "Entrez le prix de gros",
+      "enterRetailCommission": "Entrez la commission de détail",
+      "enterWholesaleCommission": "Entrez la commission de gros",
+      "enterWeight": "Entrez le poids en kg",
+      "searchProducts": "Rechercher des produits...",
+      "filterByCategory": "Filtrer par catégorie"
+    },
+    "descriptions": {
+      "retailMinPrice": "Prix minimum autorisé pour les partenaires de détail",
+      "wholesaleMinPrice": "Prix minimum autorisé pour les partenaires de gros",
+      "weight": "Poids du produit en kilogrammes",
+      "viewAndManage": "Voir et gérer les informations du produit"
+    },
+    "buttons": {
+      "addProduct": "Ajouter un produit",
+      "creating": "Création...",
+      "clearFilters": "Effacer les filtres",
+      "viewDetails": "Voir les détails",
+      "editProduct": "Modifier le produit",
+      "deleteProduct": "Supprimer le produit",
+      "addImages": "Ajouter des images",
+      "addItem": "Ajouter un article",
+      "addItems": "Ajouter des articles",
+      "saveItems": "Enregistrer les articles",
+      "uploading": "Téléchargement...",
+      "saveImages": "Enregistrer les images",
+      "downloading": "Téléchargement...",
+      "downloadGallery": "Télécharger la galerie",
+      "backToProducts": "Retour aux produits"
+    },
+    "categories": {
+      "all": "Toutes les catégories",
+      "electronics": "Électronique",
+      "clothing": "Vêtements",
+      "home": "Maison et jardin",
+      "sports": "Sports et plein air",
+      "books": "Livres",
+      "beauty": "Beauté et santé",
+      "toys": "Jouets et jeux"
+    },
+    "validation": {
+      "nameRequired": "Le nom du produit est requis",
+      "descriptionRequired": "La description du produit est requise",
+      "categoryRequired": "La catégorie du produit est requise",
+      "retailPriceRequired": "Le prix de détail est requis",
+      "wholesalePriceRequired": "Le prix de gros est requis",
+      "retailCommissionRequired": "La commission de détail est requise",
+      "wholesaleCommissionRequired": "La commission de gros est requise",
+      "weightRequired": "Le poids du produit est requis",
+      "sizeRequired": "La taille est requise",
+      "colorRequired": "La couleur est requise",
+      "inventoryPositive": "L'inventaire doit être un nombre positif",
+      "itemsRequired": "Au moins un article est requis"
+    },
+    "errors": {
+      "loadingError": "Erreur de chargement du produit",
+      "loadingErrorMessage": "Échec du chargement des détails du produit",
+      "notFound": "Produit introuvable",
+      "notFoundMessage": "Le produit que vous recherchez n'existe pas."
+    },
+    "messages": {
+      "success": "Succès",
+      "error": "Erreur",
+      "downloadSuccess": "Fichiers téléchargés avec succès",
+      "downloadError": "Échec du téléchargement des fichiers"
+    }
+  },
+  "orders": {
+    "labels": {
+      "orderDetails": "Détails de la commande",
+      "orderNumber": "Numéro de commande",
+      "customerName": "Nom du client",
+      "product": "Produit",
+      "quantity": "Quantité",
+      "price": "Prix",
+      "color": "Couleur",
+      "size": "Taille",
+      "orderDate": "Date de commande",
+      "status": "Statut",
+      "deliveryFees": "Frais de livraison",
+      "trackingId": "ID de suivi",
+      "comment": "Commentaire",
+      "orderItems": "Articles de commande",
+      "itemId": "ID de l'article",
+      "fullName": "Nom complet",
+      "phone": "Téléphone",
+      "location": "Localisation",
+      "deliveryInformation": "Informations de livraison",
+      "agency": "Agence",
+      "deliveryCompany": "Société de livraison",
+      "tracking": "Suivi",
+      "pricingInformation": "Informations de prix",
+      "productPrice": "Prix du produit",
+      "totalPrice": "Prix total",
+      "series": "Séries",
+      "noItemsFound": "Aucun article trouvé"
+    },
+    "buttons": {
+      "close": "Fermer",
+      "retry": "Réessayer"
+    },
+    "messages": {
+      "loading": "Chargement des détails de la commande...",
+      "loadingOrderDetails": "Chargement des détails de la commande"
+    },
+    "errors": {
+      "loadingError": "Échec du chargement des détails de la commande",
+      "notFound": "Aucun détail de commande disponible.",
+      "error": "Erreur",
+      "failedToLoad": "Échec du chargement des détails de la commande. Veuillez réessayer."
+    },
+    "types": {
+      "wholesale": "Gros",
+      "retail": "Détail",
+      "order": "Commande"
+    }
+  },
+  "leads": {
+    "sections": {
+      "customerInfo": "Informations client",
+      "orderSummary": "Résumé de la commande"
+    },
+    "forms": {
+      "labels": {
+        "stopdeskDelivery": "Livraison Stopdesk",
+        "wilaya": "Wilaya",
+        "commune": "Commune",
+        "deliveryAgency": "Agence de livraison",
+        "notesOptional": "Notes (optionnel)",
+        "product": "Produit",
+        "quantity": "Quantité",
+        "wholesale": "Gros",
+        "color": "Couleur",
+        "size": "Taille",
+        "subtotal": "Sous-total",
+        "totalWeight": "Poids total",
+        "deliveryFee": "Frais de livraison",
+        "totalAmount": "Montant total",
+        "estimatedDelivery": "Livraison estimée"
+      },
+      "placeholders": {
+        "selectWilaya": "Sélectionner une wilaya",
+        "selectCommune": "Sélectionner une commune",
+        "selectAgency": "Sélectionner une agence",
+        "addNotes": "Ajouter des notes supplémentaires...",
+        "selectProduct": "Sélectionner un produit",
+        "selectColor": "Sélectionner une couleur",
+        "selectSize": "Sélectionner une taille"
+      },
+      "descriptions": {
+        "stopdeskDelivery": "Livrer au stopdesk au lieu de la maison",
+        "wholesalePricing": "Activer pour les prix de gros"
+      }
+    },
+    "buttons": {
+      "addLead": "Ajouter un prospect",
+      "createLead": "Créer un prospect",
+      "creatingLead": "Création du prospect...",
+      "addProduct": "Ajouter un produit"
+    },
+    "descriptions": {
+      "createNewLead": "Créer un nouveau prospect pour votre client."
+    }
+  },
+  "payouts": {
+    "labels": {
+      "currentBalance": "Solde actuel",
+      "activeBalance": "Solde actif",
+      "totalEarnings": "Gains totaux",
+      "totalPaid": "Total payé",
+      "recentPayments": "Paiements récents",
+      "paymentStatistics": "Statistiques des paiements (Dernière année)",
+      "requestWithdraw": "Demander un retrait",
+      "amount": "Montant (DA)"
+    },
+    "buttons": {
+      "requestWithdraw": "Demander un retrait",
+      "request": "Demander"
+    },
+    "messages": {
+      "partnerInfoNotAvailable": "Informations du partenaire non disponibles",
+      "failedToLoadBalance": "Échec du chargement des données de solde",
+      "withdrawalProcessingTime": "Les retraits sont traités dans un délai de 1 à 3 jours ouvrables",
+      "failedToLoadPayments": "Échec du chargement des paiements",
+      "noPaymentsFound": "Aucun paiement trouvé"
+    }
+  },
+  "partners": {
+    "labels": {
+      "partners": "Partenaires",
+      "fullName": "Nom complet",
+      "email": "Email",
+      "gender": "Genre",
+      "background": "Formation",
+      "status": "Statut",
+      "profileImage": "Image de profil",
+      "name": "Nom",
+      "birthdate": "Date de naissance",
+      "bio": "Biographie",
+      "professionalBackground": "Formation professionnelle",
+      "socialLinks": "Liens sociaux",
+      "linkedin": "LinkedIn",
+      "instagram": "Instagram",
+      "tiktok": "TikTok",
+      "profilePreview": "Aperçu du profil",
+      "birthdateLabel": "Date de naissance :",
+      "professionalBackgroundLabel": "Formation professionnelle",
+      "partnerDetails": "Détails du partenaire",
+      "partnerId": "ID du partenaire",
+      "deliveryRate": "Taux de livraison",
+      "cancelRate": "Taux d'annulation",
+      "totalReferrals": "Total des références",
+      "totalOrders": "Total des commandes"
+    },
+    "placeholders": {
+      "searchPartners": "Rechercher des partenaires...",
+      "filterByStatus": "Filtrer par statut",
+      "filterByBackground": "Filtrer par formation",
+      "yourFullName": "Votre nom complet",
+      "tellUsAboutYourself": "Parlez-nous de vous",
+      "describeYourExperience": "Décrivez votre expérience professionnelle",
+      "linkedinUrl": "https://linkedin.com/in/votre-profil",
+      "instagramUrl": "https://instagram.com/votrecompte",
+      "tiktokUrl": "https://tiktok.com/votrecompte"
+    },
+    "buttons": {
+      "clearFilters": "Effacer les filtres",
+      "retry": "Réessayer",
+      "editProfile": "Modifier le profil",
+      "previewProfile": "Aperçu du profil",
+      "saveChanges": "Enregistrer les modifications",
+      "saving": "Enregistrement..."
+    },
+    "status": {
+      "allStatuses": "Tous les statuts",
+      "active": "Actif",
+      "inactive": "Inactif",
+      "pending": "En attente",
+      "suspended": "Suspendu"
+    },
+    "backgrounds": {
+      "allBackgrounds": "Toutes les formations",
+      "marketing": "Marketing",
+      "sales": "Ventes",
+      "technology": "Technologie",
+      "business": "Commerce",
+      "education": "Éducation",
+      "healthcare": "Santé",
+      "finance": "Finance",
+      "other": "Autre"
+    },
+    "messages": {
+      "loadingProfile": "Chargement du profil...",
+      "errorLoadingPartners": "Erreur lors du chargement des partenaires",
+      "failedToLoadPartners": "Échec du chargement des partenaires",
+      "failedToLoadProfile": "Échec du chargement du profil",
+      "pleaseSignIn": "Veuillez vous connecter pour voir votre tableau de bord",
+      "loadingDashboard": "Chargement du tableau de bord...",
+      "failedToLoadDashboard": "Échec du chargement des données du tableau de bord"
+    },
+    "validation": {
+      "userIdRequired": "L'ID utilisateur est requis",
+      "usernameMinLength": "Le nom d'utilisateur doit contenir au moins 3 caractères",
+      "fullNameRequired": "Le nom complet est requis",
+      "invalidEmail": "Adresse e-mail invalide",
+      "invalidUrl": "URL invalide",
+      "nameMinLength": "Le nom doit contenir au moins 2 caractères",
+      "birthdateRequired": "La date de naissance est requise",
+      "invalidDateFormat": "Format de date invalide",
+      "backgroundRequired": "La formation est requise",
+      "bioMaxLength": "La biographie doit contenir au maximum 500 caractères",
+      "invalidImageUrl": "URL d'image invalide"
+    }
+  },
+  "storefront": {
+    "infoBar": {
+      "content": "Garantie d'échange et de retour 48h",
+      "close": "Fermer la barre d'information"
+    },
+    "nav": {
+      "home": "Accueil",
+      "products": "Produits",
+      "terms": "Conditions",
+      "openMenu": "Ouvrir la navigation de la boutique",
+      "search": "Rechercher des produits"
+    },
+    "footer": {
+      "heading": "Instanet",
+      "description": "Votre destination mode de confiance. Découvrez des produits de qualité avec la commodité du paiement à la livraison.",
+      "links": {
+        "catalog": "Catalogue",
+        "terms": "Conditions",
+        "dashboard": "Tableau de bord"
+      },
+      "supportPrompt": "Besoin d'aide ?",
+      "supportEmail": "support@bellami.fashion",
+      "copyright": "© {year} Instanet. Tous droits réservés."
+    },
+    "home": {
+      "badge": "Boutique paiement à la livraison",
+      "headline": "Découvrez des produits que vos clients vont adorer",
+      "subheadline": "Parcourez des pages produits adaptées, capturez immédiatement des prospects et transformez-les en commandes COD sans paiement initial.",
+      "ctaExplore": "Explorer le catalogue",
+      "ctaDashboard": "Aller au tableau de bord",
+      "featuredTitle": "Pages produits à la une",
+      "featuredSubtitle": "Chaque page est optimisée pour la capture de prospects — choisissez-en une et commencez à vendre immédiatement."
+    },
+    "search": {
+      "title": "Rechercher des produits",
+      "subtitle": "Filtrez par titre ou slug pour trouver le produit dont vous avez besoin.",
+      "inputPlaceholder": "Rechercher des produits...",
+      "results": "Affichage de {count, plural, one {# produit} other {# produits}}",
+      "empty": "Aucun produit trouvé pour « {query} ».",
+      "badgeTrending": "Tendance",
+      "badgeBundle": "/ lot",
+      "badgeCod": "💡 Prêt pour le COD",
+      "viewDetails": "Voir les détails",
+      "defaultCategory": "Nouvelle arrivée",
+      "stock": {
+        "in": "{count} en stock",
+        "out": "Précommande"
+      },
+      "imagePlaceholder": "Image à venir",
+      "cardAria": "Ouvrir le produit {headline}",
+      "currencySymbol": "DA",
+      "freeShipping": "Livraison gratuite"
+    },
+    "orderForm": {
+      "unitsLabel": "Pièce {index}",
+      "bundleAria": "Sélectionner une offre",
+      "bundleSummary": "{units, plural, one {# pièce} other {# pièces}} • {price} par pièce",
+      "bundleTotal": "Total : {price}",
+      "singleBundleSummary": "{label} • {price} par pièce",
+      "bundleOption": "{count, plural, one {# pièce} other {# pièces}}",
+      "sizesNotRequired": "Les tailles ne sont pas requises pour cette couleur.",
+      "offerLabel": "Offre : {offer}",
+      "orderTotal": "Total de la commande",
+      "promotionMissing": "Aucune offre sélectionnée",
+      "submit": "Commander maintenant",
+      "submitting": "Envoi en cours...",
+      "labels": {
+        "fullName": "Nom complet",
+        "phone": "Numéro de téléphone",
+        "commune": "Commune",
+        "wilaya": "Wilaya",
+        "bundle": "Offre",
+        "color": "Couleur",
+        "size": "Taille",
+        "height": "Taille (hauteur)",
+        "weight": "Poids"
+      },
+      "placeholders": {
+        "fullName": "Nom du client",
+        "phone": "05 XX XX XX XX",
+        "commune": "Commune",
+        "wilaya": "Wilaya"
+      },
+      "validation": {
+        "fullName": "Veuillez entrer le nom complet",
+        "phoneMin": "Le téléphone doit contenir au moins 6 chiffres",
+        "phoneMax": "Le téléphone ne doit pas dépasser 20 caractères",
+        "commune": "La commune est requise",
+        "wilaya": "La wilaya est requise",
+        "color": "Sélectionnez une couleur",
+        "size": "Sélectionnez une taille",
+        "variantCount": "Sélectionnez {count, plural, one {# variante} other {# variantes}}",
+        "bundle": "Sélectionnez une offre"
+      }
+    },
+    "product": {
+      "breadcrumbs": {
+        "home": "Accueil",
+        "catalog": "Catalogue"
+      },
+      "gallery": {
+        "placeholder": "Image à venir",
+        "aria": "Afficher l'image {index} de la galerie",
+        "prev": "Précédent",
+        "next": "Suivant"
+      },
+      "testimonials": {
+        "title": "Avis clients"
+      },
+      "status": {
+        "inStock": "En stock",
+        "backOrder": "Sur commande",
+        "updated": "Mis à jour le {date}"
+      },
+      "pricing": {
+        "perUnit": "Par pièce",
+        "label": "{label} • Total {price}",
+        "badge": "{label} : {price} / pièce"
+      },
+      "description": "Description",
+      "info": {
+        "fastResponseTitle": "Réponse rapide",
+        "fastResponseDesc": "Lorsque vous remplissez le formulaire, notre équipe vous contactera en moins de 8 heures.",
+        "exchangeReturnTitle": "Échange et retour",
+        "exchangeReturnDesc": "Le client a le droit d'échanger ou de retourner dans les 48 heures si le produit ne correspond pas à ses attentes.",
+        "supportTitle": "Équipe support",
+        "supportDesc": "Notre équipe support est disponible 24h/24 pour vous aider."
+      },
+      "leadForm": {
+        "headline": "Entrez vos informations",
+        "subheadline": "Aucun paiement anticipé requis ! Vous avez le droit de retourner ou d'échanger si le produit ne correspond pas à vos attentes. Remplissez vos coordonnées ci-dessous et nous confirmerons votre commande en moins de 8 heures.",
+        "orderInProgressTitle": "Veuillez patienter",
+        "orderInProgress": "Vous avez déjà une commande en cours. Vous pourrez envoyer une nouvelle demande dans {minutes} minutes."
+      },
+      "toast": {
+        "title": "Demande envoyée",
+        "description": "Nous avons bien reçu votre commande. Notre équipe vous contactera rapidement."
+      },
+      "notFound": "Page produit introuvable.",
+      "freeShipping": "Livraison gratuite"
+    },
+    "thankYou": {
+      "title": "Merci !",
+      "description": "Votre demande a été envoyée avec succès. Notre équipe vous contactera prochainement pour confirmer les détails.",
+      "body": "Vous pouvez continuer à parcourir les autres produits.",
+      "continue": "Continuer vos achats"
+    },
+    "terms": {
+      "title": "Conditions d'utilisation",
+      "subtitle": "Veuillez lire attentivement ces conditions avant d'utiliser la plateforme.",
+      "cardTitle": "Conditions de la boutique COD Instanet",
+      "sections": {
+        "acceptance": {
+          "title": "1. Acceptation des conditions",
+          "content": "En accédant à notre boutique ou à notre tableau de bord d'affiliation, vous acceptez de respecter ces conditions d'utilisation ainsi que toutes les lois et réglementations applicables."
+        },
+        "responsibilities": {
+          "title": "2. Responsabilités de l'affilié",
+          "content": "Les affiliés sont responsables de l'exactitude des informations de prospects, de pratiques marketing transparentes et du respect des réglementations locales concernant le COD."
+        },
+        "availability": {
+          "title": "3. Disponibilité des produits",
+          "content": "Les niveaux de stock et les prix peuvent changer sans préavis. L'envoi d'un prospect ne garantit pas l'exécution de la commande tant que notre équipe ne l'a pas confirmée."
+        },
+        "payment": {
+          "title": "4. Paiement et commissions",
+          "content": "Les commissions sont versées après livraison et encaissement réussis. Les prospects frauduleux peuvent entraîner la suspension des privilèges d'affilié."
+        },
+        "changes": {
+          "title": "5. Modifications des conditions",
+          "content": "Nous nous réservons le droit de mettre à jour ces conditions périodiquement. L'utilisation continue de la plateforme vaut acceptation des révisions."
+        }
+      }
+    }
+  },
+  "affiliateDashboard": {
+    "currencySymbol": "DA",
+    "home": {
+      "title": "Tableau de bord",
+      "subtitle": "Suivez vos performances d'affiliation et gérez votre espace de travail.",
+      "loadError": "Impossible de charger les statistiques. Veuillez réessayer.",
+      "metricsAria": "Indicateurs de performance",
+      "activityAria": "Graphiques d'activité récente",
+      "deliveryRate": "Taux de livraison",
+      "confirmationRate": "Taux de confirmation",
+      "sales": "Ventes",
+      "orders": "Commandes",
+      "salesRecent": "Ventes des derniers jours",
+      "ordersRecent": "Commandes des derniers jours",
+      "salesRecentAria": "Graphique linéaire des ventes pour la période sélectionnée",
+      "ordersRecentAria": "Graphique en barres des commandes pour la période sélectionnée",
+      "vsPrevious": "{value} vs période précédente",
+      "vsPreviousPoints": "{value} pts vs période précédente",
+      "dateRange": {
+        "aria": "Sélectionner la période du tableau de bord",
+        "placeholder": "Période",
+        "last7Days": "7 derniers jours",
+        "last14Days": "14 derniers jours",
+        "last30Days": "30 derniers jours",
+        "last90Days": "90 derniers jours",
+        "thisMonth": "Ce mois-ci"
+      },
+      "level": {
+        "good": "Bon",
+        "warning": "À surveiller",
+        "poor": "Faible"
+      }
+    },
+    "orders": {
+      "title": "Commandes",
+      "partnerUnresolved": "Impossible de résoudre votre profil partenaire. Veuillez actualiser et réessayer.",
+      "stats": {
+        "total": "Total des commandes",
+        "processing": "En cours",
+        "delivered": "Livrées"
+      },
+      "searchPlaceholder": "Rechercher...",
+      "searchAria": "Rechercher des commandes",
+      "clearSearch": "Effacer la recherche",
+      "statusFilterAria": "Filtrer par statut",
+      "statusPlaceholder": "Statut",
+      "allStatuses": "Tous les statuts",
+      "createOrder": "Créer une commande",
+      "createOrderAria": "Créer une nouvelle commande",
+      "statusUpdated": "Statut de la commande mis à jour",
+      "changeStatusAria": "Statut de la commande : {status}. Cliquez pour modifier.",
+      "showMore": "Afficher plus",
+      "showMoreAria": "Charger plus de commandes",
+      "loadingMore": "Chargement...",
+      "empty": "Aucune commande trouvée.",
+      "commissionLabel": "Commission",
+      "copyPhoneAria": "Copier le numéro de téléphone",
+      "callPhoneAria": "Appeler {phone}",
+      "phoneCopiedAria": "Numéro de téléphone copié",
+      "detailsAria": "Voir les détails de la commande",
+      "deleteAria": "Supprimer la commande",
+      "details": {
+        "title": "Détails de la commande",
+        "description": "Informations client, produit et livraison pour cette commande.",
+        "customer": "Client",
+        "location": "Localisation",
+        "items": "Articles",
+        "noTracking": "Pas encore de suivi",
+        "loadError": "Impossible de charger les détails. Veuillez réessayer."
+      },
+      "delete": {
+        "title": "Supprimer cette commande ?",
+        "description": "Cette commande est encore initiale et peut être supprimée. Cette action est irréversible.",
+        "confirm": "Supprimer",
+        "deleting": "Suppression...",
+        "cancel": "Annuler"
+      },
+      "copyTrackingAria": "Copier l'identifiant de suivi",
+      "trackingCopiedAria": "Identifiant de suivi copié",
+      "viewTrackingAria": "Voir le suivi de commande",
+      "trackingTitle": "Suivi de commande",
+      "trackingDescription": "Cycle de vie du colis et mises à jour de livraison.",
+      "trackingIdLabel": "N° de suivi",
+      "trackingEmpty": "Aucun événement de suivi pour le moment.",
+      "expandAria": "Afficher les détails de la commande",
+      "collapseAria": "Masquer les détails de la commande",
+      "orderValueSummary": "Valeur des commandes dans le résumé : {amount} {currency}",
+      "print": {
+        "page": "Imprimer les bons",
+        "selected": "Imprimer les bons ({count})",
+        "bulkAction": "Imprimer les bons de livraison",
+        "ariaLabel": "Imprimer les bons de livraison",
+        "slipTitle": "Bon de livraison",
+        "order": "Commande",
+        "tracking": "Suivi",
+        "customer": "Client",
+        "phone": "Téléphone",
+        "phone2": "Téléphone 2",
+        "address": "Adresse",
+        "wilaya": "Wilaya",
+        "commune": "Commune",
+        "product": "Produit",
+        "color": "Couleur",
+        "size": "Taille",
+        "qty": "Qté",
+        "amount": "Montant COD",
+        "stopdesk": "Stop desk",
+        "notes": "Notes",
+        "yes": "Oui",
+        "no": "Non",
+        "emptyTitle": "Rien à imprimer",
+        "emptyDescription": "Sélectionnez des commandes ou attendez le chargement de la liste.",
+        "blockedTitle": "Impression bloquée",
+        "blockedDescription": "Autorisez les pop-ups pour ce site afin d'imprimer les bons de livraison."
+      },
+      "columns": {
+        "id": "ID",
+        "customer": "Client",
+        "contact": "Contact",
+        "phone": "Téléphone",
+        "product": "Produit",
+        "qty": "Qté",
+        "status": "Statut",
+        "dcStatus": "Statut DC",
+        "amount": "Montant",
+        "created": "Créée",
+        "actions": "Actions"
+      },
+      "create": {
+        "title": "Créer une commande",
+        "description": "Ajoutez les informations client, la livraison et les pages produit pour cette commande.",
+        "descriptionLocked": "Ajoutez les informations client et la livraison. La page produit est déjà sélectionnée.",
+        "sectionCustomer": "Client",
+        "sectionDelivery": "Livraison",
+        "sectionItems": "Articles",
+        "deliveryFee": "Frais de livraison",
+        "estimatedDelivery": "Livraison estimée",
+        "firstName": "Prénom",
+        "lastName": "Nom",
+        "phone": "Téléphone",
+        "address": "Adresse",
+        "deliveryType": "Type de livraison",
+        "deliveryHome": "Livraison à domicile",
+        "deliveryStopdesk": "Stopdesk",
+        "selectDeliveryType": "Sélectionner le type de livraison",
+        "deliveryTypeAria": "Sélectionner le type de livraison",
+        "wilaya": "Wilaya",
+        "commune": "Commune",
+        "agency": "Agence",
+        "selectWilaya": "Sélectionner une wilaya",
+        "selectCommune": "Sélectionner une commune",
+        "selectAgency": "Sélectionner une agence",
+        "noWilayas": "Aucune wilaya trouvée",
+        "noCommunes": "Aucune commune trouvée",
+        "noAgencies": "Aucune agence pour cette commune",
+        "items": "Articles",
+        "itemLabel": "Article {index}",
+        "addItem": "Ajouter un article",
+        "addItemAria": "Ajouter un article à la commande",
+        "deleteItem": "Supprimer",
+        "deleteItemAria": "Supprimer l'article {index}",
+        "product": "Page produit",
+        "color": "Couleur",
+        "size": "Taille",
+        "noSize": "Taille unique",
+        "quantity": "Quantité",
+        "selectProduct": "Sélectionner une page produit",
+        "selectColor": "Sélectionner une couleur",
+        "selectSize": "Sélectionner une taille",
+        "selectColorFirst": "Sélectionnez d'abord une couleur",
+        "sizesNotRequired": "Taille non requise pour cette couleur",
+        "noColors": "Aucune couleur disponible pour ce produit",
+        "itemFallback": "Article #{id}",
+        "firstNameAria": "Prénom du client",
+        "lastNameAria": "Nom du client",
+        "phoneAria": "Téléphone du client",
+        "addressAria": "Adresse du client",
+        "wilayaAria": "Sélectionner une wilaya",
+        "communeAria": "Sélectionner une commune",
+        "agencyAria": "Sélectionner une agence",
+        "productAria": "Sélectionner une page produit",
+        "colorAria": "Sélectionner une couleur",
+        "sizeAria": "Sélectionner une taille",
+        "quantityAria": "Quantité",
+        "quantityDecreaseAria": "Diminuer la quantité",
+        "quantityIncreaseAria": "Augmenter la quantité",
+        "cancel": "Annuler",
+        "submit": "Créer la commande",
+        "submitting": "Création...",
+        "sectionSummary": "Détail du montant",
+        "subtotal": "Sous-total",
+        "subtotalItems": "{count, plural, one {# article} other {# articles}}",
+        "discountLabel": "Remise (sur votre commission)",
+        "discountAria": "Montant de la remise par unité",
+        "discountMax": "Max {max} {currency}",
+        "discountHint": "Réduisez le prix client en sacrifiant une part de votre commission.",
+        "discountRow": "Votre remise",
+        "deliveryFeePending": "Sélectionnez une wilaya",
+        "total": "Total (COD)",
+        "yourCommission": "Votre commission"
+      }
+    },
+    "earnings": {
+      "title": "Gains",
+      "partnerUnresolved": "Impossible de résoudre votre profil partenaire. Veuillez actualiser et réessayer.",
+      "stats": {
+        "ready": "Prêt",
+        "notReady": "Pas prêt",
+        "withdrawn": "Retiré",
+        "available": "Disponible"
+      },
+      "requestWithdraw": "Demander un retrait",
+      "requestWithdrawAria": "Demander un retrait",
+      "sections": {
+        "readyTitle": "Prêt à retirer",
+        "readyDescription": "Commandes avec le statut transporteur encaisse.",
+        "notReadyTitle": "Pas prêt",
+        "notReadyDescription": "Commissions gagnées (commande livrée) en attente d'encaisse.",
+        "withdrawalsTitle": "Retraits",
+        "withdrawalsDescription": "Demandes de retrait en attente et payées."
+      },
+      "empty": {
+        "ready": "Aucune commission prête pour le moment.",
+        "notReady": "Aucune commission en attente.",
+        "withdraws": "Aucune demande de retrait pour le moment."
+      },
+      "columns": {
+        "order": "Commande",
+        "product": "Produit",
+        "qty": "Qté",
+        "rate": "Taux",
+        "commission": "Commission",
+        "date": "Date",
+        "id": "ID",
+        "amount": "Montant",
+        "status": "Statut"
+      },
+      "status": {
+        "paid": "Payé",
+        "pending": "En attente"
+      },
+      "withdraw": {
+        "title": "Demander un retrait",
+        "available": "Disponible au retrait : {amount} {currency}",
+        "amount": "Montant",
+        "amountAria": "Montant du retrait",
+        "cancel": "Annuler",
+        "submit": "Demander",
+        "submitting": "Envoi..."
+      }
+    },
+    "products": {
+      "title": "Produits",
+      "description": "Parcourez les pages produits actives et partagez-les avec vos clients.",
+      "searchPlaceholder": "Rechercher des pages produits...",
+      "searchAria": "Rechercher des pages produits",
+      "noImage": "Aucune image",
+      "productFallback": "Produit #{id}",
+      "commission": "Commission : {amount} {currency}",
+      "freeShipping": "Livraison gratuite",
+      "view": "Voir",
+      "viewAria": "Voir {headline}",
+      "createOrder": "Créer une commande",
+      "createOrderAria": "Créer une nouvelle commande pour {headline}",
+      "moreActionsAria": "Plus d’actions pour {headline}",
+      "checkStock": "Vérifier le stock",
+      "checkStockAria": "Vérifier le stock de {headline}",
+      "checkStockTitle": "Disponibilité du stock",
+      "checkStockColor": "Couleur",
+      "checkStockSize": "Taille",
+      "checkStockAvailability": "Statut",
+      "checkStockAvailable": "En stock",
+      "checkStockLow": "Stock faible",
+      "checkStockOut": "Rupture de stock",
+      "checkStockEmpty": "Aucune variante assignée à cette page produit.",
+      "checkStockError": "Impossible de charger le stock de ce produit.",
+      "checkStockVariants": "{count, plural, one {# variante} other {# variantes}}",
+      "downloadAssets": "Télécharger les assets",
+      "downloadAssetsAria": "Télécharger les assets de {headline}",
+      "downloadingAssets": "Téléchargement des assets...",
+      "publishMarketplace": "Publier sur Marketplace",
+      "publishMarketplaceAria": "Publier {headline} sur Facebook Marketplace",
+      "extensionInstall": {
+        "title": "Installer l'extension Instanet Marketplace",
+        "description": "En développement, chargez l'extension depuis Instanet (pas le Chrome Web Store), puis rechargez cette page.",
+        "step1": "Ouvrez chrome://extensions et activez le mode développeur",
+        "step2": "Cliquez sur Charger l'extension non empaquetée et sélectionnez le dossier bellami-marketplace-extension",
+        "step3": "Rechargez cette page Instanet",
+        "step4": "Cliquez à nouveau sur Publier sur Marketplace",
+        "close": "Compris"
+      },
+      "copyLink": "Copier le lien",
+      "copyLinkAria": "Copier le lien de {headline}",
+      "retailPrice": "Prix de vente",
+      "commissionLabel": "Votre commission",
+      "detailsDescription": "Description",
+      "closeDetails": "Fermer",
+      "empty": "Aucune page produit active trouvée.",
+      "clearSearch": "Effacer la recherche",
+      "columns": {
+        "product": "Produit",
+        "commission": "Commission",
+        "price": "Prix",
+        "created": "Créé",
+        "actions": "Actions"
+      },
+      "selectGrid": {
+        "searchPlaceholder": "Rechercher des produits...",
+        "searchAria": "Rechercher des pages produits",
+        "groupAria": "Sélectionner une page produit",
+        "empty": "Aucune page produit trouvée.",
+        "noImage": "Aucune image",
+        "selectAria": "Sélectionner {headline}"
+      },
+      "toast": {
+        "copiedTitle": "Lien copié",
+        "copiedDescription": "Le lien de la page produit a été copié",
+        "copyFailedTitle": "Échec de la copie",
+        "copyFailedDescription": "Impossible de copier le lien",
+        "downloadSuccessTitle": "Téléchargement démarré",
+        "downloadSuccessDescription": "Le zip des assets produit est en cours de téléchargement",
+        "downloadFailedTitle": "Échec du téléchargement",
+        "downloadFailedDescription": "Impossible de télécharger les assets produit",
+        "marketplaceNoAssetsTitle": "Aucune photo dans la bibliothèque",
+        "marketplaceNoAssetsDescription": "Ajoutez des images à la bibliothèque d'assets de la page produit avant de publier.",
+        "marketplaceOpenedTitle": "Extension ouverte",
+        "marketplaceOpenedDescription": "Vérifiez l'annonce dans le panneau latéral Instanet Marketplace.",
+        "marketplaceOpenFailedTitle": "Impossible d'ouvrir l'extension",
+        "marketplaceOpenFailedDescription": "Vérifiez que l'extension Instanet Marketplace est installée et activée."
+      }
+    },
+    "settings": {
+      "title": "Paramètres",
+      "subtitle": "Gérez votre langue et les préférences de votre compte.",
+      "language": {
+        "title": "Langue",
+        "description": "Choisissez la langue utilisée dans le tableau de bord affilié.",
+        "english": "English",
+        "french": "Français",
+        "arabic": "العربية"
+      },
+      "account": {
+        "title": "Compte",
+        "description": "Votre profil connecté et votre session."
+      },
+      "payment": {
+        "title": "Méthodes de paiement",
+        "description": "Ajoutez vos coordonnées de paiement pour recevoir vos commissions.",
+        "baridimobRib": "RIB BaridiMob",
+        "baridimobRibPlaceholder": "Entrez votre RIB à 20 chiffres",
+        "redotpayAccount": "Compte RedotPay",
+        "redotpayAccountPlaceholder": "Entrez votre email ou ID RedotPay",
+        "usdtAddress": "Adresse USDT",
+        "usdtAddressPlaceholder": "Entrez votre adresse USDT (TRC-20)"
+      },
+      "analytics": {
+        "title": "Analyses",
+        "subtitle": "Gérez les pixels d’analyse et de suivi (admin)."
+      },
+      "save": "Enregistrer",
+      "saving": "Enregistrement...",
+      "fields": {
+        "facebook_pixel_id": {
+          "label": "ID Pixel Facebook",
+          "placeholder": "Entrez votre ID Pixel Facebook"
+        },
+        "tiktok_pixel_id": {
+          "label": "ID Pixel TikTok",
+          "placeholder": "Un ou plusieurs ID, séparés par des virgules (ex. ABC123, DEF456)"
+        },
+        "google_analytics_id": {
+          "label": "ID Google Analytics",
+          "placeholder": "Entrez votre ID Google Analytics (GA4)"
+        },
+        "microsoft_clarity_id": {
+          "label": "ID Microsoft Clarity",
+          "placeholder": "Entrez votre ID de projet Microsoft Clarity"
+        },
+        "meta_conversion_api_access_token": {
+          "label": "Jeton d'accès Meta Conversion API",
+          "placeholder": "Entrez votre jeton d'accès Meta Conversion API"
+        }
+      },
+      "toast": {
+        "updatedTitle": "Paramètre mis à jour",
+        "updatedDescription": "{label} a été mis à jour avec succès.",
+        "errorTitle": "Erreur",
+        "errorDescription": "Échec de la mise à jour du paramètre. Veuillez réessayer."
+      }
+    }
+  }
+}

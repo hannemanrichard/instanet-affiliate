@@ -1,0 +1,148 @@
+/**
+ * Modern Minimal design tokens (tweakcn / DESIGN.md)
+ * ----------------------------------------
+ * Primary indigo (#5138F5) on pure white, cool-gray chrome.
+ * Prefer semantic tokens (bg-primary, border-border) in UI code.
+ */
+
+:root {
+  /* ——— Color (shadcn semantic) ——— */
+  --background: 0 0% 100%; /* #ffffff */
+  --foreground: 0 0% 20%; /* #333333 */
+
+  --card: 0 0% 100%; /* #ffffff */
+  --card-foreground: 0 0% 20%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 20%;
+
+  /* Primary indigo (#5138F5) */
+  --primary: 248 90% 59%;
+  --primary-foreground: 0 0% 100%;
+
+  /* Cool light gray (#f3f4f6) */
+  --secondary: 220 14% 96%;
+  --secondary-foreground: 215 14% 34%; /* #4b5563 */
+
+  --muted: 210 20% 98%; /* #f9fafb */
+  --muted-foreground: 220 9% 46%; /* #6b7280 */
+
+  /* Soft lavender wash (#E8E9FF) */
+  --accent: 237 100% 95%;
+  --accent-foreground: 224 64% 33%; /* #1e3a8a */
+
+  --destructive: 0 84% 60%; /* #ef4444 */
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 220 13% 91%; /* #e5e7eb */
+  --input: 220 13% 91%; /* #e5e7eb */
+  --ring: 248 90% 59%; /* #5138F5 */
+
+  --brand: 248 90% 59%;
+  --brand-foreground: 0 0% 100%;
+
+  --success: 142 71% 45%;
+  --success-foreground: 0 0% 100%;
+  --warning: 38 92% 50%;
+  --warning-foreground: 0 0% 9%;
+
+  /* Base radius 6px — buttons/inputs use rounded-lg */
+  --radius: 0.375rem;
+
+  /* Charts: primary + blue scale */
+  --chart-1: 248 90% 59%; /* #5138F5 */
+  --chart-2: 221 83% 53%; /* #2563eb */
+  --chart-3: 224 76% 48%; /* #1d4ed8 */
+  --chart-4: 226 71% 40%; /* #1e40af */
+  --chart-5: 224 64% 33%; /* #1e3a8a */
+
+  /* ——— Sidebar (near-white, primary active) ——— */
+  --sidebar-background: 210 20% 98%; /* #f9fafb */
+  --sidebar: 210 20% 98%;
+  --sidebar-foreground: 0 0% 20%;
+  --sidebar-primary: 248 90% 59%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 237 100% 95%; /* #E8E9FF */
+  --sidebar-accent-foreground: 224 64% 33%; /* #1e3a8a */
+  --sidebar-border: 220 13% 91%;
+  --sidebar-ring: 248 90% 59%;
+  --sidebar-width: 16rem;
+  --sidebar-width-icon: 3.25rem;
+
+  /* ——— Layout / surfaces ——— */
+  --header-height: 3.5rem;
+  --dashboard: 0 0% 100%;
+  --dashboard-foreground: 0 0% 20%;
+  --auth: 210 20% 98%;
+  --auth-foreground: 0 0% 20%;
+  --storefront-bar: 248 90% 59%;
+  --storefront-bar-foreground: 0 0% 100%;
+  --storefront-border: 220 13% 91%;
+  --storefront-accent: 248 90% 59%;
+  --storefront-accent-foreground: 0 0% 100%;
+}
+
+.dark {
+  --background: 0 0% 9%; /* #171717 */
+  --foreground: 0 0% 90%; /* #e5e5e5 */
+
+  --card: 0 0% 15%; /* #262626 */
+  --card-foreground: 0 0% 90%;
+
+  --popover: 0 0% 15%;
+  --popover-foreground: 0 0% 90%;
+
+  /* Primary persists across modes */
+  --primary: 248 90% 59%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 0 0% 15%; /* #262626 */
+  --secondary-foreground: 0 0% 90%;
+
+  --muted: 0 0% 12%; /* #1f1f1f */
+  --muted-foreground: 0 0% 64%; /* #a3a3a3 */
+
+  --accent: 237 100% 95%; /* #E8E9FF */
+  --accent-foreground: 224 64% 33%; /* #1e3a8a */
+
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 0 0% 25%; /* #404040 */
+  --input: 0 0% 25%;
+  --ring: 248 90% 59%;
+
+  --brand: 248 90% 59%;
+  --brand-foreground: 0 0% 100%;
+
+  --success: 142 60% 40%;
+  --success-foreground: 0 0% 100%;
+  --warning: 38 92% 50%;
+  --warning-foreground: 0 0% 9%;
+
+  --chart-1: 248 90% 59%;
+  --chart-2: 221 83% 53%;
+  --chart-3: 224 76% 48%;
+  --chart-4: 226 71% 40%;
+  --chart-5: 224 64% 33%; /* #1e3a8a */
+
+  --sidebar-background: 0 0% 9%;
+  --sidebar: 0 0% 9%;
+  --sidebar-foreground: 0 0% 90%;
+  --sidebar-primary: 248 90% 59%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 237 100% 95%; /* #E8E9FF */
+  --sidebar-accent-foreground: 224 64% 33%; /* #1e3a8a */
+  --sidebar-border: 0 0% 25%;
+  --sidebar-ring: 248 90% 59%;
+
+  --dashboard: 0 0% 9%;
+  --dashboard-foreground: 0 0% 90%;
+  --auth: 0 0% 9%;
+  --auth-foreground: 0 0% 90%;
+  --storefront-bar: 248 90% 55%;
+  --storefront-bar-foreground: 0 0% 100%;
+  --storefront-border: 0 0% 25%;
+  --storefront-accent: 248 90% 59%;
+  --storefront-accent-foreground: 0 0% 100%;
+}

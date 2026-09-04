@@ -1,0 +1,2 @@
+export { routing } from "./config";
+

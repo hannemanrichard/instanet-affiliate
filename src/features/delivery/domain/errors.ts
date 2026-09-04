@@ -1,0 +1,10 @@
+export class DeliveryError extends Error {
+  constructor(
+    message: string,
+    public readonly code: string,
+    public readonly cause?: unknown
+  ) {
+    super(message);
+    this.name = "DeliveryError";
+  }
+}

@@ -1,0 +1,1459 @@
+{
+  "navigation": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "back": "Back",
+    "leads": "Leads",
+    "partners": "Partners",
+    "products": "Products",
+    "orders": "Orders",
+    "earnings": "Earnings",
+    "parcels": "Parcels",
+    "stats": "Stats",
+    "balance": "Balance",
+    "balanceAria": "Available balance {amount} {currency}",
+    "settings": "Settings",
+    "profile": "Profile",
+    "tracking": "Tracking",
+    "productPages": "Product Pages",
+    "inventory": "Inventory",
+    "workspace": "Workspace",
+    "admin": "Admin",
+    "account": "Account",
+    "logout": "Log out",
+    "upgradeTitle": "Grow your earnings",
+    "upgradeDescription": "Browse products and create orders to unlock more commissions.",
+    "upgradeCta": "Browse products",
+    "profileDescription": "Manage your profile information.",
+    "settingsDescription": "Manage your profile settings and preferences."
+  },
+  "auth": {
+    "signIn": {
+      "title": "Welcome back",
+      "subtitle": "Sign in to your Instanet affiliate account with Google.",
+      "submit": "Sign in",
+      "submitting": "Signing in...",
+      "noAccount": "Don't have an account?",
+      "signUpLink": "Sign up"
+    },
+    "signUp": {
+      "title": "Create your account",
+      "subtitle": "Join Instanet with Google and start earning with affiliates.",
+      "submit": "Create account",
+      "submitting": "Creating account...",
+      "hasAccount": "Already have an account?",
+      "signInLink": "Sign in"
+    },
+    "google": {
+      "continue": "Continue with Google",
+      "submitting": "Connecting to Google...",
+      "aria": "Continue with Google"
+    },
+    "verify": {
+      "title": "Verify your email",
+      "subtitle": "Enter the code we sent to {email}.",
+      "submit": "Verify email",
+      "submitting": "Verifying..."
+    },
+    "fields": {
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "passwordHint": "Use at least 8 characters.",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "firstName": "First name",
+      "firstNamePlaceholder": "First name",
+      "lastName": "Last name",
+      "lastNamePlaceholder": "Last name",
+      "verificationCode": "Verification code",
+      "verificationCodePlaceholder": "123456"
+    },
+    "errors": {
+      "signInFailed": "Unable to sign in with Google. Please try again.",
+      "signUpFailed": "Unable to create your account with Google. Please try again.",
+      "verificationFailed": "Invalid or expired verification code.",
+      "incompleteSignIn": "Additional verification is required to finish signing in.",
+      "incompleteSignUp": "Additional steps are required to finish signing up."
+    }
+  },
+  "landing": {
+    "nav": {
+      "howItWorks": "How it works",
+      "features": "Features",
+      "terms": "Terms",
+      "signIn": "Sign in",
+      "getStarted": "Get started",
+      "dashboard": "Dashboard",
+      "openMenu": "Open navigation menu"
+    },
+    "hero": {
+      "badge": "Affiliate program",
+      "headline": "Earn commissions selling products you believe in",
+      "subheadline": "Join Instanet, share ready-made product pages, capture leads, and get paid when orders are delivered — all with cash-on-delivery, no upfront cost.",
+      "ctaPrimary": "Start earning today",
+      "ctaSecondary": "Sign in",
+      "ctaDashboard": "Go to dashboard",
+      "trustLine": "Free to join · COD fulfillment · Real-time tracking"
+    },
+    "howItWorks": {
+      "title": "How it works",
+      "subtitle": "Three simple steps to your first commission",
+      "steps": {
+        "1": {
+          "title": "Sign up free",
+          "description": "Create your affiliate account in minutes with Google."
+        },
+        "2": {
+          "title": "Pick a product page",
+          "description": "Choose from optimized pages designed to convert visitors into COD orders."
+        },
+        "3": {
+          "title": "Earn on delivery",
+          "description": "Share your page, create orders, and earn commission when deliveries complete."
+        }
+      }
+    },
+    "features": {
+      "title": "Built for affiliate success",
+      "subtitle": "Everything you need to grow without managing inventory or logistics",
+      "items": {
+        "commissions": {
+          "title": "Transparent commissions",
+          "description": "See exactly what you earn per product. Commissions lock in at order creation."
+        },
+        "pages": {
+          "title": "Conversion-ready pages",
+          "description": "Pre-built product pages with lead forms tuned for the Algerian COD market."
+        },
+        "orders": {
+          "title": "One-click order creation",
+          "description": "Create customer orders from your dashboard — we handle delivery via ZR Express."
+        },
+        "tracking": {
+          "title": "Track every parcel",
+          "description": "Monitor order status and delivery progress from a single dashboard."
+        }
+      }
+    },
+    "stats": {
+      "cod": "COD ready",
+      "codDesc": "No payment gateway needed",
+      "delivery": "Nationwide delivery",
+      "deliveryDesc": "ZR Express integration",
+      "free": "Zero inventory risk",
+      "freeDesc": "We fulfill — you sell"
+    },
+    "cta": {
+      "title": "Ready to start earning?",
+      "subtitle": "Join Instanet and start selling in minutes. Sign up is free and takes less than a minute.",
+      "button": "Create free account"
+    },
+    "footer": {
+      "description": "The affiliate platform for partners who sell fashion and lifestyle products with cash-on-delivery.",
+      "links": {
+        "terms": "Terms",
+        "signIn": "Sign in",
+        "dashboard": "Dashboard"
+      },
+      "supportPrompt": "Need help?",
+      "supportEmail": "support@bellami.fashion",
+      "copyright": "© {year} Instanet. All rights reserved."
+    }
+  },
+  "forms": {
+    "labels": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "phone": "Phone",
+      "email": "Email",
+      "name": "Name",
+      "description": "Description",
+      "category": "Category",
+      "price": "Price",
+      "quantity": "Quantity",
+      "status": "Status",
+      "dateOfBirth": "Date of Birth",
+      "gender": "Gender",
+      "background": "Background",
+      "referralSource": "Referral Source"
+    },
+    "placeholders": {
+      "enterFirstName": "Enter first name",
+      "enterLastName": "Enter last name",
+      "enterPhone": "Enter phone number",
+      "enterEmail": "Enter email address",
+      "enterName": "Enter name",
+      "enterDescription": "Enter description",
+      "selectCategory": "Select category",
+      "enterPrice": "Enter price",
+      "enterQuantity": "Enter quantity",
+      "selectGender": "Select gender",
+      "enterBackground": "Enter your background",
+      "enterLinkedIn": "Enter LinkedIn URL",
+      "enterInstagram": "Enter Instagram URL",
+      "enterTikTok": "Enter TikTok URL",
+      "enterReferralSource": "How did you hear about us?"
+    },
+    "options": {
+      "male": "Male",
+      "female": "Female"
+    },
+    "descriptions": {
+      "background": "Tell us about your professional background",
+      "referralSource": "Help us understand how you found us"
+    },
+    "demo": {
+      "title": "Demo Form"
+    },
+    "validation": {
+      "required": "This field is required",
+      "minLength": "Must be at least {min} characters",
+      "maxLength": "Must be at most {max} characters",
+      "invalidEmail": "Invalid email format",
+      "invalidPhone": "Invalid phone number",
+      "invalidPrice": "Invalid price format",
+      "invalidQuantity": "Invalid quantity format",
+      "invalidUrl": "Invalid URL format",
+      "invalidDate": "Invalid date format",
+      "firstNameRequired": "First name is required",
+      "lastNameRequired": "Last name is required",
+      "phoneRequired": "Phone number is required",
+      "emailRequired": "Email is required",
+      "nameRequired": "Name is required",
+      "descriptionRequired": "Description is required",
+      "categoryRequired": "Category is required",
+      "priceRequired": "Price is required",
+      "quantityRequired": "Quantity is required",
+      "productRequired": "Product is required",
+      "colorRequired": "Color is required",
+      "sizeRequired": "Size is required",
+      "wilayaRequired": "Wilaya is required",
+      "communeRequired": "Commune is required",
+      "agencyRequired": "Agency is required",
+      "retailPriceRequired": "Retail price is required",
+      "wholesalePriceRequired": "Wholesale price is required",
+      "retailCommissionRequired": "Retail commission is required",
+      "wholesaleCommissionRequired": "Wholesale commission is required",
+      "weightRequired": "Weight is required",
+      "trackingRequired": "Tracking number is required",
+      "firstNamePositive": "First name must be positive",
+      "lastNamePositive": "Last name must be positive",
+      "phonePositive": "Phone must be positive",
+      "emailPositive": "Email must be positive",
+      "namePositive": "Name must be positive",
+      "descriptionPositive": "Description must be positive",
+      "categoryPositive": "Category must be positive",
+      "pricePositive": "Price must be positive",
+      "quantityPositive": "Quantity must be positive",
+      "productPositive": "Product must be positive",
+      "colorPositive": "Color must be positive",
+      "sizePositive": "Size must be positive",
+      "wilayaPositive": "Wilaya must be positive",
+      "communePositive": "Commune must be positive",
+      "agencyPositive": "Agency must be positive",
+      "retailPricePositive": "Retail price must be positive",
+      "wholesalePricePositive": "Wholesale price must be positive",
+      "retailCommissionPositive": "Retail commission must be positive",
+      "wholesaleCommissionPositive": "Wholesale commission must be positive",
+      "weightPositive": "Weight must be positive",
+      "trackingPositive": "Tracking number must be positive",
+      "firstNameMin": "First name must be at least {min}",
+      "lastNameMin": "Last name must be at least {min}",
+      "phoneMin": "Phone must be at least {min}",
+      "emailMin": "Email must be at least {min}",
+      "nameMin": "Name must be at least {min}",
+      "descriptionMin": "Description must be at least {min}",
+      "categoryMin": "Category must be at least {min}",
+      "priceMin": "Price must be at least {min}",
+      "quantityMin": "Quantity must be at least {min}",
+      "productMin": "Product must be at least {min}",
+      "colorMin": "Color must be at least {min}",
+      "sizeMin": "Size must be at least {min}",
+      "wilayaMin": "Wilaya must be at least {min}",
+      "communeMin": "Commune must be at least {min}",
+      "agencyMin": "Agency must be at least {min}",
+      "retailPriceMin": "Retail price must be at least {min}",
+      "wholesalePriceMin": "Wholesale price must be at least {min}",
+      "retailCommissionMin": "Retail commission must be at least {min}",
+      "wholesaleCommissionMin": "Wholesale commission must be at least {min}",
+      "weightMin": "Weight must be at least {min}",
+      "trackingMin": "Tracking number must be at least {min}",
+      "dateOfBirthRequired": "Date of birth is required",
+      "genderRequired": "Please select a gender",
+      "backgroundMin": "Please describe your background (at least {min} characters)",
+      "statusRequired": "Status is required",
+      "itemsRequired": "At least one item is required",
+      "inventoryPositive": "Inventory must be a positive number"
+    }
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "update": "Update",
+    "view": "View",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "import": "Import",
+    "refresh": "Refresh",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "reset": "Reset",
+    "close": "Close",
+    "confirm": "Confirm",
+    "complete": "Complete",
+    "retry": "Retry"
+  },
+  "messages": {
+    "success": {
+      "saved": "Successfully saved",
+      "created": "Successfully created",
+      "updated": "Successfully updated",
+      "deleted": "Successfully deleted",
+      "exported": "Successfully exported",
+      "imported": "Successfully imported",
+      "onboardingComplete": "Onboarding Complete!",
+      "onboardingReady": "Your account is now ready to use."
+    },
+    "error": {
+      "generic": "An error occurred",
+      "network": "Network error",
+      "validation": "Validation error",
+      "notFound": "Resource not found",
+      "unauthorized": "Unauthorized access",
+      "forbidden": "Access forbidden",
+      "serverError": "Server error"
+    },
+    "loading": "Loading...",
+    "noData": "No data available",
+    "noResults": "No results found"
+  },
+  "common": {
+    "language": "Language",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System",
+    "yes": "Yes",
+    "no": "No",
+    "ok": "OK",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Information"
+  },
+  "onboarding": {
+    "title": "Complete Your Profile",
+    "description": "Let's get to know you better to personalize your experience",
+    "step1": {
+      "title": "Personal Information"
+    },
+    "step2": {
+      "title": "Social Links"
+    },
+    "step3": {
+      "title": "How did you hear about us?"
+    }
+  },
+  "tables": {
+    "columns": {
+      "fullName": "Full Name",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "phone": "Phone",
+      "email": "Email",
+      "wilaya": "Wilaya",
+      "commune": "Commune",
+      "product": "Product",
+      "status": "Status",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "actions": "Actions",
+      "orderNumber": "Order Number",
+      "customer": "Customer",
+      "total": "Total",
+      "trackingNumber": "Tracking Number",
+      "deliveryStatus": "Delivery Status",
+      "partner": "Partner",
+      "commission": "Commission",
+      "weight": "Weight",
+      "category": "Category",
+      "price": "Price",
+      "quantity": "Quantity",
+      "inventory": "Inventory",
+      "description": "Description",
+      "thumbnail": "Thumbnail",
+      "library": "Library",
+      "retailPrice": "Retail Price",
+      "wholesalePrice": "Wholesale Price",
+      "retailCommission": "Retail Commission",
+      "wholesaleCommission": "Wholesale Commission",
+      "retailMinPrice": "Retail Min Price",
+      "wholesaleMinPrice": "Wholesale Min Price"
+    },
+    "actions": {
+      "view": "View",
+      "edit": "Edit",
+      "delete": "Delete",
+      "duplicate": "Duplicate",
+      "export": "Export",
+      "import": "Import",
+      "refresh": "Refresh",
+      "selectAll": "Select All",
+      "deselectAll": "Deselect All",
+      "bulkDelete": "Bulk Delete",
+      "bulkEdit": "Bulk Edit",
+      "trackOrder": "Track Order",
+      "viewDetails": "View Details",
+      "addLead": "Add Lead",
+      "selectedCount": "{count} selected",
+      "selectedItems": "items selected"
+    },
+    "filters": {
+      "search": "Search",
+      "searchPlaceholder": "Search...",
+      "status": "Status",
+      "dateRange": "Date Range",
+      "partner": "Partner",
+      "category": "Category",
+      "clearFilters": "Clear Filters",
+      "applyFilters": "Apply Filters",
+      "all": "All",
+      "initial": "Initial",
+      "notResponding": "Not Responding",
+      "unreachable": "Unreachable",
+      "other": "Other",
+      "confirmed": "Confirmed",
+      "busy": "Busy",
+      "canceled": "Canceled",
+      "processing": "Processing",
+      "delivered": "Delivered",
+      "returned": "Returned"
+    },
+    "pagination": {
+      "showing": "Showing",
+      "of": "of",
+      "results": "results",
+      "perPage": "per page",
+      "goToPage": "Go to page",
+      "previous": "Previous",
+      "next": "Next",
+      "first": "First",
+      "last": "Last"
+    },
+    "empty": {
+      "noData": "No data available",
+      "noResults": "No results found",
+      "tryAdjustingFilters": "Try adjusting your filters",
+      "createFirst": "Create your first item"
+    },
+    "loading": {
+      "loading": "Loading...",
+      "loadingData": "Loading data...",
+      "pleaseWait": "Please wait...",
+      "error": "Failed to load data"
+    }
+  },
+  "dialogs": {
+    "leadCreation": {
+      "title": "Add Lead",
+      "description": "Create a new lead for your customer.",
+      "success": "Lead created successfully",
+      "error": "Failed to create lead"
+    },
+    "leadDetails": {
+      "title": "Lead Details",
+      "description": "View detailed information about this lead.",
+      "edit": "Edit Lead",
+      "delete": "Delete Lead"
+    },
+    "leadDeletion": {
+      "title": "Delete Lead",
+      "description": "Are you sure you want to delete this lead? This action cannot be undone.",
+      "confirm": "Yes, delete lead",
+      "cancel": "Cancel",
+      "success": "Lead deleted successfully",
+      "error": "Failed to delete lead",
+      "loading": "Deleting..."
+    },
+    "bulkDeletion": {
+      "title": "Delete Selected Leads",
+      "description": "Are you sure you want to delete {count} selected leads? This action cannot be undone.",
+      "confirm": "Yes, delete {count} leads",
+      "cancel": "Cancel",
+      "success": "{count} leads deleted successfully",
+      "error": "Failed to delete leads",
+      "loading": "Deleting..."
+    },
+    "orderDetails": {
+      "title": "Order Details",
+      "description": "View detailed information about this order.",
+      "trackOrder": "Track Order",
+      "updateStatus": "Update Status"
+    },
+    "orderTracking": {
+      "title": "Order Tracking",
+      "description": "Track the delivery status of this order.",
+      "trackingNumber": "Tracking Number",
+      "currentStatus": "Current Status",
+      "estimatedDelivery": "Estimated Delivery",
+      "deliveryHistory": "Delivery History"
+    },
+    "productCreation": {
+      "title": "Add Product",
+      "description": "Create a new product for your catalog.",
+      "success": "Product created successfully",
+      "error": "Failed to create product"
+    },
+    "productDetails": {
+      "title": "Product Details",
+      "description": "View detailed information about this product.",
+      "edit": "Edit Product",
+      "delete": "Delete Product"
+    },
+    "parcelDetails": {
+      "title": "Parcel Details",
+      "description": "View detailed information about this parcel.",
+      "trackParcel": "Track Parcel",
+      "updateStatus": "Update Status"
+    },
+    "withdrawRequest": {
+      "title": "Request Withdrawal",
+      "description": "Request a withdrawal of your earnings.",
+      "amount": "Amount",
+      "bankAccount": "Bank Account",
+      "confirm": "Request Withdrawal",
+      "cancel": "Cancel",
+      "success": "Withdrawal request submitted successfully",
+      "error": "Failed to submit withdrawal request"
+    }
+  },
+  "dashboard": {
+    "overview": {
+      "title": "Dashboard Overview",
+      "welcome": "Welcome back",
+      "totalLeads": "Total Leads",
+      "totalOrders": "Total Orders",
+      "totalRevenue": "Total Revenue",
+      "totalCommissions": "Total Commissions",
+      "recentActivity": "Recent Activity",
+      "quickActions": "Quick Actions",
+      "statistics": "Statistics",
+      "performance": "Performance",
+      "leads": "Leads",
+      "orders": "Orders",
+      "multilingual": "Multilingual Demo"
+    },
+    "stats": {
+      "leads": {
+        "total": "Total Leads",
+        "new": "New Leads",
+        "converted": "Converted",
+        "conversionRate": "Conversion Rate"
+      },
+      "orders": {
+        "total": "Total Orders",
+        "pending": "Pending",
+        "delivered": "Delivered",
+        "returned": "Returned"
+      },
+      "revenue": {
+        "total": "Total Revenue",
+        "thisMonth": "This Month",
+        "lastMonth": "Last Month",
+        "growth": "Growth"
+      },
+      "commissions": {
+        "total": "Total Commissions",
+        "pending": "Pending",
+        "paid": "Paid",
+        "thisMonth": "This Month"
+      }
+    },
+    "charts": {
+      "leadsOverTime": "Leads Over Time",
+      "ordersOverTime": "Orders Over Time",
+      "revenueOverTime": "Revenue Over Time",
+      "topProducts": "Top Products",
+      "topPartners": "Top Partners",
+      "conversionFunnel": "Conversion Funnel"
+    }
+  },
+  "products": {
+    "labels": {
+      "name": "Name",
+      "description": "Description",
+      "category": "Category",
+      "retailPrice": "Retail Price",
+      "wholesalePrice": "Wholesale Price",
+      "retailCommission": "Retail Commission",
+      "wholesaleCommission": "Wholesale Commission",
+      "retailMinPrice": "Retail Minimum Price",
+      "wholesaleMinPrice": "Wholesale Minimum Price",
+      "weight": "Weight (kg)",
+      "productImage": "Product Image",
+      "productGallery": "Product Gallery",
+      "commission": "Commission",
+      "actions": "Actions",
+      "color": "Color",
+      "size": "Size",
+      "inventory": "Inventory",
+      "noImage": "No image",
+      "gallery": "Gallery",
+      "retail": "Retail",
+      "wholesale": "Wholesale",
+      "price": "Price",
+      "productDetails": "Product Details"
+    },
+    "placeholders": {
+      "enterName": "Enter product name",
+      "enterDescription": "Enter product description",
+      "selectCategory": "Select category",
+      "enterRetailPrice": "Enter retail price",
+      "enterWholesalePrice": "Enter wholesale price",
+      "enterRetailCommission": "Enter retail commission",
+      "enterWholesaleCommission": "Enter wholesale commission",
+      "enterWeight": "Enter weight in kg",
+      "searchProducts": "Search products...",
+      "filterByCategory": "Filter by category"
+    },
+    "descriptions": {
+      "retailMinPrice": "Minimum allowed price for retail partners",
+      "wholesaleMinPrice": "Minimum allowed price for wholesale partners",
+      "weight": "Product weight in kilograms",
+      "viewAndManage": "View and manage product information"
+    },
+    "buttons": {
+      "addProduct": "Add Product",
+      "creating": "Creating...",
+      "clearFilters": "Clear filters",
+      "viewDetails": "View Details",
+      "editProduct": "Edit Product",
+      "deleteProduct": "Delete Product",
+      "addImages": "Add Images",
+      "addItem": "Add Item",
+      "addItems": "Add Items",
+      "saveItems": "Save Items",
+      "uploading": "Uploading...",
+      "saveImages": "Save Images",
+      "downloading": "Downloading...",
+      "downloadGallery": "Download Gallery",
+      "backToProducts": "Back to Products"
+    },
+    "categories": {
+      "all": "All Categories",
+      "electronics": "Electronics",
+      "clothing": "Clothing",
+      "home": "Home & Garden",
+      "sports": "Sports & Outdoors",
+      "books": "Books",
+      "beauty": "Beauty & Health",
+      "toys": "Toys & Games"
+    },
+    "validation": {
+      "nameRequired": "Product name is required",
+      "descriptionRequired": "Product description is required",
+      "categoryRequired": "Product category is required",
+      "retailPriceRequired": "Retail price is required",
+      "wholesalePriceRequired": "Wholesale price is required",
+      "retailCommissionRequired": "Retail commission is required",
+      "wholesaleCommissionRequired": "Wholesale commission is required",
+      "weightRequired": "Product weight is required",
+      "sizeRequired": "Size is required",
+      "colorRequired": "Color is required",
+      "inventoryPositive": "Inventory must be a positive number",
+      "itemsRequired": "At least one item is required"
+    },
+    "errors": {
+      "loadingError": "Error loading product",
+      "loadingErrorMessage": "Failed to load product details",
+      "notFound": "Product not found",
+      "notFoundMessage": "The product you're looking for doesn't exist."
+    },
+    "messages": {
+      "success": "Success",
+      "error": "Error",
+      "downloadSuccess": "Files downloaded successfully",
+      "downloadError": "Failed to download files"
+    }
+  },
+  "orders": {
+    "labels": {
+      "orderDetails": "Order Details",
+      "orderNumber": "Order Number",
+      "customerName": "Customer Name",
+      "product": "Product",
+      "quantity": "Quantity",
+      "price": "Price",
+      "color": "Color",
+      "size": "Size",
+      "height": "Height",
+      "weight": "Weight",
+      "orderDate": "Order Date",
+      "status": "Status",
+      "deliveryFees": "Delivery Fees",
+      "trackingId": "Tracking ID",
+      "comment": "Comment",
+      "orderItems": "Order Items",
+      "itemId": "Item ID",
+      "fullName": "Full Name",
+      "phone": "Phone",
+      "location": "Location",
+      "deliveryInformation": "Delivery Information",
+      "agency": "Agency",
+      "deliveryCompany": "Delivery Company",
+      "tracking": "Tracking",
+      "pricingInformation": "Pricing Information",
+      "productPrice": "Product Price",
+      "totalPrice": "Total Price",
+      "series": "Series",
+      "noItemsFound": "No items found"
+    },
+    "buttons": {
+      "close": "Close",
+      "retry": "Retry"
+    },
+    "messages": {
+      "loading": "Loading order details...",
+      "loadingOrderDetails": "Loading Order Details"
+    },
+    "errors": {
+      "loadingError": "Failed to load order details",
+      "notFound": "No order details available.",
+      "error": "Error",
+      "failedToLoad": "Failed to load order details. Please try again."
+    },
+    "types": {
+      "wholesale": "Wholesale",
+      "retail": "Retail",
+      "order": "Order"
+    }
+  },
+  "leads": {
+    "sections": {
+      "customerInfo": "Customer Information",
+      "orderSummary": "Order Summary"
+    },
+    "forms": {
+      "labels": {
+        "stopdeskDelivery": "Stopdesk Delivery",
+        "wilaya": "Wilaya",
+        "commune": "Commune",
+        "deliveryAgency": "Delivery Agency",
+        "notesOptional": "Notes (Optional)",
+        "product": "Product",
+        "quantity": "Quantity",
+        "wholesale": "Wholesale",
+        "color": "Color",
+        "size": "Size",
+        "subtotal": "Subtotal",
+        "totalWeight": "Total Weight",
+        "deliveryFee": "Delivery Fee",
+        "totalAmount": "Total Amount",
+        "estimatedDelivery": "Estimated Delivery"
+      },
+      "placeholders": {
+        "selectWilaya": "Select wilaya",
+        "selectCommune": "Select commune",
+        "selectAgency": "Select agency",
+        "addNotes": "Add any additional notes...",
+        "selectProduct": "Select product",
+        "selectColor": "Select color",
+        "selectSize": "Select size"
+      },
+      "descriptions": {
+        "stopdeskDelivery": "Deliver to stopdesk instead of home",
+        "wholesalePricing": "Enable for wholesale pricing"
+      }
+    },
+    "buttons": {
+      "addLead": "Add Lead",
+      "createLead": "Create Lead",
+      "creatingLead": "Creating Lead...",
+      "addProduct": "Add Product"
+    },
+    "descriptions": {
+      "createNewLead": "Create a new lead for your customer."
+    }
+  },
+  "payouts": {
+    "labels": {
+      "currentBalance": "Current Balance",
+      "activeBalance": "Active Balance",
+      "totalEarnings": "Total Earnings",
+      "totalPaid": "Total Paid",
+      "recentPayments": "Recent Payments",
+      "paymentStatistics": "Payment Statistics (Last Year)",
+      "requestWithdraw": "Request Withdraw",
+      "amount": "Amount (DA)"
+    },
+    "buttons": {
+      "requestWithdraw": "Request Withdraw",
+      "request": "Request"
+    },
+    "messages": {
+      "partnerInfoNotAvailable": "Partner information not available",
+      "failedToLoadBalance": "Failed to load balance data",
+      "withdrawalProcessingTime": "Withdrawals are processed within 1-3 business days",
+      "failedToLoadPayments": "Failed to load payments",
+      "noPaymentsFound": "No payments found"
+    }
+  },
+  "partners": {
+    "labels": {
+      "partners": "Partners",
+      "fullName": "Full Name",
+      "email": "Email",
+      "gender": "Gender",
+      "background": "Background",
+      "status": "Status",
+      "profileImage": "Profile Image",
+      "name": "Name",
+      "birthdate": "Birthdate",
+      "bio": "Bio",
+      "professionalBackground": "Professional Background",
+      "socialLinks": "Social Links",
+      "linkedin": "LinkedIn",
+      "instagram": "Instagram",
+      "tiktok": "TikTok",
+      "profilePreview": "Profile Preview",
+      "birthdateLabel": "Birthdate:",
+      "professionalBackgroundLabel": "Professional Background",
+      "partnerDetails": "Partner Details",
+      "partnerId": "Partner ID",
+      "deliveryRate": "Delivery Rate",
+      "cancelRate": "Cancel Rate",
+      "totalReferrals": "Total Referrals",
+      "totalOrders": "Total Orders"
+    },
+    "placeholders": {
+      "searchPartners": "Search partners...",
+      "filterByStatus": "Filter by status",
+      "filterByBackground": "Filter by background",
+      "yourFullName": "Your full name",
+      "tellUsAboutYourself": "Tell us about yourself",
+      "describeYourExperience": "Describe your professional experience",
+      "linkedinUrl": "https://linkedin.com/in/your-profile",
+      "instagramUrl": "https://instagram.com/yourhandle",
+      "tiktokUrl": "https://tiktok.com/yourhandle"
+    },
+    "buttons": {
+      "clearFilters": "Clear filters",
+      "retry": "Retry",
+      "editProfile": "Edit Profile",
+      "previewProfile": "Preview Profile",
+      "saveChanges": "Save Changes",
+      "saving": "Saving..."
+    },
+    "status": {
+      "allStatuses": "All Statuses",
+      "active": "Active",
+      "inactive": "Inactive",
+      "pending": "Pending",
+      "suspended": "Suspended"
+    },
+    "backgrounds": {
+      "allBackgrounds": "All Backgrounds",
+      "marketing": "Marketing",
+      "sales": "Sales",
+      "technology": "Technology",
+      "business": "Business",
+      "education": "Education",
+      "healthcare": "Healthcare",
+      "finance": "Finance",
+      "other": "Other"
+    },
+    "messages": {
+      "loadingProfile": "Loading profile...",
+      "errorLoadingPartners": "Error loading partners",
+      "failedToLoadPartners": "Failed to load partners",
+      "failedToLoadProfile": "Failed to load profile",
+      "pleaseSignIn": "Please sign in to view your dashboard",
+      "loadingDashboard": "Loading dashboard...",
+      "failedToLoadDashboard": "Failed to load dashboard data"
+    },
+    "validation": {
+      "userIdRequired": "User ID is required",
+      "usernameMinLength": "Username must be at least 3 characters",
+      "fullNameRequired": "Full name is required",
+      "invalidEmail": "Invalid email address",
+      "invalidUrl": "Invalid URL",
+      "nameMinLength": "Name must be at least 2 characters",
+      "birthdateRequired": "Birthdate is required",
+      "invalidDateFormat": "Invalid date format",
+      "backgroundRequired": "Background is required",
+      "bioMaxLength": "Bio must be at most 500 characters",
+      "invalidImageUrl": "Invalid image URL"
+    }
+  },
+  "storefront": {
+    "infoBar": {
+      "content": "48h Exchange & Return Guarantee",
+      "close": "Close info bar"
+    },
+    "nav": {
+      "home": "Home",
+      "products": "Products",
+      "terms": "Terms",
+      "openMenu": "Open storefront navigation",
+      "search": "Search products"
+    },
+    "footer": {
+      "heading": "Instanet",
+      "description": "Your trusted fashion destination. Discover quality products with cash-on-delivery convenience.",
+      "links": {
+        "catalog": "Catalog",
+        "terms": "Terms",
+        "dashboard": "Dashboard"
+      },
+      "supportPrompt": "Need help?",
+      "supportEmail": "support@bellami.fashion",
+      "copyright": "© {year} Instanet. All rights reserved."
+    },
+    "home": {
+      "badge": "Cash on Delivery Storefront",
+      "headline": "Discover products your customers will love",
+      "subheadline": "Browse tailored products, capture leads instantly, and turn them into COD orders without upfront payment.",
+      "ctaExplore": "Explore Catalog",
+      "ctaDashboard": "Go to Dashboard",
+      "featuredTitle": "Featured products",
+      "featuredSubtitle": "Each page is optimized for lead capture—pick one and start selling right away."
+    },
+    "search": {
+      "title": "Search products",
+      "subtitle": "Filter by headline or slug to locate the product you need.",
+      "inputPlaceholder": "Search products...",
+      "results": "{count, plural, one {Showing # product} other {Showing # products}}",
+      "empty": "No products found for \"{query}\".",
+      "badgeTrending": "Trending now",
+      "badgeBundle": "/ bundle",
+      "badgeCod": "💡 COD ready",
+      "viewDetails": "View details",
+      "defaultCategory": "New arrival",
+      "stock": {
+        "in": "{count} in stock",
+        "out": "Back-order"
+      },
+      "imagePlaceholder": "Image coming soon",
+      "cardAria": "Open product for {headline}",
+      "currencySymbol": "DA"
+    },
+    "orderForm": {
+      "unitsLabel": "Piece {index}",
+      "bundleAria": "Select bundle",
+      "bundleSummary": "{units, plural, one {# piece} other {# pieces}} • {price} each",
+      "bundleTotal": "Total: {price}",
+      "singleBundleSummary": "{label} • {price} / piece",
+      "bundleOption": "{count, plural, one {# piece} other {# pieces}}",
+      "sizesNotRequired": "Sizes are not required for this color.",
+      "offerLabel": "Offer: {offer}",
+      "orderTotal": "Order total",
+      "promotionMissing": "No promotion selected",
+      "submit": "Order Now",
+      "submitting": "Submitting...",
+      "labels": {
+        "fullName": "Full Name",
+        "phone": "Phone Number",
+        "commune": "Commune",
+        "wilaya": "Wilaya",
+        "bundle": "Order bundle",
+        "color": "Color",
+        "size": "Size"
+      },
+      "placeholders": {
+        "fullName": "Customer name",
+        "phone": "05 XX XX XX XX",
+        "commune": "Commune",
+        "wilaya": "Wilaya"
+      },
+      "validation": {
+        "fullName": "Please enter full name",
+        "phoneMin": "Phone must have at least 6 digits",
+        "phoneMax": "Phone must be at most 20 characters",
+        "commune": "Commune is required",
+        "wilaya": "Wilaya is required",
+        "color": "Select a color",
+        "size": "Select a size",
+        "variantCount": "Select {count, plural, one {# variant} other {# variants}}",
+        "bundle": "Select a bundle"
+      }
+    },
+    "product": {
+      "breadcrumbs": {
+        "home": "Home",
+        "catalog": "Catalog"
+      },
+      "gallery": {
+        "placeholder": "Image coming soon",
+        "aria": "View gallery image {index}",
+        "prev": "Previous",
+        "next": "Next"
+      },
+      "testimonials": {
+        "title": "Customer Reviews"
+      },
+      "status": {
+        "inStock": "In stock",
+        "backOrder": "Back-order",
+        "updated": "Updated {date}"
+      },
+      "pricing": {
+        "perUnit": "Per piece",
+        "label": "{label} • Total {price}",
+        "badge": "{label}: {price} / piece"
+      },
+      "description": "Description",
+      "info": {
+        "fastResponseTitle": "Fast response",
+        "fastResponseDesc": "When you fill the form, our team will contact you in less than 8 hours.",
+        "exchangeReturnTitle": "Exchange & Return",
+        "exchangeReturnDesc": "The customer has the right to exchange or return within 48 hours if the product doesn't match their expectations.",
+        "supportTitle": "Support team",
+        "supportDesc": "Our support team is available 24/7 to assist you."
+      },
+      "leadForm": {
+        "headline": "Enter your information",
+        "subheadline": "No upfront payment required! You have the right to return or exchange if the product doesn't meet your expectations. Fill in your details below and we'll confirm your order in less than 8 hours.",
+        "orderInProgressTitle": "Please wait",
+        "orderInProgress": "You already have an order in progress. You can submit another request in {minutes} minutes."
+      },
+      "toast": {
+        "title": "Lead submitted",
+        "description": "We received your order request. Our team will contact you shortly."
+      },
+      "notFound": "Product not found."
+    },
+    "thankYou": {
+      "title": "Thank you!",
+      "description": "Your request was submitted successfully. Our team will contact you shortly to confirm your order details.",
+      "body": "You can continue browsing other products.",
+      "continue": "Continue Shopping"
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "subtitle": "Please review these terms carefully before using the platform.",
+      "cardTitle": "Instanet COD Store Terms",
+      "sections": {
+        "acceptance": {
+          "title": "1. Acceptance of Terms",
+          "content": "By accessing or using our storefront and affiliate dashboard, you agree to comply with these Terms of Service and all applicable laws and regulations."
+        },
+        "responsibilities": {
+          "title": "2. Affiliate Responsibilities",
+          "content": "Affiliates are responsible for accurate lead information, transparent marketing practices, and adherence to local regulations regarding COD sales."
+        },
+        "availability": {
+          "title": "3. Product Availability",
+          "content": "Inventory levels and pricing may change without notice. Submitting a lead does not guarantee order fulfillment until our team confirms the request."
+        },
+        "payment": {
+          "title": "4. Payment & Commissions",
+          "content": "Commissions are issued after successful delivery and payment collection. Fraudulent leads may result in suspension of affiliate privileges."
+        },
+        "changes": {
+          "title": "5. Changes to Terms",
+          "content": "We reserve the right to update these terms periodically. Continued use of the platform indicates acceptance of any revisions."
+        }
+      }
+    }
+  },
+  "affiliateDashboard": {
+    "currencySymbol": "DA",
+    "home": {
+      "title": "Dashboard",
+      "subtitle": "Track your affiliate performance and manage your workspace.",
+      "loadError": "Unable to load dashboard stats. Please try again.",
+      "metricsAria": "Performance metrics",
+      "activityAria": "Recent activity charts",
+      "deliveryRate": "Delivery rate",
+      "confirmationRate": "Confirmation rate",
+      "sales": "Sales",
+      "orders": "Orders",
+      "salesRecent": "Sales in recent days",
+      "ordersRecent": "Orders in recent days",
+      "salesRecentAria": "Line chart of sales in the selected period",
+      "ordersRecentAria": "Bar chart of orders in the selected period",
+      "vsPrevious": "{value} vs previous period",
+      "vsPreviousPoints": "{value} pts vs previous period",
+      "dateRange": {
+        "aria": "Select dashboard date range",
+        "placeholder": "Date range",
+        "last7Days": "Last 7 days",
+        "last14Days": "Last 14 days",
+        "last30Days": "Last 30 days",
+        "last90Days": "Last 90 days",
+        "thisMonth": "This month"
+      },
+      "level": {
+        "good": "Good",
+        "warning": "Needs attention",
+        "poor": "Poor"
+      }
+    },
+    "orders": {
+      "title": "Orders",
+      "partnerUnresolved": "Unable to resolve your partner profile. Please refresh and try again.",
+      "stats": {
+        "total": "Total orders",
+        "processing": "Processing",
+        "delivered": "Delivered"
+      },
+      "searchPlaceholder": "Search orders...",
+      "searchAria": "Search orders",
+      "clearSearch": "Clear search",
+      "statusFilterAria": "Filter by status",
+      "statusPlaceholder": "Status",
+      "allStatuses": "All statuses",
+      "createOrder": "Create order",
+      "createOrderAria": "Create new order",
+      "statusUpdated": "Order status updated",
+      "changeStatusAria": "Order status: {status}. Click to change.",
+      "showMore": "Show more",
+      "showMoreAria": "Load more orders",
+      "loadingMore": "Loading...",
+      "empty": "No orders found.",
+      "commissionLabel": "Commission",
+      "copyPhoneAria": "Copy phone number",
+      "callPhoneAria": "Call {phone}",
+      "phoneCopiedAria": "Phone number copied",
+      "detailsAria": "View order details",
+      "deleteAria": "Delete order",
+      "details": {
+        "title": "Order details",
+        "description": "Customer, product, and delivery information for this order.",
+        "customer": "Customer",
+        "location": "Location",
+        "items": "Items",
+        "noTracking": "No tracking yet",
+        "loadError": "Failed to load order details. Please try again."
+      },
+      "delete": {
+        "title": "Delete this order?",
+        "description": "This order is still initial and can be removed. This action cannot be undone.",
+        "confirm": "Delete",
+        "deleting": "Deleting...",
+        "cancel": "Cancel"
+      },
+      "copyTrackingAria": "Copy tracking ID",
+      "trackingCopiedAria": "Tracking ID copied",
+      "viewTrackingAria": "View order tracking",
+      "trackingTitle": "Order tracking",
+      "trackingDescription": "Parcel lifecycle and delivery updates for this order.",
+      "trackingIdLabel": "Tracking ID",
+      "trackingEmpty": "No tracking events yet.",
+      "expandAria": "Show order details",
+      "collapseAria": "Hide order details",
+      "orderValueSummary": "Order value shown in summary: {amount} {currency}",
+      "print": {
+        "page": "Print slips",
+        "selected": "Print slips ({count})",
+        "bulkAction": "Print delivery slips",
+        "ariaLabel": "Print delivery slips",
+        "slipTitle": "Delivery slip",
+        "order": "Order",
+        "tracking": "Tracking",
+        "customer": "Customer",
+        "phone": "Phone",
+        "phone2": "Phone 2",
+        "address": "Address",
+        "wilaya": "Wilaya",
+        "commune": "Commune",
+        "product": "Product",
+        "color": "Color",
+        "size": "Size",
+        "qty": "Qty",
+        "amount": "COD amount",
+        "stopdesk": "Stop desk",
+        "notes": "Notes",
+        "yes": "Yes",
+        "no": "No",
+        "emptyTitle": "Nothing to print",
+        "emptyDescription": "Select orders or wait for the list to load.",
+        "blockedTitle": "Print blocked",
+        "blockedDescription": "Allow pop-ups for this site to print delivery slips."
+      },
+      "columns": {
+        "id": "ID",
+        "customer": "Customer",
+        "contact": "Contact",
+        "phone": "Phone",
+        "product": "Product",
+        "qty": "Qty",
+        "status": "Status",
+        "dcStatus": "DC status",
+        "amount": "Amount",
+        "created": "Created",
+        "actions": "Actions"
+      },
+      "create": {
+        "title": "Create order",
+        "description": "Add customer details, delivery, and product pages for this order.",
+        "descriptionLocked": "Add customer and delivery details. The product page is already selected.",
+        "sectionCustomer": "Customer",
+        "sectionDelivery": "Delivery",
+        "sectionItems": "Items",
+        "deliveryFee": "Delivery fee",
+        "estimatedDelivery": "Estimated delivery",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "phone": "Phone",
+        "address": "Address",
+        "deliveryType": "Delivery type",
+        "deliveryHome": "Home delivery",
+        "deliveryStopdesk": "Stopdesk",
+        "selectDeliveryType": "Select delivery type",
+        "deliveryTypeAria": "Select delivery type",
+        "wilaya": "Wilaya",
+        "commune": "Commune",
+        "agency": "Agency",
+        "selectWilaya": "Select wilaya",
+        "selectCommune": "Select commune",
+        "selectAgency": "Select agency",
+        "noWilayas": "No wilayas found",
+        "noCommunes": "No communes found",
+        "noAgencies": "No agencies for this commune",
+        "items": "Items",
+        "itemLabel": "Item {index}",
+        "addItem": "Add item",
+        "addItemAria": "Add order item",
+        "deleteItem": "Delete",
+        "deleteItemAria": "Delete item {index}",
+        "product": "Product page",
+        "color": "Color",
+        "size": "Size",
+        "noSize": "One size",
+        "quantity": "Quantity",
+        "selectProduct": "Select a product page",
+        "selectColor": "Select a color",
+        "selectSize": "Select a size",
+        "selectColorFirst": "Select a color first",
+        "sizesNotRequired": "Size not required for this color",
+        "noColors": "No colors available for this product",
+        "itemFallback": "Item #{id}",
+        "firstNameAria": "Customer first name",
+        "lastNameAria": "Customer last name",
+        "phoneAria": "Customer phone",
+        "addressAria": "Customer address",
+        "wilayaAria": "Select wilaya",
+        "communeAria": "Select commune",
+        "agencyAria": "Select agency",
+        "productAria": "Select product page",
+        "colorAria": "Select color",
+        "sizeAria": "Select size",
+        "quantityAria": "Quantity",
+        "quantityDecreaseAria": "Decrease quantity",
+        "quantityIncreaseAria": "Increase quantity",
+        "cancel": "Cancel",
+        "submit": "Create order",
+        "submitting": "Creating...",
+        "sectionSummary": "Amount breakdown",
+        "subtotal": "Subtotal",
+        "subtotalItems": "{count, plural, one {# item} other {# items}}",
+        "discountLabel": "Discount (from your commission)",
+        "discountAria": "Per-unit discount amount",
+        "discountMax": "Max {max} {currency}",
+        "discountHint": "Lower the customer price by sacrificing part of your commission.",
+        "discountRow": "Your discount",
+        "deliveryFeePending": "Select wilaya",
+        "total": "Total (COD)",
+        "yourCommission": "Your commission"
+      }
+    },
+    "earnings": {
+      "title": "Earnings",
+      "partnerUnresolved": "Unable to resolve your partner profile. Please refresh and try again.",
+      "stats": {
+        "ready": "Ready",
+        "notReady": "Not ready",
+        "withdrawn": "Withdrawn",
+        "available": "Available"
+      },
+      "requestWithdraw": "Request withdraw",
+      "requestWithdrawAria": "Request withdraw",
+      "sections": {
+        "readyTitle": "Ready to withdraw",
+        "readyDescription": "Orders with delivery company status encaisse.",
+        "notReadyTitle": "Not ready",
+        "notReadyDescription": "Earned commissions (order delivered) waiting for encaisse.",
+        "withdrawalsTitle": "Withdrawals",
+        "withdrawalsDescription": "Pending and paid withdraw requests."
+      },
+      "empty": {
+        "ready": "No ready commissions yet.",
+        "notReady": "No pending commissions.",
+        "withdraws": "No withdraw requests yet."
+      },
+      "columns": {
+        "order": "Order",
+        "product": "Product",
+        "qty": "Qty",
+        "rate": "Rate",
+        "commission": "Commission",
+        "date": "Date",
+        "id": "ID",
+        "amount": "Amount",
+        "status": "Status"
+      },
+      "status": {
+        "paid": "Paid",
+        "pending": "Pending"
+      },
+      "withdraw": {
+        "title": "Request withdraw",
+        "available": "Available to withdraw: {amount} {currency}",
+        "amount": "Amount",
+        "amountAria": "Withdraw amount",
+        "cancel": "Cancel",
+        "submit": "Request",
+        "submitting": "Submitting..."
+      }
+    },
+    "products": {
+      "title": "Products",
+      "description": "Browse active product pages and share them with your customers.",
+      "searchPlaceholder": "Search product pages...",
+      "searchAria": "Search product pages",
+      "noImage": "No image",
+      "productFallback": "Product #{id}",
+      "commission": "Commission: {amount} {currency}",
+      "freeShipping": "Free shipping",
+      "view": "View",
+      "viewAria": "View {headline}",
+      "createOrder": "Create order",
+      "createOrderAria": "Create new order for {headline}",
+      "moreActionsAria": "More actions for {headline}",
+      "checkStock": "Check stock",
+      "checkStockAria": "Check stock for {headline}",
+      "checkStockTitle": "Stock availability",
+      "checkStockColor": "Color",
+      "checkStockSize": "Size",
+      "checkStockAvailability": "Status",
+      "checkStockAvailable": "In stock",
+      "checkStockLow": "Low stock",
+      "checkStockOut": "Out of stock",
+      "checkStockEmpty": "No variants assigned to this product page.",
+      "checkStockError": "Could not load stock for this product.",
+      "checkStockVariants": "{count, plural, one {# variant} other {# variants}}",
+      "downloadAssets": "Download assets",
+      "downloadAssetsAria": "Download assets for {headline}",
+      "downloadingAssets": "Downloading assets...",
+      "publishMarketplace": "Publish to Marketplace",
+      "publishMarketplaceAria": "Publish {headline} to Facebook Marketplace",
+      "extensionInstall": {
+        "title": "Install Instanet Marketplace extension",
+        "description": "In development, load the extension from Instanet (not the Chrome Web Store), then reload this page.",
+        "step1": "Open chrome://extensions and enable Developer mode",
+        "step2": "Click Load unpacked and select the bellami-marketplace-extension folder",
+        "step3": "Reload this Instanet page",
+        "step4": "Click Publish to Marketplace again",
+        "close": "Got it"
+      },
+      "copyLink": "Copy link",
+      "copyLinkAria": "Copy link for {headline}",
+      "retailPrice": "Retail price",
+      "commissionLabel": "Your commission",
+      "detailsDescription": "Description",
+      "closeDetails": "Close",
+      "empty": "No active product pages found.",
+      "clearSearch": "Clear search",
+      "columns": {
+        "product": "Product",
+        "commission": "Commission",
+        "price": "Price",
+        "created": "Created",
+        "actions": "Actions"
+      },
+      "selectGrid": {
+        "searchPlaceholder": "Search products...",
+        "searchAria": "Search product pages",
+        "groupAria": "Select a product page",
+        "empty": "No product pages found.",
+        "noImage": "No image",
+        "selectAria": "Select {headline}"
+      },
+      "toast": {
+        "copiedTitle": "Link copied",
+        "copiedDescription": "Product page link copied to clipboard",
+        "copyFailedTitle": "Copy failed",
+        "copyFailedDescription": "Could not copy the link",
+        "downloadSuccessTitle": "Download started",
+        "downloadSuccessDescription": "Product assets zip is downloading",
+        "downloadFailedTitle": "Download failed",
+        "downloadFailedDescription": "Could not download product assets",
+        "marketplaceNoAssetsTitle": "No library photos",
+        "marketplaceNoAssetsDescription": "Add images to the product page assets library before publishing.",
+        "marketplaceOpenedTitle": "Extension opened",
+        "marketplaceOpenedDescription": "Review the listing in the Instanet Marketplace side panel.",
+        "marketplaceOpenFailedTitle": "Could not open extension",
+        "marketplaceOpenFailedDescription": "Make sure the Instanet Marketplace extension is installed and enabled."
+      }
+    },
+    "settings": {
+      "title": "Settings",
+      "subtitle": "Manage your language and account preferences.",
+      "language": {
+        "title": "Language",
+        "description": "Choose the language used across the affiliate dashboard.",
+        "english": "English",
+        "french": "Français",
+        "arabic": "العربية"
+      },
+      "account": {
+        "title": "Account",
+        "description": "Your signed-in profile and session."
+      },
+      "payment": {
+        "title": "Payment Methods",
+        "description": "Add your payout details so we can send your commissions.",
+        "baridimobRib": "BaridiMob RIB",
+        "baridimobRibPlaceholder": "Enter your 20-digit RIB",
+        "redotpayAccount": "RedotPay Account",
+        "redotpayAccountPlaceholder": "Enter your RedotPay email or ID",
+        "usdtAddress": "USDT Address",
+        "usdtAddressPlaceholder": "Enter your USDT wallet address (TRC-20)"
+      },
+      "analytics": {
+        "title": "Analytics",
+        "subtitle": "Manage analytics and tracking pixels (admin)."
+      },
+      "save": "Save",
+      "saving": "Saving...",
+      "fields": {
+        "facebook_pixel_id": {
+          "label": "Facebook Pixel ID",
+          "placeholder": "Enter your Facebook Pixel ID"
+        },
+        "tiktok_pixel_id": {
+          "label": "TikTok Pixel ID(s)",
+          "placeholder": "One or more IDs, comma-separated (e.g. ABC123, DEF456)"
+        },
+        "google_analytics_id": {
+          "label": "Google Analytics ID",
+          "placeholder": "Enter your Google Analytics ID (GA4)"
+        },
+        "microsoft_clarity_id": {
+          "label": "Microsoft Clarity ID",
+          "placeholder": "Enter your Microsoft Clarity Project ID"
+        },
+        "meta_conversion_api_access_token": {
+          "label": "Meta Conversion API Access Token",
+          "placeholder": "Enter your Meta Conversion API access token"
+        }
+      },
+      "toast": {
+        "updatedTitle": "Setting updated",
+        "updatedDescription": "{label} has been updated successfully.",
+        "errorTitle": "Error",
+        "errorDescription": "Failed to update setting. Please try again."
+      }
+    }
+  }
+}
