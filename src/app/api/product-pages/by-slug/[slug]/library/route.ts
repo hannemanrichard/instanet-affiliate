@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
+import { z } from "zod";
 import { productApplicationService } from "@/features/products/application/services/productApplicationService";
 import { getProductPageLibraryAssetsSafe } from "@/features/products/data/productPageAssetService";
 import { jsonError } from "@/shared/server/jsonError";
+import { parseWithSchema } from "@/shared/server/parseRequest";
+
+const slugSchema = z.string().trim().min(1).max(200);
 
 /** JSON list of product_page_assets (library only) for Marketplace publish. */
 export async function GET(
@@ -9,7 +13,8 @@ export async function GET(
   context: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = await context.params;
+    const { slug: rawSlug } = await context.params;
+    const slug = parseWithSchema(slugSchema, rawSlug, "Invalid slug");
     const page = await productApplicationService.getProductPageBySlug(slug);
 
     if (!page) {

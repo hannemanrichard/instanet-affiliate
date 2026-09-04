@@ -2,15 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireCurrentPartner } from "@/shared/server/requireCurrentPartner";
 import { jsonError } from "@/shared/server/jsonError";
 import { partnerApplicationService } from "@/features/partners/application/services/partnerApplicationService";
+import { updatePartnerPaymentBodySchema } from "@/features/partners/domain/validations";
+import { parseJsonBody } from "@/shared/server/parseRequest";
 
 export async function PATCH(request: NextRequest) {
   try {
     const partner = await requireCurrentPartner();
-    const body = (await request.json()) as {
-      baridimob_rib?: string | null;
-      redotpay_account?: string | null;
-      usdt_address?: string | null;
-    };
+    const body = await parseJsonBody(request, updatePartnerPaymentBodySchema);
 
     const updated = await partnerApplicationService.updatePayment(partner.id, {
       baridimob_rib: body.baridimob_rib,

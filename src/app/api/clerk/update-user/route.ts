@@ -1,6 +1,8 @@
 import logger from "@/shared/utils/logger";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
+import { updateClerkUserBodySchema } from "@/shared/server/requestSchemas";
+import { parseJsonBody, ValidationError } from "@/shared/server/parseRequest";
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,29 +12,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const body = await req.json();
-    const { userId, firstName, lastName } = body as {
-      userId?: string;
-      firstName?: string;
-      lastName?: string;
-    };
+    const body = await parseJsonBody(req, updateClerkUserBodySchema);
 
     // Only allow a user to update their own Clerk profile
-    if (!userId || userId !== sessionUserId) {
+    if (body.userId !== sessionUserId) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
-
-    if (typeof firstName !== "string" || typeof lastName !== "string") {
-      return NextResponse.json(
-        { error: "firstName and lastName are required" },
-        { status: 400 }
-      );
     }
 
     const clerk = await clerkClient();
     await clerk.users.updateUser(sessionUserId, {
-      firstName: firstName.trim(),
-      lastName: lastName.trim(),
+      firstName: body.firstName,
+      lastName: body.lastName,
     });
 
     return NextResponse.json(
@@ -40,6 +30,17 @@ export async function POST(req: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
+    if (error instanceof ValidationError) {
+      return NextResponse.json(
+        {
+          error: error.message,
+          code: error.code,
+          issues: error.issues,
+        },
+        { status: 400 }
+      );
+    }
+
     logger.error(
       "Error updating user",
       error instanceof Error ? error : new Error(String(error))

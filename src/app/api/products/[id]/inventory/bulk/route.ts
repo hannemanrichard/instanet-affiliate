@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { productApplicationService } from "@/features/products/application/services/productApplicationService";
-import type { ProductInventoryAdjustment } from "@/features/products/domain";
-import { ProductError, ProductItemError } from "@/features/products/domain";
+import { productInventoryAdjustmentsBodySchema } from "@/features/products/domain/validations";
 import { requireAdminActor } from "@/shared/server/requireDashboardActor";
 import { jsonError } from "@/shared/server/jsonError";
+import {
+  parseJsonBody,
+  parsePositiveIntParam,
+} from "@/shared/server/parseRequest";
 
 export async function POST(
   req: NextRequest,
@@ -12,22 +15,8 @@ export async function POST(
   try {
     await requireAdminActor();
     const { id } = await context.params;
-    const productId = Number(id);
-
-    if (!productId || Number.isNaN(productId)) {
-      throw new ProductError("Valid product id is required", "PRODUCT_INVALID_ID");
-    }
-
-    const body = (await req.json()) as {
-      adjustments?: ProductInventoryAdjustment[];
-    };
-
-    if (!body.adjustments?.length) {
-      throw new ProductItemError(
-        "adjustments are required",
-        "PRODUCT_INVENTORY_ADJUSTMENTS_REQUIRED"
-      );
-    }
+    const productId = parsePositiveIntParam(id, "id");
+    const body = await parseJsonBody(req, productInventoryAdjustmentsBodySchema);
 
     const snapshot = await productApplicationService.bulkUpdateInventory(
       productId,

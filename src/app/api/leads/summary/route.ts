@@ -5,8 +5,10 @@ import { jsonError } from "@/shared/server/jsonError";
 
 export async function GET() {
   try {
-    await requireDashboardActor();
-    const summary = await leadApplicationService.getLeadSummary();
+    const actor = await requireDashboardActor();
+    const partnerId =
+      actor.role === "partner" ? actor.partner.id : undefined;
+    const summary = await leadApplicationService.getLeadSummary(partnerId);
     return NextResponse.json(summary);
   } catch (error) {
     return jsonError(error);

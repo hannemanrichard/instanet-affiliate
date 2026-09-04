@@ -11,6 +11,11 @@ import type {
 } from "../domain";
 import type { LeadItemEntity } from "../domain/entities";
 import type { LeadRepository, UserOption } from "../domain/repositories";
+import type {
+  LeadFilters,
+  LeadPaginationParams,
+  PaginatedLeadsResult,
+} from "../domain/valueObjects";
 
 type Tables = Database["public"]["Tables"];
 type LeadRow = Tables["leads"]["Row"];
@@ -24,25 +29,129 @@ type UserRow = Tables["users"]["Row"];
 export class SupabaseLeadService implements LeadRepository {
   private readonly tableName = "leads";
 
-  async getAll(): Promise<LeadEntity[]> {
+  /** Columns needed for list mapping — avoid select("*"). */
+  private readonly listColumns = [
+    "id",
+    "first_name",
+    "last_name",
+    "phone",
+    "address",
+    "commune",
+    "wilaya",
+    "channel",
+    "comment",
+    "color",
+    "size",
+    "product",
+    "status",
+    "objective",
+    "offer",
+    "price",
+    "agent_id",
+    "partner_id",
+    "created_at",
+    "last_changed_status",
+    "has_recourse",
+    "is_abondoned",
+    "is_moved",
+    "is_wholesale",
+  ].join(", ");
+
+  async getAll(filters?: LeadFilters): Promise<LeadEntity[]> {
     return withPerformanceTracking("LeadService", "getAll", async () => {
       const rows = await DatabaseWrapper.executeQuery(
         async () => {
-          const { data, error } = await supabase
+          let query = supabase
             .from(this.tableName)
-            .select("*")
+            .select(this.listColumns)
             .order("created_at", { ascending: false });
 
+          if (filters?.partnerId != null) {
+            query = query.eq("partner_id", filters.partnerId);
+          }
+          if (filters?.status) {
+            query = query.eq("status", filters.status);
+          }
+          if (filters?.agentId != null) {
+            query = query.eq("agent_id", filters.agentId);
+          }
+
+          const { data, error } = await query;
           if (error) throw error;
           return { data, error };
         },
         {
           operation: "getAll",
           table: this.tableName,
+          metadata: { filters },
         }
       );
 
-      return rows.map(this.mapRowToEntity);
+      return (rows as LeadRow[]).map(this.mapRowToEntity);
+    });
+  }
+
+  async getPaginated(
+    filters: LeadFilters,
+    pagination: LeadPaginationParams
+  ): Promise<PaginatedLeadsResult> {
+    return withPerformanceTracking("LeadService", "getPaginated", async () => {
+      const page = Math.max(1, pagination.page);
+      const limit = Math.max(1, Math.min(100, pagination.limit));
+      const from = (page - 1) * limit;
+      const to = from + limit - 1;
+
+      const result = await DatabaseWrapper.executeQuery(
+        async () => {
+          let query = supabase
+            .from(this.tableName)
+            .select(this.listColumns, { count: "exact" })
+            .order("created_at", { ascending: false })
+            .range(from, to);
+
+          if (filters.partnerId != null) {
+            query = query.eq("partner_id", filters.partnerId);
+          }
+          if (filters.status) {
+            query = query.eq("status", filters.status);
+          }
+          if (filters.agentId != null) {
+            query = query.eq("agent_id", filters.agentId);
+          }
+          if (filters.search?.trim()) {
+            const normalized = filters.search.trim();
+            query = query.or(
+              [
+                `first_name.ilike.%${normalized}%`,
+                `last_name.ilike.%${normalized}%`,
+                `phone.ilike.%${normalized}%`,
+              ].join(",")
+            );
+          }
+
+          const { data, error, count } = await query;
+          if (error) throw error;
+          return {
+            data: {
+              rows: (data ?? []) as LeadRow[],
+              total: count ?? 0,
+            },
+            error,
+          };
+        },
+        {
+          operation: "getPaginated",
+          table: this.tableName,
+          metadata: { filters, pagination: { page, limit } },
+        }
+      );
+
+      return {
+        data: result.rows.map(this.mapRowToEntity),
+        total: result.total,
+        page,
+        limit,
+      };
     });
   }
 
@@ -52,7 +161,7 @@ export class SupabaseLeadService implements LeadRepository {
         async () => {
           const { data, error } = await supabase
             .from(this.tableName)
-            .select("*")
+            .select(this.listColumns)
             .eq("id", id)
             .maybeSingle();
 
@@ -71,40 +180,45 @@ export class SupabaseLeadService implements LeadRepository {
     });
   }
 
-  async getByStatus(status: string): Promise<LeadEntity[]> {
+  async getByStatus(status: string, partnerId?: number): Promise<LeadEntity[]> {
     return withPerformanceTracking("LeadService", "getByStatus", async () => {
       const rows = await DatabaseWrapper.executeQuery(
         async () => {
-          const { data, error } = await supabase
+          let query = supabase
             .from(this.tableName)
-            .select("*")
+            .select(this.listColumns)
             .eq("status", status)
             .order("created_at", { ascending: false });
 
+          if (partnerId != null) {
+            query = query.eq("partner_id", partnerId);
+          }
+
+          const { data, error } = await query;
           if (error) throw error;
           return { data, error };
         },
         {
           operation: "getByStatus",
           table: this.tableName,
-          metadata: { status },
+          metadata: { status, partnerId },
         }
       );
 
-      return rows.map(this.mapRowToEntity);
+      return (rows as LeadRow[]).map(this.mapRowToEntity);
     });
   }
 
-  async search(term: string): Promise<LeadEntity[]> {
+  async search(term: string, partnerId?: number): Promise<LeadEntity[]> {
     if (!term.trim()) return [];
 
     const normalized = term.trim();
     return withPerformanceTracking("LeadService", "search", async () => {
       const rows = await DatabaseWrapper.executeQuery(
         async () => {
-          const { data, error } = await supabase
+          let query = supabase
             .from(this.tableName)
-            .select("*")
+            .select(this.listColumns)
             .or(
               [
                 `first_name.ilike.%${normalized}%`,
@@ -114,17 +228,22 @@ export class SupabaseLeadService implements LeadRepository {
             )
             .order("created_at", { ascending: false });
 
+          if (partnerId != null) {
+            query = query.eq("partner_id", partnerId);
+          }
+
+          const { data, error } = await query;
           if (error) throw error;
           return { data, error };
         },
         {
           operation: "search",
           table: this.tableName,
-          metadata: { term: normalized },
+          metadata: { term: normalized, partnerId },
         }
       );
 
-      return rows.map(this.mapRowToEntity);
+      return (rows as LeadRow[]).map(this.mapRowToEntity);
     });
   }
 
@@ -256,13 +375,20 @@ export class SupabaseLeadService implements LeadRepository {
     });
   }
 
-  async getSummary(): Promise<LeadSummary> {
+  async getSummary(partnerId?: number): Promise<LeadSummary> {
     return withPerformanceTracking("LeadService", "getSummary", async () => {
-      const rows = await DatabaseWrapper.executeQuery(
+      const rows = await DatabaseWrapper.executeQuery<
+        Array<{
+          total_leads: number | null;
+          total_pending: number | null;
+          total_confirmed: number | null;
+          total_wholesale: number | null;
+        }>
+      >(
         async () => {
-          const { data, error } = await supabase
-            .from(this.tableName)
-            .select("status, is_wholesale");
+          const { data, error } = await supabase.rpc("get_lead_summary", {
+            p_partner_id: partnerId ?? null,
+          });
 
           if (error) throw error;
           return { data, error };
@@ -270,30 +396,17 @@ export class SupabaseLeadService implements LeadRepository {
         {
           operation: "getSummary",
           table: this.tableName,
+          metadata: { partnerId },
         }
       );
 
-      const summary: LeadSummary = {
-        total_leads: 0,
-        total_pending: 0,
-        total_confirmed: 0,
-        total_wholesale: 0,
+      const row = rows[0];
+      return {
+        total_leads: Number(row?.total_leads ?? 0),
+        total_pending: Number(row?.total_pending ?? 0),
+        total_confirmed: Number(row?.total_confirmed ?? 0),
+        total_wholesale: Number(row?.total_wholesale ?? 0),
       };
-
-      rows.forEach((row) => {
-        summary.total_leads += 1;
-        if (row.status === "new" || row.status === "contacted") {
-          summary.total_pending += 1;
-        }
-        if (row.status === "converted") {
-          summary.total_confirmed += 1;
-        }
-        if (row.is_wholesale) {
-          summary.total_wholesale += 1;
-        }
-      });
-
-      return summary;
     });
   }
 

@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { settingsApplicationService } from "@/features/settings/application/services/settingsApplicationService";
-import type { SettingKey } from "@/features/settings/domain";
+import { updateSettingBodySchema } from "@/features/settings/domain/validations";
 import { requireAdminActor } from "@/shared/server/requireDashboardActor";
 import { jsonError } from "@/shared/server/jsonError";
+import { parseJsonBody } from "@/shared/server/parseRequest";
 
 export async function GET() {
   try {
@@ -17,20 +18,10 @@ export async function GET() {
 export async function PATCH(req: NextRequest) {
   try {
     await requireAdminActor();
-    const body = (await req.json()) as {
-      key?: SettingKey | string;
-      value?: string | null;
-    };
-
-    if (!body.key || typeof body.key !== "string" || !body.key.trim()) {
-      return NextResponse.json(
-        { error: "Setting key is required", code: "SETTING_KEY_REQUIRED" },
-        { status: 400 }
-      );
-    }
+    const body = await parseJsonBody(req, updateSettingBodySchema);
 
     const setting = await settingsApplicationService.updateSetting(
-      body.key.trim(),
+      body.key,
       body.value ?? null
     );
     return NextResponse.json(setting);

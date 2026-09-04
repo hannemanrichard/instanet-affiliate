@@ -19,7 +19,11 @@ import type {
   LeadItemRepository,
   LeadRepository,
 } from "../../domain/repositories";
-import type { LeadFilters } from "../../domain/valueObjects";
+import type {
+  LeadFilters,
+  LeadPaginationParams,
+  PaginatedLeadsResult,
+} from "../../domain/valueObjects";
 import { assignRandomUser } from "../../utils/assignUser";
 
 export interface CreateLeadPayload {
@@ -42,14 +46,31 @@ export class LeadApplicationService {
   async getLeads(filters?: LeadFilters): Promise<LeadEntity[]> {
     try {
       if (filters?.search?.trim()) {
-        return await this.leadRepository.search(filters.search.trim());
+        return await this.leadRepository.search(
+          filters.search.trim(),
+          filters.partnerId
+        );
       }
 
       if (filters?.status) {
-        return await this.leadRepository.getByStatus(filters.status);
+        return await this.leadRepository.getByStatus(
+          filters.status,
+          filters.partnerId
+        );
       }
 
-      return await this.leadRepository.getAll();
+      return await this.leadRepository.getAll(filters);
+    } catch {
+      throw new LeadError("Failed to load leads", "LEAD_FETCH_FAILED");
+    }
+  }
+
+  async getPaginatedLeads(
+    filters: LeadFilters,
+    pagination: LeadPaginationParams
+  ): Promise<PaginatedLeadsResult> {
+    try {
+      return await this.leadRepository.getPaginated(filters, pagination);
     } catch {
       throw new LeadError("Failed to load leads", "LEAD_FETCH_FAILED");
     }
@@ -79,9 +100,9 @@ export class LeadApplicationService {
     }
   }
 
-  async getLeadSummary(): Promise<LeadSummary> {
+  async getLeadSummary(partnerId?: number): Promise<LeadSummary> {
     try {
-      return await this.leadRepository.getSummary();
+      return await this.leadRepository.getSummary(partnerId);
     } catch {
       throw new LeadError(
         "Failed to load lead summary",

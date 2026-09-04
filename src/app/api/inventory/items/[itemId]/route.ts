@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { inventoryApplicationService } from "@/features/inventory/application/services/inventoryApplicationService";
-import { InventoryError } from "@/features/inventory/domain";
 import { requireDashboardActor } from "@/shared/server/requireDashboardActor";
 import { jsonError } from "@/shared/server/jsonError";
+import { parsePositiveIntParam } from "@/shared/server/parseRequest";
 
 export async function GET(
   _req: NextRequest,
@@ -11,14 +11,7 @@ export async function GET(
   try {
     await requireDashboardActor();
     const { itemId: itemIdParam } = await context.params;
-    const itemId = Number(itemIdParam);
-
-    if (!itemId || Number.isNaN(itemId)) {
-      throw new InventoryError(
-        "Valid itemId is required",
-        "INVENTORY_INVALID_ITEM"
-      );
-    }
+    const itemId = parsePositiveIntParam(itemIdParam, "itemId");
 
     const inventory =
       await inventoryApplicationService.getInventoryByItem(itemId);

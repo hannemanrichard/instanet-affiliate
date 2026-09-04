@@ -7,13 +7,18 @@ import {
   getAssetFileExtension,
 } from "@/features/products/presentation/productPageMedia";
 import { jsonError } from "@/shared/server/jsonError";
+import { parseWithSchema } from "@/shared/server/parseRequest";
+import { z } from "zod";
+
+const slugSchema = z.string().trim().min(1).max(200);
 
 export async function GET(
   _req: NextRequest,
   context: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { slug } = await context.params;
+    const { slug: rawSlug } = await context.params;
+    const slug = parseWithSchema(slugSchema, rawSlug, "Invalid slug");
     const page = await productApplicationService.getProductPageBySlug(slug);
 
     if (!page) {

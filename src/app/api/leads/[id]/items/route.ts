@@ -1,28 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { leadApplicationService } from "@/features/leads/application/services/leadApplicationService";
-import type { UpdateLeadItemInput } from "@/features/leads/domain";
-import { LeadError } from "@/features/leads/domain";
-import { requireDashboardActor } from "@/shared/server/requireDashboardActor";
+import { replaceLeadItemsBodySchema } from "@/features/leads/domain";
+import { requireLeadAccess } from "@/shared/server/requireLeadAccess";
 import { jsonError } from "@/shared/server/jsonError";
-
-const parseLeadId = async (
-  context: { params: Promise<{ id: string }> }
-): Promise<number> => {
-  const { id: idParam } = await context.params;
-  const leadId = Number(idParam);
-  if (!leadId || Number.isNaN(leadId)) {
-    throw new LeadError("Valid lead id is required", "LEAD_INVALID_ID");
-  }
-  return leadId;
-};
+import {
+  parseJsonBody,
+  parsePositiveIntParam,
+} from "@/shared/server/parseRequest";
 
 export async function GET(
   _req: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
   try {
-    await requireDashboardActor();
-    const leadId = await parseLeadId(context);
+    const { id: idParam } = await context.params;
+    const leadId = parsePositiveIntParam(idParam, "id");
+    await requireLeadAccess(leadId);
     const items = await leadApplicationService.getLeadItems(leadId);
     return NextResponse.json(items);
   } catch (error) {
@@ -35,16 +28,10 @@ export async function PUT(
   context: { params: Promise<{ id: string }> }
 ) {
   try {
-    await requireDashboardActor();
-    const leadId = await parseLeadId(context);
-    const body = (await req.json()) as { items?: UpdateLeadItemInput[] };
-
-    if (!Array.isArray(body.items)) {
-      throw new LeadError(
-        "Lead items array is required",
-        "LEAD_ITEMS_REQUIRED"
-      );
-    }
+    const { id: idParam } = await context.params;
+    const leadId = parsePositiveIntParam(idParam, "id");
+    await requireLeadAccess(leadId);
+    const body = await parseJsonBody(req, replaceLeadItemsBodySchema);
 
     const items = await leadApplicationService.replaceLeadItems(
       leadId,

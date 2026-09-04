@@ -419,17 +419,19 @@ export class SupabaseOrderService implements OrderRepository {
 
   async getSummary(partnerId?: number): Promise<OrderSummary> {
     return withPerformanceTracking("OrderService", "getSummary", async () => {
-      const rows = await DatabaseWrapper.executeQuery(
+      const rows = await DatabaseWrapper.executeQuery<
+        Array<{
+          total_orders: number | null;
+          total_processing: number | null;
+          total_delivered: number | null;
+          total_value: number | null;
+        }>
+      >(
         async () => {
-          let query = supabase
-            .from(this.tableName)
-            .select("status, product_price, product_qty");
+          const { data, error } = await supabase.rpc("get_order_summary", {
+            p_partner_id: partnerId ?? null,
+          });
 
-          if (partnerId != null) {
-            query = query.eq("partner_id", partnerId);
-          }
-
-          const { data, error } = await query;
           if (error) throw error;
           return { data, error };
         },
@@ -440,22 +442,13 @@ export class SupabaseOrderService implements OrderRepository {
         }
       );
 
-      const initial = {
-        total_orders: 0,
-        total_processing: 0,
-        total_delivered: 0,
-        total_value: 0,
+      const row = rows[0];
+      return {
+        total_orders: Number(row?.total_orders ?? 0),
+        total_processing: Number(row?.total_processing ?? 0),
+        total_delivered: Number(row?.total_delivered ?? 0),
+        total_value: Number(row?.total_value ?? 0),
       };
-
-      return rows.reduce<OrderSummary>((acc, row) => {
-        acc.total_orders += 1;
-        if (row.status === "processing") acc.total_processing += 1;
-        if (row.status === "delivered") acc.total_delivered += 1;
-
-        const lineValue = (row.product_price ?? 0) * (row.product_qty ?? 0);
-        acc.total_value += lineValue;
-        return acc;
-      }, initial);
     });
   }
 

@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { productApplicationService } from "@/features/products/application/services/productApplicationService";
-import { ProductError } from "@/features/products/domain";
 import { requireDashboardActor } from "@/shared/server/requireDashboardActor";
 import { jsonError } from "@/shared/server/jsonError";
+import { parsePositiveIntParam } from "@/shared/server/parseRequest";
 
 export async function GET(
   _req: NextRequest,
@@ -11,12 +11,7 @@ export async function GET(
   try {
     await requireDashboardActor();
     const { id } = await context.params;
-    const productId = Number(id);
-
-    if (!productId || Number.isNaN(productId)) {
-      throw new ProductError("Valid product id is required", "PRODUCT_INVALID_ID");
-    }
-
+    const productId = parsePositiveIntParam(id, "id");
     const inventory =
       await productApplicationService.getProductInventory(productId);
     return NextResponse.json(inventory);

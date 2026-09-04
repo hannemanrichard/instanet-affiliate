@@ -142,13 +142,17 @@ describe("SupabaseLeadService", () => {
     });
   });
 
-  it("aggregates summary metrics", async () => {
+  it("maps SQL aggregate row to LeadSummary", async () => {
     mockDatabaseWrapper.executeQuery.mockResolvedValue([
-      { status: "new", is_wholesale: false },
-      { status: "converted", is_wholesale: true },
+      {
+        total_leads: 2,
+        total_pending: 1,
+        total_confirmed: 1,
+        total_wholesale: 1,
+      },
     ]);
 
-    const summary = await service.getSummary();
+    const summary = await service.getSummary(42);
 
     expect(summary).toEqual({
       total_leads: 2,

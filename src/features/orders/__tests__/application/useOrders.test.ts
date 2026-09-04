@@ -7,7 +7,6 @@ import {
   useOrderItems,
   useReplaceOrderItems,
   useUpdateOrder,
-  useUpdateOrderStatus,
 } from "../../application/useOrders";
 import { apiFetch } from "@/shared/utils/apiFetch";
 
@@ -69,27 +68,14 @@ describe("Order hooks", () => {
 
     await result.current.mutateAsync({
       orderId: 1,
-      payload: { order: { status: "delivered" } },
+      payload: { order: { comment: "Customer prefers evening delivery" } },
     });
 
     expect(mockApiFetch).toHaveBeenCalledWith("/api/orders/1", {
       method: "PATCH",
-      body: JSON.stringify({ order: { status: "delivered" } }),
-    });
-  });
-
-  it("updates order status", async () => {
-    mockApiFetch.mockResolvedValue({ order: { id: 1, status: "processed" } });
-
-    const { result } = renderHook(() => useUpdateOrderStatus(), {
-      wrapper: createWrapper(),
-    });
-
-    await result.current.mutateAsync({ orderId: 1, status: "processed" });
-
-    expect(mockApiFetch).toHaveBeenCalledWith("/api/orders/1", {
-      method: "PATCH",
-      body: JSON.stringify({ status: "processed" }),
+      body: JSON.stringify({
+        order: { comment: "Customer prefers evening delivery" },
+      }),
     });
   });
 

@@ -1,21 +1,17 @@
 import { NextResponse } from "next/server";
 import { leadHopApplicationService } from "@/features/leads/application/services/leadHopApplicationService";
-import { LeadError } from "@/features/leads/domain";
-import { requireDashboardActor } from "@/shared/server/requireDashboardActor";
+import { requireLeadAccess } from "@/shared/server/requireLeadAccess";
 import { jsonError } from "@/shared/server/jsonError";
+import { parsePositiveIntParam } from "@/shared/server/parseRequest";
 
 export async function DELETE(
   _req: Request,
   context: { params: Promise<{ id: string }> }
 ) {
   try {
-    await requireDashboardActor();
     const { id: idParam } = await context.params;
-    const leadId = Number(idParam);
-    if (!leadId || Number.isNaN(leadId)) {
-      throw new LeadError("Valid lead id is required", "LEAD_INVALID_ID");
-    }
-
+    const leadId = parsePositiveIntParam(idParam, "id");
+    await requireLeadAccess(leadId);
     await leadHopApplicationService.deleteLeadHopsByLeadId(leadId);
     return NextResponse.json({ success: true });
   } catch (error) {

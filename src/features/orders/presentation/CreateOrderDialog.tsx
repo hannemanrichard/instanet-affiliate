@@ -230,7 +230,6 @@ export const CreateOrderDialog = ({
 
     await createOrder.mutateAsync({
       order: {
-        status: "initial",
         first_name: firstName.trim() || undefined,
         last_name: lastName.trim() || undefined,
         phone: phone.trim() || undefined,
@@ -248,16 +247,11 @@ export const CreateOrderDialog = ({
         shipping_price: wilayaFee,
         is_free_shipping: true,
         is_wholesale: false,
-        is_auto_delivered: false,
         is_exchange_required: false,
         is_exchange: false,
         has_exchange: false,
         has_defect: false,
-        return_processed: false,
-        agent_id: 1,
-        tracker_id: 1,
         channel: "affiliate",
-        delivery_company: "zr",
       },
       items: Array.from(itemQtyMap.values()),
       productId: firstProduct.id,

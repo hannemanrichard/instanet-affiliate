@@ -4222,6 +4222,15 @@ export type Database = {
               isSetofReturn: true
             }
           }
+      get_lead_summary: {
+        Args: { p_partner_id?: number }
+        Returns: {
+          total_confirmed: number
+          total_leads: number
+          total_pending: number
+          total_wholesale: number
+        }[]
+      }
       get_leads_by_agent:
         | {
             Args: never
@@ -4999,6 +5008,15 @@ export type Database = {
           isOneToOne: false
           isSetofReturn: true
         }
+      }
+      get_order_summary: {
+        Args: { p_partner_id?: number }
+        Returns: {
+          total_delivered: number
+          total_orders: number
+          total_processing: number
+          total_value: number
+        }[]
       }
       get_ordered_items: {
         Args: never

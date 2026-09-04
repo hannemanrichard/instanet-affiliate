@@ -4,61 +4,22 @@ import {
   type CreateLeadPayload,
 } from "@/features/leads/application/services/leadApplicationService";
 import { leadHopApplicationService } from "@/features/leads/application/services/leadHopApplicationService";
-import type {
-  CreateLeadInput,
-  CreateLeadItemInput,
-  LeadWithItems,
-} from "@/features/leads/domain";
-import { LeadError } from "@/features/leads/domain";
+import type { CreateLeadInput, LeadWithItems } from "@/features/leads/domain";
+import { publicLeadBodySchema } from "@/features/leads/domain";
 import { SupabasePartnerService } from "@/features/partners/data";
 import { supabaseServer } from "@/infrastructure/supabase/server";
 import { jsonError } from "@/shared/server/jsonError";
-
-const ALLOWED_LEAD_FIELDS = [
-  "first_name",
-  "last_name",
-  "phone",
-  "address",
-  "commune",
-  "wilaya",
-  "channel",
-  "comment",
-  "color",
-  "size",
-  "product",
-  "status",
-  "objective",
-  "offer",
-  "price",
-  "is_abondoned",
-  "is_moved",
-  "is_wholesale",
-  "has_recourse",
-] as const;
-
-type AllowedLeadField = (typeof ALLOWED_LEAD_FIELDS)[number];
+import { parseJsonBody } from "@/shared/server/parseRequest";
 
 const partnerService = new SupabasePartnerService();
 
-const pickAllowedLeadFields = (
-  input: Record<string, unknown>
-): Partial<CreateLeadInput> => {
-  const result: Partial<CreateLeadInput> = {};
-  for (const key of ALLOWED_LEAD_FIELDS) {
-    if (key in input) {
-      (result as Record<AllowedLeadField, unknown>)[key] = input[key];
-    }
-  }
-  return result;
-};
-
 const resolvePartnerIdFromRef = async (
-  ref: unknown
+  ref: string | number | undefined
 ): Promise<number | undefined> => {
   if (ref == null || ref === "") return undefined;
 
-  const asNumber = Number(ref);
-  if (!Number.isNaN(asNumber) && asNumber > 0) {
+  const asNumber = typeof ref === "number" ? ref : Number(ref);
+  if (!Number.isNaN(asNumber) && asNumber > 0 && String(ref).trim() === String(asNumber)) {
     const partner = await partnerService.getById(asNumber);
     return partner?.id;
   }
@@ -77,21 +38,6 @@ const resolvePartnerIdFromRef = async (
   return data.id;
 };
 
-const sanitizeItems = (items: unknown): CreateLeadItemInput[] | undefined => {
-  if (!Array.isArray(items) || items.length === 0) return undefined;
-  return items
-    .map((item) => {
-      const raw = item as { item_id?: unknown; qty?: unknown };
-      const item_id = Number(raw.item_id);
-      const qty = Number(raw.qty);
-      if (!item_id || Number.isNaN(item_id) || Number.isNaN(qty) || qty < 1) {
-        return null;
-      }
-      return { item_id, qty };
-    })
-    .filter((item): item is CreateLeadItemInput => item != null);
-};
-
 /**
  * Public storefront lead submit (no Clerk session).
  * Only inserts allowlisted fields; ignores client agent_id / partner_id.
@@ -100,36 +46,19 @@ const sanitizeItems = (items: unknown): CreateLeadItemInput[] | undefined => {
  */
 export async function POST(req: NextRequest) {
   try {
-    const body = (await req.json()) as {
-      lead?: Record<string, unknown>;
-      items?: unknown;
-      ref?: unknown;
-    };
-
-    if (!body.lead || typeof body.lead !== "object") {
-      throw new LeadError("Lead payload is required", "LEAD_REQUIRED");
-    }
-
-    const leadFields = pickAllowedLeadFields(body.lead);
-    if (!leadFields.phone && !leadFields.first_name) {
-      throw new LeadError(
-        "Lead requires at least phone or first_name",
-        "LEAD_INVALID"
-      );
-    }
-
+    const body = await parseJsonBody(req, publicLeadBodySchema);
     const partnerId = await resolvePartnerIdFromRef(body.ref);
 
     const payload: CreateLeadPayload = {
       lead: {
-        ...leadFields,
-        status: leadFields.status ?? "initial",
-        is_moved: leadFields.is_moved ?? false,
-        is_abondoned: leadFields.is_abondoned ?? false,
-        is_wholesale: leadFields.is_wholesale ?? false,
+        ...body.lead,
+        status: body.lead.status ?? "initial",
+        is_moved: body.lead.is_moved ?? false,
+        is_abondoned: body.lead.is_abondoned ?? false,
+        is_wholesale: body.lead.is_wholesale ?? false,
         ...(partnerId != null ? { partner_id: partnerId } : {}),
       } as CreateLeadInput,
-      items: sanitizeItems(body.items),
+      items: body.items,
     };
 
     const result: LeadWithItems =

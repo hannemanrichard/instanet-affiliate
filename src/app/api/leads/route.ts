@@ -3,19 +3,37 @@ import {
   leadApplicationService,
   type CreateLeadPayload,
 } from "@/features/leads/application/services/leadApplicationService";
-import type { CreateLeadInput } from "@/features/leads/domain";
+import {
+  createLeadBodySchema,
+  listLeadsQuerySchema,
+  type CreateLeadInput,
+} from "@/features/leads/domain";
 import { requireDashboardActor } from "@/shared/server/requireDashboardActor";
 import { jsonError } from "@/shared/server/jsonError";
+import {
+  parseJsonBody,
+  parseSearchParams,
+} from "@/shared/server/parseRequest";
 
 export async function GET(req: NextRequest) {
   try {
-    await requireDashboardActor();
-    const { searchParams } = req.nextUrl;
-    const status = searchParams.get("status")?.trim() || undefined;
-    const search = searchParams.get("search")?.trim() || undefined;
+    const actor = await requireDashboardActor();
+    const query = parseSearchParams(
+      req.nextUrl.searchParams,
+      listLeadsQuerySchema
+    );
+    const partnerId =
+      actor.role === "partner" ? actor.partner.id : undefined;
 
-    const leads = await leadApplicationService.getLeads({ status, search });
-    return NextResponse.json(leads);
+    const result = await leadApplicationService.getPaginatedLeads(
+      {
+        status: query.status,
+        search: query.search,
+        partnerId,
+      },
+      { page: query.page, limit: query.limit }
+    );
+    return NextResponse.json(result);
   } catch (error) {
     return jsonError(error);
   }
@@ -24,14 +42,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const actor = await requireDashboardActor();
-    const body = (await req.json()) as CreateLeadPayload;
-
-    if (!body.lead) {
-      return NextResponse.json(
-        { error: "Lead payload is required", code: "LEAD_REQUIRED" },
-        { status: 400 }
-      );
-    }
+    const body = await parseJsonBody(req, createLeadBodySchema);
 
     const leadFields = { ...body.lead } as Partial<CreateLeadInput>;
 

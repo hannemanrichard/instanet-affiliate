@@ -3,30 +3,25 @@ import {
   leadApplicationService,
   type UpdateLeadPayload,
 } from "@/features/leads/application/services/leadApplicationService";
-import { LeadError } from "@/features/leads/domain";
-import type { UpdateLeadInput } from "@/features/leads/domain";
-import { requireDashboardActor } from "@/shared/server/requireDashboardActor";
+import {
+  updateLeadBodySchema,
+  type UpdateLeadInput,
+} from "@/features/leads/domain";
+import { requireLeadAccess } from "@/shared/server/requireLeadAccess";
 import { jsonError } from "@/shared/server/jsonError";
-
-const parseLeadId = async (
-  context: { params: Promise<{ id: string }> }
-): Promise<number> => {
-  const { id: idParam } = await context.params;
-  const leadId = Number(idParam);
-  if (!leadId || Number.isNaN(leadId)) {
-    throw new LeadError("Valid lead id is required", "LEAD_INVALID_ID");
-  }
-  return leadId;
-};
+import {
+  parseJsonBody,
+  parsePositiveIntParam,
+} from "@/shared/server/parseRequest";
 
 export async function GET(
   _req: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
   try {
-    await requireDashboardActor();
-    const leadId = await parseLeadId(context);
-    const detail = await leadApplicationService.getLeadDetail(leadId);
+    const { id: idParam } = await context.params;
+    const leadId = parsePositiveIntParam(idParam, "id");
+    const { detail } = await requireLeadAccess(leadId);
     return NextResponse.json(detail);
   } catch (error) {
     return jsonError(error);
@@ -38,16 +33,10 @@ export async function PATCH(
   context: { params: Promise<{ id: string }> }
 ) {
   try {
-    await requireDashboardActor();
-    const leadId = await parseLeadId(context);
-    const body = (await req.json()) as UpdateLeadPayload;
-
-    if (!body.lead && !body.items) {
-      throw new LeadError(
-        "Lead update payload is required",
-        "LEAD_UPDATE_REQUIRED"
-      );
-    }
+    const { id: idParam } = await context.params;
+    const leadId = parsePositiveIntParam(idParam, "id");
+    await requireLeadAccess(leadId);
+    const body = await parseJsonBody(req, updateLeadBodySchema);
 
     const leadFields = body.lead
       ? ({ ...body.lead } as Partial<UpdateLeadInput>)
@@ -73,8 +62,9 @@ export async function DELETE(
   context: { params: Promise<{ id: string }> }
 ) {
   try {
-    await requireDashboardActor();
-    const leadId = await parseLeadId(context);
+    const { id: idParam } = await context.params;
+    const leadId = parsePositiveIntParam(idParam, "id");
+    await requireLeadAccess(leadId);
     await leadApplicationService.deleteLead(leadId);
     return NextResponse.json({ success: true });
   } catch (error) {

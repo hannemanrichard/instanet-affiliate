@@ -74,5 +74,7 @@ export const config = {
     "/api/leads(.*)",
     "/api/products(.*)",
     "/api/product-pages(.*)",
+    // Intentionally omit /api/uploadthing — UT server callbacks have no Clerk
+    // session. Auth is enforced in api/uploadthing/core.ts route middleware.
   ],
 };

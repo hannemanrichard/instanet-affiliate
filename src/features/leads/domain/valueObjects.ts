@@ -13,3 +13,14 @@ export interface LeadFilters {
   partnerId?: number;
 }
 
+export interface LeadPaginationParams {
+  page: number;
+  limit: number;
+}
+
+export interface PaginatedLeadsResult {
+  data: import("./entities").LeadEntity[];
+  total: number;
+  page: number;
+  limit: number;
+}

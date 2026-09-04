@@ -39,14 +39,20 @@ describe("Lead hooks", () => {
   });
 
   it("fetches leads", async () => {
-    const leads = [{ id: 1 }];
-    mockApiFetch.mockResolvedValue(leads);
+    const page = {
+      data: [{ id: 1 }],
+      total: 1,
+      page: 1,
+      limit: 10,
+    };
+    mockApiFetch.mockResolvedValue(page);
 
     const { result } = renderHook(() => useLeads(), { wrapper: createWrapper() });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
-    expect(result.current.data).toEqual(leads);
-    expect(mockApiFetch).toHaveBeenCalledWith("/api/leads");
+    expect(result.current.data).toEqual([{ id: 1 }]);
+    expect(result.current.total).toBe(1);
+    expect(mockApiFetch).toHaveBeenCalledWith("/api/leads?page=1&limit=10");
   });
 
   it("fetches single lead", async () => {

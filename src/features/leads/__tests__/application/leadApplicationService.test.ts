@@ -16,6 +16,7 @@ import type {
 
 const createLeadRepositoryMock = (): jest.Mocked<LeadRepository> => ({
   getAll: jest.fn(),
+  getPaginated: jest.fn(),
   getById: jest.fn(),
   getByStatus: jest.fn(),
   search: jest.fn(),
@@ -74,22 +75,53 @@ describe("LeadApplicationService", () => {
   });
 
   describe("getLeads", () => {
-    it("returns leads by status", async () => {
+    it("returns leads by status scoped to partner", async () => {
       const leads = [baseLead];
       leadRepository.getByStatus.mockResolvedValue(leads);
 
-      const result = await service.getLeads({ status: "new" });
+      const result = await service.getLeads({ status: "new", partnerId: 42 });
 
-      expect(leadRepository.getByStatus).toHaveBeenCalledWith("new");
+      expect(leadRepository.getByStatus).toHaveBeenCalledWith("new", 42);
       expect(result).toEqual(leads);
     });
 
     it("performs search when term provided", async () => {
       leadRepository.search.mockResolvedValue([baseLead]);
 
-      await service.getLeads({ search: "john" });
+      await service.getLeads({ search: "john", partnerId: 42 });
 
-      expect(leadRepository.search).toHaveBeenCalledWith("john");
+      expect(leadRepository.search).toHaveBeenCalledWith("john", 42);
+    });
+
+    it("returns all leads with partner filter", async () => {
+      leadRepository.getAll.mockResolvedValue([baseLead]);
+
+      await service.getLeads({ partnerId: 42 });
+
+      expect(leadRepository.getAll).toHaveBeenCalledWith({ partnerId: 42 });
+    });
+  });
+
+  describe("getPaginatedLeads", () => {
+    it("delegates to repository pagination", async () => {
+      leadRepository.getPaginated.mockResolvedValue({
+        data: [baseLead],
+        total: 1,
+        page: 1,
+        limit: 10,
+      });
+
+      const result = await service.getPaginatedLeads(
+        { partnerId: 42, status: "new" },
+        { page: 1, limit: 10 }
+      );
+
+      expect(leadRepository.getPaginated).toHaveBeenCalledWith(
+        { partnerId: 42, status: "new" },
+        { page: 1, limit: 10 }
+      );
+      expect(result.total).toBe(1);
+      expect(result.data).toHaveLength(1);
     });
   });
 
@@ -172,8 +204,9 @@ describe("LeadApplicationService", () => {
       };
       leadRepository.getSummary.mockResolvedValue(summary);
 
-      const result = await service.getLeadSummary();
+      const result = await service.getLeadSummary(42);
 
+      expect(leadRepository.getSummary).toHaveBeenCalledWith(42);
       expect(result).toEqual(summary);
     });
   });

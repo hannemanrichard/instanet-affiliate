@@ -212,19 +212,37 @@ describe("SupabaseOrderService", () => {
   });
 
   describe("getSummary", () => {
-    it("aggregates summary values", async () => {
+    it("maps SQL aggregate row to OrderSummary", async () => {
       mockDatabaseWrapper.executeQuery.mockResolvedValue([
-        { status: "processing", product_price: 100, product_qty: 2 },
-        { status: "delivered", product_price: 150, product_qty: 1 },
+        {
+          total_orders: 2,
+          total_processing: 1,
+          total_delivered: 1,
+          total_value: 350,
+        },
       ]);
 
-      const summary = await service.getSummary();
+      const summary = await service.getSummary(42);
 
       expect(summary).toEqual({
         total_orders: 2,
         total_processing: 1,
         total_delivered: 1,
         total_value: 350,
+      });
+      expect(mockDatabaseWrapper.executeQuery).toHaveBeenCalled();
+    });
+
+    it("defaults missing aggregate row to zeros", async () => {
+      mockDatabaseWrapper.executeQuery.mockResolvedValue([]);
+
+      const summary = await service.getSummary();
+
+      expect(summary).toEqual({
+        total_orders: 0,
+        total_processing: 0,
+        total_delivered: 0,
+        total_value: 0,
       });
     });
   });

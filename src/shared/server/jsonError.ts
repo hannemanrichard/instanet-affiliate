@@ -14,10 +14,22 @@ import {
   ProductPageError,
 } from "@/features/products/domain";
 import { UnauthorizedError } from "./requireCurrentPartner";
+import { ValidationError } from "./parseRequest";
 
 export const jsonError = (error: unknown, fallbackStatus = 500) => {
   if (error instanceof UnauthorizedError) {
     return NextResponse.json({ error: error.message }, { status: 401 });
+  }
+
+  if (error instanceof ValidationError) {
+    return NextResponse.json(
+      {
+        error: error.message,
+        code: error.code,
+        issues: error.issues,
+      },
+      { status: 400 }
+    );
   }
 
   if (
@@ -40,7 +52,8 @@ export const jsonError = (error: unknown, fallbackStatus = 500) => {
           ? 400
           : error.code.includes("NOT_FOUND")
             ? 404
-            : error.code.includes("NOT_ALLOWED")
+            : error.code.includes("NOT_ALLOWED") ||
+                error.code.includes("FORBIDDEN")
               ? 403
               : 500;
 

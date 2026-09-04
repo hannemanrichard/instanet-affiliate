@@ -6,58 +6,20 @@ import {
   type MetaConversionEvent,
 } from "@/shared/utils/metaConversionApi";
 import { NextRequest, NextResponse } from "next/server";
+import { metaConversionBodySchema } from "@/shared/server/requestSchemas";
+import { parseJsonBody, ValidationError } from "@/shared/server/parseRequest";
 
 /**
  * POST /api/meta-conversion
- *
- * Track events via Meta Conversion API (server-side)
- *
- * Body:
- * {
- *   eventType: "Purchase" | "Lead",
- *   eventData: {
- *     value?: number;
- *     currency?: string;
- *     content_name?: string;
- *     content_ids?: string[];
- *     num_items?: number;
- *     userData?: {
- *       em?: string[];
- *       ph?: string[];
- *       fn?: string[];
- *       ln?: string[];
- *       external_id?: string[];
- *       client_ip_address?: string;
- *       client_user_agent?: string;
- *       fbp?: string;
- *       fbc?: string;
- *     };
- *     eventId?: string;
- *     eventSourceUrl?: string;
- *   }
- * }
+ * Track events via Meta Conversion API (server-side).
  */
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const { eventType, eventData } = body;
+    const { eventType, eventData } = await parseJsonBody(
+      req,
+      metaConversionBodySchema
+    );
 
-    if (!eventType || !eventData) {
-      return NextResponse.json(
-        { error: "Missing required fields: eventType and eventData" },
-        { status: 400 }
-      );
-    }
-
-    if (!["Purchase", "Lead"].includes(eventType)) {
-      return NextResponse.json(
-        { error: "Invalid eventType. Must be 'Purchase' or 'Lead'" },
-        { status: 400 }
-      );
-    }
-
-    // Get settings from database
-    // Use service role client for reading settings (no auth required)
     if (!supabaseAdmin) {
       logger.error(
         "Supabase service role client not configured. SUPABASE_SERVICE_ROLE_KEY is missing."
@@ -83,7 +45,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Extract pixel ID and access token
     const pixelIdSetting = settings?.find((s) => s.key === "facebook_pixel_id");
     const accessTokenSetting = settings?.find(
       (s) => s.key === "meta_conversion_api_access_token"
@@ -101,7 +62,6 @@ export async function POST(req: NextRequest) {
       logger.warn(
         "Meta Conversion API access token not configured - skipping server-side tracking"
       );
-      // Return success but don't track - client-side pixel tracking will still work
       return NextResponse.json({
         success: true,
         skipped: true,
@@ -110,21 +70,18 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Get client IP and user agent from request
     const clientIp =
       req.headers.get("x-forwarded-for")?.split(",")[0] ||
       req.headers.get("x-real-ip") ||
       "";
     const userAgent = req.headers.get("user-agent") || "";
 
-    // Prepare user data with IP and user agent
     const userData: MetaConversionEvent["userData"] = {
       ...eventData.userData,
       client_ip_address: clientIp,
       client_user_agent: userAgent,
     };
 
-    // Track the event
     let result;
     if (eventType === "Purchase") {
       result = await trackMetaPurchase(
@@ -141,7 +98,7 @@ export async function POST(req: NextRequest) {
           eventSourceUrl: eventData.eventSourceUrl,
         }
       );
-    } else if (eventType === "Lead") {
+    } else {
       result = await trackMetaLead(
         pixelIdSetting.value,
         accessTokenSetting.value,
@@ -160,6 +117,17 @@ export async function POST(req: NextRequest) {
       result,
     });
   } catch (error) {
+    if (error instanceof ValidationError) {
+      return NextResponse.json(
+        {
+          error: error.message,
+          code: error.code,
+          issues: error.issues,
+        },
+        { status: 400 }
+      );
+    }
+
     logger.error(
       "Error in Meta Conversion API route",
       error instanceof Error ? error : new Error(String(error))

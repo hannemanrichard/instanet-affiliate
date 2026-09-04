@@ -41,7 +41,7 @@ const buildDescription = (description: string): string => {
   return "Parcel description";
 };
 
-/** Matches examples/delivery-api.js generateTrack() */
+/** Matches the ZR create externalId shape used by the delivery gateway. */
 export const buildExternalId = (orderId: number): string => {
   const timestamp = Date.now().toString(36);
   const rand = Math.random().toString(36).substring(2, 6);
@@ -101,7 +101,6 @@ export class ZrDeliveryParcelGateway implements DeliveryParcelGateway {
       deliveryType: input.deliveryType,
       description: buildDescription(input.description),
       amount: input.amount,
-      // Match examples/delivery-api.js /zr/create externalId shape
       externalId: buildExternalId(input.orderId),
       weight: {
         weight: 1,
@@ -113,7 +112,6 @@ export class ZrDeliveryParcelGateway implements DeliveryParcelGateway {
     }
 
     try {
-      // Create uses /api/v1/parcels (see examples/delivery-api.js)
       const created = await zrFetch<ZrCreateParcelResponse>("/parcels", {
         method: "POST",
         body: payload,

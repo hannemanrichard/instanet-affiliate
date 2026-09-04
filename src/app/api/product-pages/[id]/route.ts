@@ -1,20 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { productApplicationService } from "@/features/products/application/services/productApplicationService";
-import type { ProductPageEntity } from "@/features/products/domain";
-import { ProductPageError } from "@/features/products/domain";
+import { updateProductPageBodySchema } from "@/features/products/domain/validations";
 import { requireAdminActor } from "@/shared/server/requireDashboardActor";
 import { jsonError } from "@/shared/server/jsonError";
-
-const parsePageId = (raw: string) => {
-  const pageId = Number(raw);
-  if (!pageId || Number.isNaN(pageId)) {
-    throw new ProductPageError(
-      "Valid product page id is required",
-      "PRODUCT_PAGE_INVALID_ID"
-    );
-  }
-  return pageId;
-};
+import {
+  parseJsonBody,
+  parsePositiveIntParam,
+} from "@/shared/server/parseRequest";
 
 export async function PATCH(
   req: NextRequest,
@@ -23,8 +15,8 @@ export async function PATCH(
   try {
     await requireAdminActor();
     const { id } = await context.params;
-    const pageId = parsePageId(id);
-    const payload = (await req.json()) as Partial<ProductPageEntity>;
+    const pageId = parsePositiveIntParam(id, "id");
+    const payload = await parseJsonBody(req, updateProductPageBodySchema);
     const page = await productApplicationService.updateProductPage(pageId, payload);
     return NextResponse.json(page);
   } catch (error) {
@@ -39,7 +31,7 @@ export async function DELETE(
   try {
     await requireAdminActor();
     const { id } = await context.params;
-    const pageId = parsePageId(id);
+    const pageId = parsePositiveIntParam(id, "id");
     await productApplicationService.deleteProductPage(pageId);
     return NextResponse.json({ success: true });
   } catch (error) {

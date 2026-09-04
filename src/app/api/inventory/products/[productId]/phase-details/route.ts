@@ -1,16 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { inventoryApplicationService } from "@/features/inventory/application/services/inventoryApplicationService";
-import type { InventoryPhase } from "@/features/inventory/domain";
-import { InventoryError } from "@/features/inventory/domain";
+import { inventoryPhaseDetailsQuerySchema } from "@/features/inventory/domain/validations";
 import { requireDashboardActor } from "@/shared/server/requireDashboardActor";
 import { jsonError } from "@/shared/server/jsonError";
-
-const VALID_PHASES = new Set<InventoryPhase>([
-  "ordered",
-  "in_delivery",
-  "delivered",
-  "other",
-]);
+import {
+  parsePositiveIntParam,
+  parseSearchParams,
+} from "@/shared/server/parseRequest";
 
 export async function GET(
   req: NextRequest,
@@ -19,36 +15,15 @@ export async function GET(
   try {
     await requireDashboardActor();
     const { productId: productIdParam } = await context.params;
-    const productId = Number(productIdParam);
-
-    if (!productId || Number.isNaN(productId)) {
-      throw new InventoryError(
-        "Valid productId is required",
-        "INVENTORY_INVALID_PRODUCT"
-      );
-    }
-
-    const phasesParam = req.nextUrl.searchParams.get("phases") ?? "";
-    const phases = phasesParam
-      .split(",")
-      .map((phase) => phase.trim())
-      .filter((phase): phase is InventoryPhase =>
-        VALID_PHASES.has(phase as InventoryPhase)
-      );
-
-    if (!phases.length) {
-      throw new InventoryError(
-        "At least one valid phase is required",
-        "INVENTORY_INVALID_PHASES"
-      );
-    }
-
-    const productName =
-      req.nextUrl.searchParams.get("productName")?.trim() || undefined;
+    const productId = parsePositiveIntParam(productIdParam, "productId");
+    const query = parseSearchParams(
+      req.nextUrl.searchParams,
+      inventoryPhaseDetailsQuerySchema
+    );
 
     const details = await inventoryApplicationService.getInventoryPhaseDetails(
       productId,
-      { phases, productName }
+      { phases: query.phases, productName: query.productName }
     );
 
     return NextResponse.json({ details });

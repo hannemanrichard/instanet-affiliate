@@ -6,7 +6,6 @@ import { apiFetch } from "@/shared/utils/apiFetch";
 import type {
   CreateOrderItemInput,
   CreateOrderInput,
-  OrderEntity,
   OrderFilters,
   OrderItemEntity,
   OrderSummary,
@@ -25,9 +24,22 @@ const orderItemsKey = (orderId: number) => [
 ];
 const orderSummaryKey = [...ordersKey, "summary"];
 
-/** Client payload — partner_id is set on the server from the Clerk session */
+/** Client payload — partner_id / status / delivery statuses are set on the server */
 export type ClientCreateOrderPayload = {
-  order: Omit<CreateOrderInput, "partner_id">;
+  order: Omit<
+    CreateOrderInput,
+    | "partner_id"
+    | "status"
+    | "dc_recent_status"
+    | "yalidine_status"
+    | "tracking_id"
+    | "parcel_id"
+    | "tracker_id"
+    | "agent_id"
+    | "delivery_company"
+    | "is_auto_delivered"
+    | "return_processed"
+  >;
   items?: CreateOrderItemInput[];
   productId?: number;
   deliveryLocation?: {
@@ -145,21 +157,6 @@ export const useUpdateOrder = () => {
       invalidateQueries: [ordersKey, orderSummaryKey, ["earnings"]],
       successMessage: "Order updated successfully",
       errorMessage: "Failed to update order",
-    }
-  );
-};
-
-export const useUpdateOrderStatus = () => {
-  return useStandardMutation(
-    ({ orderId, status }: { orderId: number; status: string }) =>
-      apiFetch<{ order: OrderEntity }>(`/api/orders/${orderId}`, {
-        method: "PATCH",
-        body: JSON.stringify({ status }),
-      }).then((data) => data.order),
-    {
-      invalidateQueries: [ordersKey, orderSummaryKey, ["earnings"]],
-      successMessage: "Order status updated",
-      errorMessage: "Failed to update order status",
     }
   );
 };

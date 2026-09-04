@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { inventoryApplicationService } from "@/features/inventory/application/services/inventoryApplicationService";
-import { InventoryError } from "@/features/inventory/domain";
 import { requireDashboardActor } from "@/shared/server/requireDashboardActor";
 import { jsonError } from "@/shared/server/jsonError";
+import { parsePositiveIntParam } from "@/shared/server/parseRequest";
 
 export async function GET(
   _req: NextRequest,
@@ -11,14 +11,7 @@ export async function GET(
   try {
     await requireDashboardActor();
     const { productId: productIdParam } = await context.params;
-    const productId = Number(productIdParam);
-
-    if (!productId || Number.isNaN(productId)) {
-      throw new InventoryError(
-        "Valid productId is required",
-        "INVENTORY_INVALID_PRODUCT"
-      );
-    }
+    const productId = parsePositiveIntParam(productIdParam, "productId");
 
     const summary =
       await inventoryApplicationService.getInventoryPhaseSummary(productId);

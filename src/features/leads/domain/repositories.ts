@@ -9,7 +9,12 @@ import type {
   UpdateLeadHopInput,
   UpdateLeadItemInput,
 } from "./entities";
-import type { LeadStatus } from "./valueObjects";
+import type {
+  LeadFilters,
+  LeadPaginationParams,
+  LeadStatus,
+  PaginatedLeadsResult,
+} from "./valueObjects";
 
 export type CreateLeadInput = Omit<LeadEntity, "id" | "created_at" | "last_changed_status">;
 export type UpdateLeadInput = Partial<Omit<LeadEntity, "id">>;
@@ -21,15 +26,19 @@ export interface UserOption {
 }
 
 export interface LeadRepository {
-  getAll(): Promise<LeadEntity[]>;
+  getAll(filters?: LeadFilters): Promise<LeadEntity[]>;
+  getPaginated(
+    filters: LeadFilters,
+    pagination: LeadPaginationParams
+  ): Promise<PaginatedLeadsResult>;
   getById(id: number): Promise<LeadEntity | null>;
-  getByStatus(status: LeadStatus): Promise<LeadEntity[]>;
-  search(term: string): Promise<LeadEntity[]>;
+  getByStatus(status: LeadStatus, partnerId?: number): Promise<LeadEntity[]>;
+  search(term: string, partnerId?: number): Promise<LeadEntity[]>;
   create(data: CreateLeadInput): Promise<LeadEntity>;
   update(id: number, data: UpdateLeadInput): Promise<LeadEntity>;
   delete(id: number): Promise<void>;
   getWithItems(id: number): Promise<LeadWithItems | null>;
-  getSummary(): Promise<LeadSummary>;
+  getSummary(partnerId?: number): Promise<LeadSummary>;
   getAgents(): Promise<UserOption[]>;
   getTrackers(): Promise<UserOption[]>;
 }
@@ -51,4 +60,3 @@ export interface LeadHopRepository {
   delete(leadId: number, agentId: number): Promise<void>;
   deleteByLeadId(leadId: number): Promise<void>;
 }
-

@@ -9,6 +9,7 @@ import type {
   LeadItemEntity,
   LeadSummary,
   LeadWithItems,
+  PaginatedLeadsResult,
   UpdateLeadItemInput,
   UpdateLeadInput,
   CreateLeadItemInput,
@@ -16,8 +17,6 @@ import type {
 
 const leadsKey = ["leads"];
 const leadDetailKey = (leadId: number) => [...leadsKey, leadId.toString()];
-const leadsStatusKey = (status: string) => [...leadsKey, "status", status];
-const leadsSearchKey = (term: string) => [...leadsKey, "search", term];
 const leadItemsKey = (leadId: number) => [...leadsKey, leadId.toString(), "items"];
 const leadSummaryKey = [...leadsKey, "summary"];
 
@@ -38,33 +37,62 @@ export type CreatePublicLeadPayload = {
   ref?: string | number;
 };
 
-const buildLeadsQuery = (filters?: LeadFilters) => {
-  const params = new URLSearchParams();
-  if (filters?.status) params.set("status", String(filters.status));
-  if (filters?.search?.trim()) params.set("search", filters.search.trim());
-  const qs = params.toString();
-  return qs ? `/api/leads?${qs}` : "/api/leads";
-};
+export const usePaginatedLeads = (
+  filters: Omit<LeadFilters, "partnerId"> = {},
+  page = 1,
+  limit = 10,
+  enabled = true
+) => {
+  const trimmedSearch = filters.search?.trim() ?? "";
 
-export const useLeads = (filters?: LeadFilters) => {
-  const { status, search } = filters ?? {};
-  const trimmedSearch = search?.trim() ?? "";
-
-  const key =
-    trimmedSearch.length > 0
-      ? leadsSearchKey(trimmedSearch)
-      : status
-        ? leadsStatusKey(status)
-        : leadsKey;
+  const params = new URLSearchParams({
+    page: String(page),
+    limit: String(limit),
+  });
+  if (filters.status) params.set("status", String(filters.status));
+  if (trimmedSearch) params.set("search", trimmedSearch);
 
   return useStandardQuery(
-    key,
-    () => apiFetch<LeadEntity[]>(buildLeadsQuery(filters)),
+    [
+      ...leadsKey,
+      "paginated",
+      filters.status ?? "all",
+      trimmedSearch || "nosearch",
+      `page:${page}`,
+      `limit:${limit}`,
+    ],
+    () =>
+      apiFetch<PaginatedLeadsResult>(`/api/leads?${params.toString()}`),
     {
-      enabled: !trimmedSearch || trimmedSearch.length > 1,
+      enabled: enabled && (!trimmedSearch || trimmedSearch.length > 1),
       staleTime: 60 * 1000,
     }
   );
+};
+
+/** Compatibility wrapper — returns the page `data` array like the old list hook. */
+export const useLeads = (
+  filters?: LeadFilters,
+  page = 1,
+  limit = 10
+) => {
+  const query = usePaginatedLeads(
+    {
+      status: filters?.status,
+      search: filters?.search,
+      agentId: filters?.agentId,
+    },
+    page,
+    limit
+  );
+
+  return {
+    ...query,
+    data: query.data?.data as LeadEntity[] | undefined,
+    total: query.data?.total,
+    page: query.data?.page,
+    limit: query.data?.limit,
+  };
 };
 
 export const useLead = (leadId: number) => {
