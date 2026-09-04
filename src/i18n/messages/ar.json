@@ -1192,14 +1192,18 @@
         "notReady": "لا توجد عمولات معلّقة.",
         "withdraws": "لا توجد طلبات سحب بعد."
       },
+      "productFallback": "منتج",
+      "discountApplied": "خصم −{amount} {currency}/وحدة",
+      "lineStatus": {
+        "ready": "محصّل",
+        "notReady": "بانتظار التحصيل"
+      },
       "columns": {
-        "order": "الطلب",
         "product": "المنتج",
         "qty": "الكمية",
         "rate": "المعدل",
         "commission": "العمولة",
         "date": "التاريخ",
-        "id": "المعرّف",
         "amount": "المبلغ",
         "status": "الحالة"
       },

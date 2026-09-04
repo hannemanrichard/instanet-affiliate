@@ -10,7 +10,7 @@ type CommissionRow = Tables["commissions"]["Row"];
 type OrderRow = Tables["orders"]["Row"];
 
 type CommissionWithOrder = CommissionRow & {
-  orders?: Pick<OrderRow, "id" | "status" | "dc_recent_status" | "created_at"> | null;
+  orders?: Pick<OrderRow, "status" | "dc_recent_status" | "created_at"> | null;
 };
 
 const ENCAISSE = "encaisse";
@@ -27,9 +27,18 @@ export class SupabaseEarningsService implements EarningsRepository {
               .from("commissions")
               .select(
                 `
-                  *,
+                  id,
+                  partner_id,
+                  order_id,
+                  product_id,
+                  product_name,
+                  quantity,
+                  unit_commission,
+                  unit_discount,
+                  amount,
+                  is_earned,
+                  created_at,
                   orders (
-                    id,
                     status,
                     dc_recent_status,
                     created_at

@@ -1192,14 +1192,18 @@
         "notReady": "Aucune commission en attente.",
         "withdraws": "Aucune demande de retrait pour le moment."
       },
+      "productFallback": "Produit",
+      "discountApplied": "Remise −{amount} {currency}/unité",
+      "lineStatus": {
+        "ready": "Encaissé",
+        "notReady": "En attente d'encaissement"
+      },
       "columns": {
-        "order": "Commande",
         "product": "Produit",
         "qty": "Qté",
         "rate": "Taux",
         "commission": "Commission",
         "date": "Date",
-        "id": "ID",
         "amount": "Montant",
         "status": "Statut"
       },

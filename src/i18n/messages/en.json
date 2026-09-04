@@ -1291,14 +1291,18 @@
         "notReady": "No pending commissions.",
         "withdraws": "No withdraw requests yet."
       },
+      "productFallback": "Product",
+      "discountApplied": "Discount −{amount} {currency}/unit",
+      "lineStatus": {
+        "ready": "Encaisse",
+        "notReady": "Awaiting encaisse"
+      },
       "columns": {
-        "order": "Order",
         "product": "Product",
         "qty": "Qty",
         "rate": "Rate",
         "commission": "Commission",
         "date": "Date",
-        "id": "ID",
         "amount": "Amount",
         "status": "Status"
       },

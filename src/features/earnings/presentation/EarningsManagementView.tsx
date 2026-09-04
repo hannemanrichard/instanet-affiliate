@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useMemo, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import {
   Banknote,
   CircleDollarSign,
@@ -10,22 +10,12 @@ import {
 } from "lucide-react";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-} from "@/shared/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/shared/components/ui/card";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import StatsCard from "@/shared/components/ui/StatsCard";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/shared/components/ui/table";
+import { DataTable } from "@/shared/components/ui/data-table/data-table";
+import { formatRelativeDate } from "@/shared/utils/formatRelativeDate";
 import { useCurrentPartner } from "@/features/partners";
 import { useEarningsSummary } from "../application";
 import type { EarningLine, WithdrawEntity } from "../domain";
@@ -37,7 +27,7 @@ const formatAmount = (amount: number) =>
     numberingSystem: "latn",
   }).format(amount);
 
-const formatDate = (value?: string) => {
+const formatAbsoluteDate = (value?: string) => {
   if (!value) return "—";
   return new Date(value).toLocaleDateString("en-GB");
 };
@@ -45,21 +35,129 @@ const formatDate = (value?: string) => {
 const EarningsLinesTable = ({
   lines,
   emptyLabel,
-  columns,
   currency,
+  productLabel,
+  qtyLabel,
+  rateLabel,
+  commissionLabel,
+  statusLabel,
+  dateLabel,
+  productFallback,
+  discountAppliedLabel,
+  readyStatusLabel,
+  notReadyStatusLabel,
+  showFulfillmentStatus,
 }: {
   lines: EarningLine[];
   emptyLabel: string;
   currency: string;
-  columns: {
-    order: string;
-    product: string;
-    qty: string;
-    rate: string;
-    commission: string;
-    date: string;
-  };
+  productLabel: string;
+  qtyLabel: string;
+  rateLabel: string;
+  commissionLabel: string;
+  statusLabel: string;
+  dateLabel: string;
+  productFallback: string;
+  discountAppliedLabel: (amount: string) => string;
+  readyStatusLabel: string;
+  notReadyStatusLabel: string;
+  showFulfillmentStatus: boolean;
 }) => {
+  const locale = useLocale();
+
+  const columns = useMemo(
+    () => [
+      {
+        key: "product",
+        label: productLabel,
+        render: (line: EarningLine) => (
+          <div className="min-w-0 max-w-[16rem]">
+            <p className="truncate font-medium text-foreground">
+              {line.productName?.trim() || productFallback}
+            </p>
+            {line.unitDiscount > 0 ? (
+              <p className="truncate text-xs text-muted-foreground">
+                {discountAppliedLabel(formatAmount(line.unitDiscount))}
+              </p>
+            ) : null}
+          </div>
+        ),
+      },
+      {
+        key: "quantity",
+        label: qtyLabel,
+        render: (line: EarningLine) => (
+          <span className="tabular-nums text-muted-foreground">
+            {line.quantity}
+          </span>
+        ),
+      },
+      {
+        key: "rate",
+        label: rateLabel,
+        render: (line: EarningLine) => (
+          <span className="tabular-nums text-muted-foreground">
+            {formatAmount(line.commissionRate)} {currency}
+          </span>
+        ),
+      },
+      {
+        key: "commission",
+        label: commissionLabel,
+        render: (line: EarningLine) => (
+          <span className="font-medium tabular-nums">
+            {formatAmount(line.commissionAmount)} {currency}
+          </span>
+        ),
+      },
+      ...(showFulfillmentStatus
+        ? [
+            {
+              key: "status",
+              label: statusLabel,
+              render: (line: EarningLine) => {
+                const isReady = line.bucket === "ready";
+                return (
+                  <Badge variant={isReady ? "secondary" : "outline"}>
+                    {isReady ? readyStatusLabel : notReadyStatusLabel}
+                  </Badge>
+                );
+              },
+            },
+          ]
+        : []),
+      {
+        key: "date",
+        label: dateLabel,
+        render: (line: EarningLine) => (
+          <span
+            className="text-muted-foreground"
+            title={formatAbsoluteDate(line.createdAt)}
+          >
+            {line.createdAt
+              ? formatRelativeDate(line.createdAt, locale)
+              : "—"}
+          </span>
+        ),
+      },
+    ],
+    [
+      commissionLabel,
+      currency,
+      dateLabel,
+      discountAppliedLabel,
+      locale,
+      notReadyStatusLabel,
+      productFallback,
+      productLabel,
+      qtyLabel,
+      rateLabel,
+      readyStatusLabel,
+      showFulfillmentStatus,
+      statusLabel,
+    ]
+  );
+
   if (lines.length === 0) {
     return (
       <Alert>
@@ -69,36 +167,15 @@ const EarningsLinesTable = ({
   }
 
   return (
-    <Card>
+    <Card className="min-w-0 overflow-hidden">
       <CardContent className="p-0">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>{columns.order}</TableHead>
-              <TableHead>{columns.product}</TableHead>
-              <TableHead>{columns.qty}</TableHead>
-              <TableHead>{columns.rate}</TableHead>
-              <TableHead>{columns.commission}</TableHead>
-              <TableHead>{columns.date}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {lines.map((line) => (
-              <TableRow key={`${line.bucket}-${line.commissionId}`}>
-                <TableCell>#{line.orderId}</TableCell>
-                <TableCell>{line.productName || "—"}</TableCell>
-                <TableCell>{line.quantity}</TableCell>
-                <TableCell>
-                  {formatAmount(line.commissionRate)} {currency}
-                </TableCell>
-                <TableCell className="font-medium">
-                  {formatAmount(line.commissionAmount)} {currency}
-                </TableCell>
-                <TableCell>{formatDate(line.createdAt)}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <DataTable
+          columns={columns}
+          data={lines as Array<EarningLine & Record<string, unknown>>}
+          emptyLabel={emptyLabel}
+          showToolbar={false}
+          embedded
+        />
       </CardContent>
     </Card>
   );
@@ -107,24 +184,70 @@ const EarningsLinesTable = ({
 const WithdrawsTable = ({
   withdraws,
   emptyLabel,
-  columns,
-  statusLabels,
   currency,
+  amountLabel,
+  statusLabel,
+  dateLabel,
+  paidLabel,
+  pendingLabel,
 }: {
   withdraws: WithdrawEntity[];
   emptyLabel: string;
   currency: string;
-  columns: {
-    id: string;
-    amount: string;
-    status: string;
-    date: string;
-  };
-  statusLabels: {
-    paid: string;
-    pending: string;
-  };
+  amountLabel: string;
+  statusLabel: string;
+  dateLabel: string;
+  paidLabel: string;
+  pendingLabel: string;
 }) => {
+  const locale = useLocale();
+
+  const columns = useMemo(
+    () => [
+      {
+        key: "date",
+        label: dateLabel,
+        render: (withdraw: WithdrawEntity) => (
+          <span
+            className="text-muted-foreground"
+            title={formatAbsoluteDate(withdraw.created_at)}
+          >
+            {withdraw.created_at
+              ? formatRelativeDate(withdraw.created_at, locale)
+              : "—"}
+          </span>
+        ),
+      },
+      {
+        key: "amount",
+        label: amountLabel,
+        render: (withdraw: WithdrawEntity) => (
+          <span className="font-medium tabular-nums">
+            {formatAmount(withdraw.amount)} {currency}
+          </span>
+        ),
+      },
+      {
+        key: "status",
+        label: statusLabel,
+        render: (withdraw: WithdrawEntity) => (
+          <Badge variant={withdraw.is_paid ? "secondary" : "outline"}>
+            {withdraw.is_paid ? paidLabel : pendingLabel}
+          </Badge>
+        ),
+      },
+    ],
+    [
+      amountLabel,
+      currency,
+      dateLabel,
+      locale,
+      paidLabel,
+      pendingLabel,
+      statusLabel,
+    ]
+  );
+
   if (withdraws.length === 0) {
     return (
       <Alert>
@@ -134,34 +257,15 @@ const WithdrawsTable = ({
   }
 
   return (
-    <Card>
+    <Card className="min-w-0 overflow-hidden">
       <CardContent className="p-0">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>{columns.id}</TableHead>
-              <TableHead>{columns.amount}</TableHead>
-              <TableHead>{columns.status}</TableHead>
-              <TableHead>{columns.date}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {withdraws.map((withdraw) => (
-              <TableRow key={withdraw.id}>
-                <TableCell>#{withdraw.id}</TableCell>
-                <TableCell className="font-medium">
-                  {formatAmount(withdraw.amount)} {currency}
-                </TableCell>
-                <TableCell>
-                  <Badge variant={withdraw.is_paid ? "secondary" : "outline"}>
-                    {withdraw.is_paid ? statusLabels.paid : statusLabels.pending}
-                  </Badge>
-                </TableCell>
-                <TableCell>{formatDate(withdraw.created_at)}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <DataTable
+          columns={columns}
+          data={withdraws as Array<WithdrawEntity & Record<string, unknown>>}
+          emptyLabel={emptyLabel}
+          showToolbar={false}
+          embedded
+        />
       </CardContent>
     </Card>
   );
@@ -175,27 +279,6 @@ export const EarningsManagementView = () => {
   const earningsEnabled = !partnerLoading && partnerId != null;
   const earningsQuery = useEarningsSummary(earningsEnabled);
   const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
-
-  const lineColumns = {
-    order: t("columns.order"),
-    product: t("columns.product"),
-    qty: t("columns.qty"),
-    rate: t("columns.rate"),
-    commission: t("columns.commission"),
-    date: t("columns.date"),
-  };
-
-  const withdrawColumns = {
-    id: t("columns.id"),
-    amount: t("columns.amount"),
-    status: t("columns.status"),
-    date: t("columns.date"),
-  };
-
-  const statusLabels = {
-    paid: t("status.paid"),
-    pending: t("status.pending"),
-  };
 
   if (partnerLoading || earningsQuery.isLoading) {
     return (
@@ -227,8 +310,23 @@ export const EarningsManagementView = () => {
 
   const summary = earningsQuery.data;
 
+  const sharedLineProps = {
+    currency,
+    productLabel: t("columns.product"),
+    qtyLabel: t("columns.qty"),
+    rateLabel: t("columns.rate"),
+    commissionLabel: t("columns.commission"),
+    statusLabel: t("columns.status"),
+    dateLabel: t("columns.date"),
+    productFallback: t("productFallback"),
+    discountAppliedLabel: (amount: string) =>
+      t("discountApplied", { amount, currency }),
+    readyStatusLabel: t("lineStatus.ready"),
+    notReadyStatusLabel: t("lineStatus.notReady"),
+  };
+
   return (
-    <div className="space-y-8">
+    <div className="min-w-0 space-y-8">
       <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
         <StatsCard
           title={t("stats.ready")}
@@ -275,10 +373,10 @@ export const EarningsManagementView = () => {
           </p>
         </div>
         <EarningsLinesTable
+          {...sharedLineProps}
           lines={summary?.readyLines ?? []}
           emptyLabel={t("empty.ready")}
-          columns={lineColumns}
-          currency={currency}
+          showFulfillmentStatus={false}
         />
       </section>
 
@@ -292,10 +390,10 @@ export const EarningsManagementView = () => {
           </p>
         </div>
         <EarningsLinesTable
+          {...sharedLineProps}
           lines={summary?.notReadyLines ?? []}
           emptyLabel={t("empty.notReady")}
-          columns={lineColumns}
-          currency={currency}
+          showFulfillmentStatus
         />
       </section>
 
@@ -311,9 +409,12 @@ export const EarningsManagementView = () => {
         <WithdrawsTable
           withdraws={summary?.withdraws ?? []}
           emptyLabel={t("empty.withdraws")}
-          columns={withdrawColumns}
-          statusLabels={statusLabels}
           currency={currency}
+          amountLabel={t("columns.amount")}
+          statusLabel={t("columns.status")}
+          dateLabel={t("columns.date")}
+          paidLabel={t("status.paid")}
+          pendingLabel={t("status.pending")}
         />
       </section>
 
