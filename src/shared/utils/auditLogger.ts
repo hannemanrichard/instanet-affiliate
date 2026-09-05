@@ -1,4 +1,6 @@
-import { supabase } from "@/infrastructure/supabase/client";
+import "server-only";
+import { supabaseServer } from "@/infrastructure/supabase/server";
+import { AUDIT_LOG_SOURCE } from "@/shared/server/auditSource";
 import { errorHandlers } from "@/shared/utils/errorHandler";
 import logger from "@/shared/utils/logger";
 import { getAuditLogField } from "./idUtils";
@@ -6,6 +8,7 @@ import { getAuditLogField } from "./idUtils";
 export interface AuditEntry {
   table_name: string;
   recordId: number | string;
+  source?: string;
   action: "INSERT" | "UPDATE" | "DELETE";
   old_values?: Record<string, any>;
   new_values?: Record<string, any>;
@@ -19,6 +22,7 @@ export class AuditLogger {
   static async logAuditEntry(entry: AuditEntry): Promise<void> {
     try {
       const insertData: any = {
+        source: entry.source ?? AUDIT_LOG_SOURCE,
         table_name: entry.table_name,
         action: entry.action,
         old_values: entry.old_values ? JSON.stringify(entry.old_values) : null,
@@ -30,7 +34,9 @@ export class AuditLogger {
       const fieldName = getAuditLogField(entry.recordId);
       insertData[fieldName] = entry.recordId;
 
-      const { error } = await supabase.from("audit_logs").insert(insertData);
+      const { error } = await supabaseServer
+        .from("audit_logs")
+        .insert(insertData);
 
       if (error) {
         throw errorHandlers.common.createError(
@@ -57,7 +63,7 @@ export class AuditLogger {
     limit: number = 50
   ): Promise<any[]> {
     try {
-      let query = supabase
+      let query = supabaseServer
         .from("audit_logs")
         .select("*")
         .eq("table_name", tableName);
@@ -96,7 +102,7 @@ export class AuditLogger {
     limit: number = 100
   ): Promise<any[]> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseServer
         .from("audit_logs")
         .select("*")
         .eq("table_name", tableName)
@@ -129,7 +135,7 @@ export class AuditLogger {
     limit: number = 100
   ): Promise<any[]> {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseServer
         .from("audit_logs")
         .select("*")
         .eq("changed_by", changedBy)

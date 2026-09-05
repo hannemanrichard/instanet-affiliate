@@ -39,6 +39,9 @@ export type ClientCreateOrderPayload = {
     | "delivery_company"
     | "is_auto_delivered"
     | "return_processed"
+    | "product_price"
+    | "delivery_fees"
+    | "shipping_price"
   >;
   items?: CreateOrderItemInput[];
   productId?: number;

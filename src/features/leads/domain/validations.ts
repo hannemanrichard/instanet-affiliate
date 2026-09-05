@@ -92,7 +92,6 @@ export const publicLeadFieldsSchema = z
     color: optionalTrimmedString,
     size: optionalTrimmedString,
     product: optionalTrimmedString,
-    status: optionalTrimmedString,
     objective: optionalTrimmedString,
     offer: optionalTrimmedString,
     price: optionalTrimmedString,

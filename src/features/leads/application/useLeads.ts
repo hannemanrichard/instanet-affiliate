@@ -31,7 +31,10 @@ export type UpdateLeadPayload = {
 };
 
 export type CreatePublicLeadPayload = {
-  lead: CreateLeadPayload["lead"];
+  lead: Omit<
+    CreateLeadPayload["lead"],
+    "status" | "agent_id" | "partner_id" | "last_changed_status"
+  >;
   items?: CreateLeadItemInput[];
   /** Optional partner id or username — validated server-side */
   ref?: string | number;

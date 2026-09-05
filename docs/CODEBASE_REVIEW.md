@@ -1,7 +1,7 @@
 # Codebase Review
 
 **Project:** instanet-affiliate  
-**Date:** 2026-09-04 (updated)  
+**Date:** 2026-09-05 (updated)  
 **Method:** Static analysis of `src/features`, `src/app/api`, middleware, and migrations. No runtime pentest or load test.
 
 ---
@@ -12,14 +12,14 @@
 |-----------|------:|
 | Clean Architecture | **7.0 / 10** |
 | DDD | **5.5 / 10** |
-| Security | **7.0 / 10** |
+| Security | **7.8 / 10** |
 | Performance | **6.5 / 10** |
 | Quality | **7.5 / 10** |
-| **Overall** | **6.7 / 10** |
+| **Overall** | **7.0 / 10** |
 
 **Maturity:** Growing / Intermediate (L3) — feature-sliced modular monolith with ports and adapters; domain model is still mostly anemic.
 
-**Bottom line:** Partner tenancy and privileged order-status paths are solid. Zod, UploadThing auth, leads pagination, and SQL summary RPCs closed several High/Med gaps. Remaining High risks: service-role-without-RLS, open Meta Conversion, client-trusted COD pricing, and the broken/unsafe public-leads boundary. Performance leftover: dashboard/earnings still fetch-all + JS aggregation; missing `orders(partner_id, created_at)` index.
+**Bottom line:** Partner tenancy and privileged order-status paths are solid. Zod, UploadThing auth, leads pagination, SQL summary RPCs, server-authoritative order pricing, anonymous-safe public lead submission, and endpoint rate limiting closed several High/Med gaps. Remaining High risk is primarily service-role-without-RLS; Meta Conversion is still unauthenticated but now rate-limited. Performance leftover: dashboard/earnings still fetch-all + JS aggregation; missing `orders(partner_id, created_at)` index.
 
 ### Recent fixes reflected in this review
 
@@ -33,6 +33,10 @@
 | UploadThing auth via file-router middleware | Verified — Clerk session; product* admin-only |
 | Leads list pagination (no full-table fetch on GET) | Verified — `getPaginated` + list columns + `046` index |
 | Order/lead summaries via SQL aggregates | Verified — `get_order_summary` / `get_lead_summary` (`047`) |
+| Order create pricing is server-authoritative | Verified — create path ignores client `product_price` / delivery fees; derives from product + ZR wilaya |
+| Public storefront lead submit is anonymous-safe | Verified — `/api/leads/public` bypasses Clerk auth and strips client `status` |
+| `supabaseAdmin` removed from browser-safe module | Verified — service-role access now goes through `server.ts` |
+| Abuseable endpoints have server-side rate limiting | Verified — `meta-conversion`, `leads/public`, and UploadThing auth paths are throttled |
 
 > If `delivery-api.js` was ever pushed with live ZR/Supabase keys, **rotate those credentials** — git history may still contain them.
 
@@ -76,14 +80,14 @@
 - Thin value objects (filters / string unions) with little invariant protection.
 - Business rules mostly in application services, not rich aggregates.
 - Sanitization is at the HTTP edge; application `createOrder` / `updateOrder` still accept privileged fields if called without the API sanitizer.
-- Client-trusted COD amounts on create (`product_price` / fees) while commission snapshots from catalog — pricing is not a domain invariant.
-- Public lead schema still allows client `status`.
+- Partner order pricing is now derived on the server at create time, but PATCH still allows fee edits after create so pricing is not fully immutable end-to-end.
+- Public lead route is safer now, but the authenticated lead-create path still allows partners to send workflow fields like `status` and `agent_id`.
 
 ---
 
-### Security — 7.0 / 10
+### Security — 7.8 / 10
 
-Up from **4.5** after partner order lockdown, secrets cleanup, leads IDOR, Zod on APIs, and UploadThing auth.
+Up from **4.5** after partner order lockdown, secrets cleanup, leads IDOR, Zod on APIs, UploadThing auth, and server-side endpoint throttling.
 
 #### Fixed (was Critical / High)
 
@@ -97,38 +101,34 @@ Up from **4.5** after partner order lockdown, secrets cleanup, leads IDOR, Zod o
 
 None active on the previously fixed IDOR / status-forgery paths under current middleware + route guards.
 
-> Latent: if `/api/leads/public` is excluded from Clerk protection without tightening the public allowlist, arbitrary `status` becomes a Critical workflow-integrity issue.
-
 #### Still open — High
 
 | Finding | Where |
 |---------|--------|
 | Service-role Supabase is the sole auth boundary; no RLS on core tables (`orders` / `leads` / `commissions` / `partners`) | `infrastructure/supabase/server.ts`, migrations |
-| `supabaseAdmin` exported from non-`server-only` client module | `infrastructure/supabase/client.ts` |
-| Unauthenticated Meta Conversion proxy; no rate limit | `api/meta-conversion/route.ts` (not in Clerk matcher) |
-| Client-trusted `product_price` / `delivery_fees` / `shipping_price` on create (COD can be underpriced while commission snapshots from catalog) | `partnerOrderFields.ts`, `api/orders/route.ts`, parcel create |
-| Public lead allowlist includes `status`; `/api/leads/public` also requires auth via middleware (storefront cannot work anonymously; opening it without stripping `status` is unsafe) | `api/leads/public/route.ts`, `middleware.ts`, `leads/domain/validations.ts` |
+| Unauthenticated Meta Conversion proxy still accepts public traffic; rate limiting reduces abuse but auth/signing would be stronger | `api/meta-conversion/route.ts` |
 
 #### Still open — Medium
 
 | Finding | Where |
 |---------|--------|
-| No rate limiting on abuseable endpoints | Meta, leads/public (when opened), UploadThing |
+| Rate limiting is process-local in memory; good for single-instance defense, weaker across multiple instances / serverless cold starts | `shared/server/rateLimit.ts` |
 | PostgREST `.or()` search interpolates raw terms | `orderService.search`, `leadService.search` |
 | Authenticated partners can set lead `status` / `agent_id` on create; PATCH only strips `partner_id` | `leads/domain/validations.ts`, `api/leads/*` |
 | Partners can read admin catalog / inventory GETs (`requireDashboardActor`, not admin) | `api/products/admin`, inventory GET |
 | Intended-public reads (`settings/map`, product catalog/by-slug) sit behind Clerk matcher | `middleware.ts` vs route comments |
 | Sanitization only at HTTP edge; `updateOrderStatus` still exists on application service (no API) | `orderApplicationService.ts` |
-| Partners can still PATCH `shipping_price` / `delivery_fees` after create (parcel already sent) | `partnerOrderFields.ts`, `api/orders/[id]` |
+| Partners can still PATCH `shipping_price` / `delivery_fees` after create; create is fixed, update path is not | `partnerOrderFields.ts`, `api/orders/[id]` |
 
 #### Middleware coverage
 
 | Route group | Matcher | Protected | Notes |
 |-------------|---------|-----------|-------|
-| partner, orders, earnings, dashboard, inventory, settings, leads, products, product-pages | Yes | Yes | Session at edge |
+| partner, orders, earnings, dashboard, inventory, settings, leads, products, product-pages | Yes | Yes | Session at edge except `/api/leads/public` |
 | set-role, clerk | Yes | No | Handler self-auth |
 | meta-conversion | No | No | Fully open |
 | uploadthing | No | N/A | Auth in `core.ts` (intentional) |
+| leads/public | Yes | No | Anonymous storefront submit; route allowlist forces `status: "initial"` |
 
 #### What is done well
 
@@ -192,7 +192,7 @@ Up from **5.5** after leads pagination and SQL summary RPCs.
 - Dead helpers: `PARTNER_FORBIDDEN_ORDER_KEYS`, `partnerOrderUpdateHasWritableFields` unused.
 - No API-route or E2E tests for inject attempts.
 - Infra utils still `any`-heavy (`databaseWrapper`, pixel SDKs).
-- Public leads route comments claim no Clerk session, but `/api/leads(.*)` is in the matcher.
+- Public lead access is now handled by middleware exception logic; document that behavior clearly to avoid future regressions.
 
 ---
 
@@ -200,12 +200,12 @@ Up from **5.5** after leads pagination and SQL summary RPCs.
 
 | # | Action | Impact |
 |---|--------|--------|
-| 1 | Rate-limit / auth Meta conversion; fix public leads (exclude from matcher **and** strip `status` / privileged fields) | Abuse / storefront integrity |
-| 2 | Server-authoritative `product_price` + delivery fees on create (from catalog ± discount) | COD integrity |
+| 1 | Add stronger Meta Conversion trust boundary (signed secret, server-to-server allowlist, or auth as appropriate) | Abuse / storefront integrity |
+| 2 | Remove partner PATCH control of `shipping_price` / `delivery_fees`, or recompute fees server-side on editable destination changes | COD integrity |
 | 3 | Wrap order create (and delete) in a DB transaction / compensating cleanup for ZR | Data integrity |
 | 4 | SQL aggregates for dashboard/earnings; index `orders(partner_id, created_at)` | Performance |
 | 5 | Centralize DI composition root; deepen a few aggregates/VOs; remove dead helpers; add API inject tests | Architecture / quality |
-| 6 | Defense-in-depth: RLS on core tables; move `supabaseAdmin` behind `server-only` | Security depth |
+| 6 | Defense-in-depth: RLS on core tables | Security depth |
 
 ---
 
@@ -244,6 +244,7 @@ src/app/api/leads/public/route.ts
 src/app/api/uploadthing/core.ts
 src/app/api/meta-conversion/route.ts
 src/shared/server/parseRequest.ts
+src/shared/server/rateLimit.ts
 src/shared/server/requireCurrentPartner.ts
 src/shared/server/requireOrderAccess.ts
 src/shared/server/requireLeadAccess.ts

@@ -19,6 +19,8 @@ const isProtectedRoute = createRouteMatcher([
   "/api/product-pages(.*)",
 ]);
 
+const isPublicLeadRoute = createRouteMatcher(["/api/leads/public"]);
+
 const buildLocalSignInRedirect = (req: Request) => {
   const url = new URL(req.url);
   const signInUrl = new URL("/sign-in", url.origin);
@@ -32,8 +34,9 @@ const buildLocalSignInRedirect = (req: Request) => {
 export default clerkMiddleware(async (auth, req) => {
   const { pathname, searchParams } = req.nextUrl;
   const isAuthEntry = isAuthEntryPath(pathname);
+  const isPublicLead = isPublicLeadRoute(req);
 
-  if (isProtectedRoute(req) || isAuthEntry) {
+  if ((isProtectedRoute(req) && !isPublicLead) || isAuthEntry) {
     const { userId } = await auth();
 
     if (isAuthEntry && userId) {
@@ -45,7 +48,7 @@ export default clerkMiddleware(async (auth, req) => {
       return NextResponse.redirect(new URL(nextPath, req.url));
     }
 
-    if (isProtectedRoute(req) && !userId) {
+    if (isProtectedRoute(req) && !isPublicLead && !userId) {
       if (pathname.startsWith("/api/")) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
       }

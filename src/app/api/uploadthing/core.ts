@@ -2,6 +2,7 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 import logger from "@/shared/utils/logger";
+import { consumeRateLimit } from "@/shared/server/rateLimit";
 
 const f = createUploadthing();
 
@@ -15,6 +16,17 @@ const requireAuthenticatedUpload = async () => {
   if (!userId) {
     throw new UploadThingError("Unauthorized");
   }
+
+  const rateLimit = consumeRateLimit({
+    bucket: "uploadthing-authenticated",
+    identifier: userId,
+    limit: 20,
+    windowMs: 10 * 60 * 1000,
+  });
+  if (!rateLimit.allowed) {
+    throw new UploadThingError("Too many upload requests");
+  }
+
   return { userId };
 };
 

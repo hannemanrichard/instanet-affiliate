@@ -6,6 +6,7 @@ import { SupabaseCommissionService } from "@/features/earnings/data";
 import { SupabaseProductService } from "@/features/products/data";
 import { DeliveryError, type DeliveryParcelGateway } from "@/features/delivery/domain";
 import { zrDeliveryParcelGateway } from "@/features/delivery/data";
+import { getDeliveryFeeForWilaya } from "@/shared/data/zrLocations";
 import type {
   CreateOrderInput,
   CreateOrderItemInput,
@@ -142,8 +143,12 @@ export class OrderApplicationService {
         );
       }
 
+      const trustedFinancials = await this.resolveTrustedFinancials(payload);
+
       const orderInput: CreateOrderInput = {
         ...payload.order,
+        product_price: trustedFinancials.productPrice,
+        delivery_fees: trustedFinancials.deliveryFees,
         status: payload.order.status ?? "initial",
         is_auto_delivered: payload.order.is_auto_delivered ?? false,
         is_exchange_required: payload.order.is_exchange_required ?? false,
@@ -154,12 +159,17 @@ export class OrderApplicationService {
         is_free_shipping: payload.order.is_free_shipping ?? true,
         agent_id: payload.order.agent_id ?? 1,
         tracker_id: payload.order.tracker_id ?? 1,
-        shipping_price:
-          payload.order.shipping_price ?? payload.order.delivery_fees,
+        shipping_price: trustedFinancials.deliveryFees,
         delivery_company: payload.order.delivery_company ?? "zr",
       };
 
-      const order = await this.orderRepository.create(orderInput);
+      const createdOrder = await this.orderRepository.create(orderInput);
+      const order: OrderEntity = {
+        ...createdOrder,
+        product_price: trustedFinancials.productPrice,
+        delivery_fees: trustedFinancials.deliveryFees,
+        shipping_price: trustedFinancials.deliveryFees,
+      };
 
       let items: OrderItemEntity[] = [];
       if (payload.items?.length) {
@@ -181,6 +191,46 @@ export class OrderApplicationService {
       }
       throw new OrderError("Failed to create order", "ORDER_CREATE_FAILED");
     }
+  }
+
+  private async resolveTrustedFinancials(
+    payload: CreateOrderPayload
+  ): Promise<{ productPrice: number; deliveryFees: number }> {
+    if (!payload.productId) {
+      throw new OrderError(
+        "Product id is required to create an order",
+        "ORDER_PRODUCT_REQUIRED"
+      );
+    }
+
+    const product = await this.productRepository.getById(payload.productId);
+    if (!product) {
+      throw new OrderError("Product not found", "ORDER_PRODUCT_NOT_FOUND");
+    }
+
+    if (!payload.deliveryLocation?.wilayaId) {
+      throw new OrderError(
+        "Delivery location (wilaya) is required",
+        "ORDER_DELIVERY_LOCATION_REQUIRED"
+      );
+    }
+
+    const deliveryFees = getDeliveryFeeForWilaya(
+      payload.deliveryLocation.wilayaId,
+      payload.order.is_stopdesk ?? false
+    );
+
+    if (deliveryFees == null) {
+      throw new OrderError(
+        "Delivery fee could not be resolved for the selected wilaya",
+        "ORDER_DELIVERY_FEE_NOT_FOUND"
+      );
+    }
+
+    return {
+      productPrice: product.retail_price ?? 0,
+      deliveryFees,
+    };
   }
 
   async updateOrder(orderId: number, payload: UpdateOrderPayload): Promise<OrderWithItems> {

@@ -24,6 +24,7 @@ export type Database = {
           old_values: Json | null
           record_id: number | null
           record_uuid: string | null
+          source: string
           table_name: string
         }
         Insert: {
@@ -35,6 +36,7 @@ export type Database = {
           old_values?: Json | null
           record_id?: number | null
           record_uuid?: string | null
+          source?: string
           table_name: string
         }
         Update: {
@@ -46,6 +48,7 @@ export type Database = {
           old_values?: Json | null
           record_id?: number | null
           record_uuid?: string | null
+          source?: string
           table_name?: string
         }
         Relationships: []

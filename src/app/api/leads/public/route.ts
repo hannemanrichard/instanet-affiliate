@@ -10,6 +10,10 @@ import { SupabasePartnerService } from "@/features/partners/data";
 import { supabaseServer } from "@/infrastructure/supabase/server";
 import { jsonError } from "@/shared/server/jsonError";
 import { parseJsonBody } from "@/shared/server/parseRequest";
+import {
+  applyRateLimit,
+  createRateLimitResponse,
+} from "@/shared/server/rateLimit";
 
 const partnerService = new SupabasePartnerService();
 
@@ -46,13 +50,26 @@ const resolvePartnerIdFromRef = async (
  */
 export async function POST(req: NextRequest) {
   try {
+    const rateLimit = applyRateLimit(req, {
+      bucket: "public-leads",
+      limit: 10,
+      windowMs: 10 * 60 * 1000,
+    });
+
+    if (!rateLimit.allowed) {
+      return createRateLimitResponse(
+        "Too many public lead submissions",
+        rateLimit.retryAfterSeconds
+      );
+    }
+
     const body = await parseJsonBody(req, publicLeadBodySchema);
     const partnerId = await resolvePartnerIdFromRef(body.ref);
 
     const payload: CreateLeadPayload = {
       lead: {
         ...body.lead,
-        status: body.lead.status ?? "initial",
+        status: "initial",
         is_moved: body.lead.is_moved ?? false,
         is_abondoned: body.lead.is_abondoned ?? false,
         is_wholesale: body.lead.is_wholesale ?? false,

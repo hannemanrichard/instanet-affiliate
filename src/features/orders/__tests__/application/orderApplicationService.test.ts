@@ -122,8 +122,8 @@ describe("OrderApplicationService", () => {
   };
 
   const deliveryLocation = {
-    wilayaId: "wilaya-uuid",
-    communeId: "commune-uuid",
+    wilayaId: "981f136a-996f-463e-a536-8e643daab193",
+    communeId: "4d3c708d-443e-430c-9e8c-00264b2e4575",
   };
 
   beforeEach(() => {
@@ -199,6 +199,9 @@ describe("OrderApplicationService", () => {
         order: {
           ...baseOrder,
           id: undefined as unknown as number,
+          product_price: 1,
+          delivery_fees: 2,
+          shipping_price: 3,
         } as CreateOrderInput,
         items: [
           {
@@ -250,7 +253,13 @@ describe("OrderApplicationService", () => {
 
       const result = await service.createOrder(payload);
 
-      expect(orderRepository.create).toHaveBeenCalled();
+      expect(orderRepository.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          product_price: 5000,
+          delivery_fees: 800,
+          shipping_price: 800,
+        })
+      );
       expect(orderItemRepository.createMany).toHaveBeenCalledWith(1, payload.items);
       expect(productRepository.getById).toHaveBeenCalledWith(10);
       expect(commissionRepository.create).toHaveBeenCalledWith({
@@ -267,10 +276,10 @@ describe("OrderApplicationService", () => {
       expect(deliveryParcelGateway.createParcel).toHaveBeenCalledWith(
         expect.objectContaining({
           orderId: 1,
-          cityTerritoryId: "wilaya-uuid",
-          districtTerritoryId: "commune-uuid",
+          cityTerritoryId: "981f136a-996f-463e-a536-8e643daab193",
+          districtTerritoryId: "4d3c708d-443e-430c-9e8c-00264b2e4575",
           deliveryType: "home",
-          amount: 10700,
+          amount: 10800,
         })
       );
       expect(orderRepository.update).toHaveBeenCalledWith(1, {
@@ -294,7 +303,7 @@ describe("OrderApplicationService", () => {
     });
 
     it("rejects create without delivery location", async () => {
-      orderRepository.create.mockResolvedValue(baseOrder);
+      productRepository.getById.mockResolvedValue(product);
       commissionRepository.create.mockResolvedValue({
         id: 99,
         partner_id: 42,
@@ -318,6 +327,18 @@ describe("OrderApplicationService", () => {
           productId: 10,
         })
       ).rejects.toMatchObject({ code: "ORDER_DELIVERY_LOCATION_REQUIRED" });
+    });
+
+    it("rejects create without product id", async () => {
+      await expect(
+        service.createOrder({
+          order: {
+            ...baseOrder,
+            id: undefined as unknown as number,
+          } as CreateOrderInput,
+          deliveryLocation,
+        })
+      ).rejects.toMatchObject({ code: "ORDER_PRODUCT_REQUIRED" });
     });
   });
 

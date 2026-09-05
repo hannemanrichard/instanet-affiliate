@@ -83,4 +83,17 @@ describe("API body schemas", () => {
       }).success
     ).toBe(true);
   });
+
+  it("strips privileged public lead fields like status", () => {
+    const result = publicLeadBodySchema.safeParse({
+      lead: {
+        phone: "0555111222",
+        status: "qualified",
+      },
+    });
+
+    expect(result.success).toBe(true);
+    if (!result.success) return;
+    expect("status" in result.data.lead).toBe(false);
+  });
 });

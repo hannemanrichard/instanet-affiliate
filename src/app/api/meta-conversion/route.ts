@@ -1,4 +1,4 @@
-import { supabaseAdmin } from "@/infrastructure/supabase/client";
+import { supabaseServer } from "@/infrastructure/supabase/server";
 import logger from "@/shared/utils/logger";
 import {
   trackMetaLead,
@@ -8,6 +8,10 @@ import {
 import { NextRequest, NextResponse } from "next/server";
 import { metaConversionBodySchema } from "@/shared/server/requestSchemas";
 import { parseJsonBody, ValidationError } from "@/shared/server/parseRequest";
+import {
+  applyRateLimit,
+  createRateLimitResponse,
+} from "@/shared/server/rateLimit";
 
 /**
  * POST /api/meta-conversion
@@ -15,23 +19,25 @@ import { parseJsonBody, ValidationError } from "@/shared/server/parseRequest";
  */
 export async function POST(req: NextRequest) {
   try {
+    const rateLimit = applyRateLimit(req, {
+      bucket: "meta-conversion",
+      limit: 30,
+      windowMs: 5 * 60 * 1000,
+    });
+
+    if (!rateLimit.allowed) {
+      return createRateLimitResponse(
+        "Too many Meta Conversion requests",
+        rateLimit.retryAfterSeconds
+      );
+    }
+
     const { eventType, eventData } = await parseJsonBody(
       req,
       metaConversionBodySchema
     );
 
-    if (!supabaseAdmin) {
-      logger.error(
-        "Supabase service role client not configured. SUPABASE_SERVICE_ROLE_KEY is missing."
-      );
-      return NextResponse.json(
-        { error: "Server configuration error" },
-        { status: 500 }
-      );
-    }
-
-    const supabase = supabaseAdmin;
-    const { data: settings, error: settingsError } = await supabase
+    const { data: settings, error: settingsError } = await supabaseServer
       .from("settings")
       .select("key, value")
       .in("key", ["facebook_pixel_id", "meta_conversion_api_access_token"])
