@@ -81,17 +81,10 @@ export class DashboardApplicationService {
   constructor(private readonly statsRepository: DashboardStatsRepository) {}
 
   async getOverview(
-    partnerId: number,
+    partnerId: number | undefined,
     range: DashboardDateRange
   ): Promise<DashboardOverview> {
     try {
-      if (!partnerId) {
-        throw new DashboardError(
-          "Partner id is required",
-          "DASHBOARD_PARTNER_REQUIRED"
-        );
-      }
-
       if (!range.fromDate || !range.toDate) {
         throw new DashboardError(
           "A date range is required",

@@ -5,6 +5,7 @@ import {
 import type {
   CreateWithdrawInput,
   EarningsSummary,
+  UpdateWithdrawStatusInput,
   WithdrawEntity,
 } from "../../domain";
 import { EarningsError } from "../../domain";
@@ -19,15 +20,8 @@ export class EarningsApplicationService {
     private readonly withdrawRepository: WithdrawRepository
   ) {}
 
-  async getEarningsSummary(partnerId: number): Promise<EarningsSummary> {
+  async getEarningsSummary(partnerId?: number): Promise<EarningsSummary> {
     try {
-      if (!partnerId) {
-        throw new EarningsError(
-          "Partner id is required",
-          "EARNINGS_PARTNER_REQUIRED"
-        );
-      }
-
       const [lines, withdraws] = await Promise.all([
         this.earningsRepository.getEarningLines(partnerId),
         this.withdrawRepository.getByPartnerId(partnerId),
@@ -45,10 +39,10 @@ export class EarningsApplicationService {
         0
       );
       const pendingWithdrawTotal = withdraws
-        .filter((withdraw) => !withdraw.is_paid)
+        .filter((withdraw) => withdraw.status === "pending")
         .reduce((sum, withdraw) => sum + withdraw.amount, 0);
       const paidWithdrawTotal = withdraws
-        .filter((withdraw) => withdraw.is_paid)
+        .filter((withdraw) => withdraw.status === "approved")
         .reduce((sum, withdraw) => sum + withdraw.amount, 0);
       const withdrawnTotal = pendingWithdrawTotal + paidWithdrawTotal;
       const availableToWithdraw = Math.max(0, readyTotal - withdrawnTotal);
@@ -104,6 +98,32 @@ export class EarningsApplicationService {
       throw new EarningsError(
         "Failed to request withdraw",
         "WITHDRAW_CREATE_FAILED"
+      );
+    }
+  }
+
+  async updateWithdrawStatus(
+    input: UpdateWithdrawStatusInput
+  ): Promise<WithdrawEntity> {
+    try {
+      const existing = await this.withdrawRepository.getById(input.id);
+      if (!existing) {
+        throw new EarningsError("Withdraw not found", "WITHDRAW_NOT_FOUND");
+      }
+
+      if (existing.status !== "pending") {
+        throw new EarningsError(
+          "Only pending withdraw requests can be updated",
+          "WITHDRAW_NOT_ALLOWED"
+        );
+      }
+
+      return await this.withdrawRepository.updateStatus(input);
+    } catch (error) {
+      if (error instanceof EarningsError) throw error;
+      throw new EarningsError(
+        "Failed to update withdraw status",
+        "WITHDRAW_UPDATE_FAILED"
       );
     }
   }

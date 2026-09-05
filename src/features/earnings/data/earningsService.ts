@@ -16,17 +16,15 @@ type CommissionWithOrder = CommissionRow & {
 const ENCAISSE = "encaisse";
 
 export class SupabaseEarningsService implements EarningsRepository {
-  async getEarningLines(partnerId: number): Promise<EarningLine[]> {
+  async getEarningLines(partnerId?: number): Promise<EarningLine[]> {
     return withPerformanceTracking(
       "EarningsService",
       "getEarningLines",
       async () => {
         const rows = await DatabaseWrapper.executeQuery(
           async () => {
-            const { data, error } = await supabase
-              .from("commissions")
-              .select(
-                `
+            let query = supabase.from("commissions").select(
+              `
                   id,
                   partner_id,
                   order_id,
@@ -44,9 +42,15 @@ export class SupabaseEarningsService implements EarningsRepository {
                     created_at
                   )
                 `
-              )
-              .eq("partner_id", partnerId)
-              .order("created_at", { ascending: false });
+            );
+
+            if (partnerId != null) {
+              query = query.eq("partner_id", partnerId);
+            }
+
+            const { data, error } = await query.order("created_at", {
+              ascending: false,
+            });
 
             if (error) throw error;
             return { data: (data ?? []) as CommissionWithOrder[], error };

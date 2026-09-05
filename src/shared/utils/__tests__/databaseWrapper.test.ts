@@ -22,7 +22,7 @@ describe("DatabaseWrapper", () => {
     jest.clearAllMocks();
   });
 
-  it("injects the audit source automatically for audited mutations", async () => {
+  it("logs audited mutations without requiring a source field", async () => {
     const created = { id: 123, name: "Test product" };
 
     const result = await DatabaseWrapper.executeMutation(
@@ -43,7 +43,6 @@ describe("DatabaseWrapper", () => {
 
     expect(result).toEqual(created);
     expect(AuditLogger.logAuditEntry).toHaveBeenCalledWith({
-      source: "instanet-affiliate",
       table_name: "products",
       recordId: 123,
       action: "INSERT",

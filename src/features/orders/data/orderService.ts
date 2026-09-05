@@ -285,7 +285,7 @@ export class SupabaseOrderService implements OrderRepository {
     }));
   };
 
-  async create(data: CreateOrderInput): Promise<OrderEntity> {
+  async create(data: CreateOrderInput, changedBy?: number): Promise<OrderEntity> {
     return withPerformanceTracking("OrderService", "create", async () => {
       const payload: OrderInsert = this.mapCreateInputToInsert(data);
 
@@ -307,6 +307,7 @@ export class SupabaseOrderService implements OrderRepository {
           auditLog: {
             enabled: true,
             action: "INSERT",
+            changedBy,
             newValues: payload,
           },
         }
@@ -316,7 +317,11 @@ export class SupabaseOrderService implements OrderRepository {
     });
   }
 
-  async update(id: number, data: UpdateOrderInput): Promise<OrderEntity> {
+  async update(
+    id: number,
+    data: UpdateOrderInput,
+    changedBy?: number
+  ): Promise<OrderEntity> {
     return withPerformanceTracking("OrderService", "update", async () => {
       const payload: OrderUpdate = {
         ...this.mapUpdateInputToUpdate(data),
@@ -343,6 +348,7 @@ export class SupabaseOrderService implements OrderRepository {
             enabled: true,
             action: "UPDATE",
             recordId: id,
+            changedBy,
             newValues: payload,
           },
         }
@@ -352,7 +358,7 @@ export class SupabaseOrderService implements OrderRepository {
     });
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: number, changedBy?: number): Promise<void> {
     return withPerformanceTracking("OrderService", "delete", async () => {
       await DatabaseWrapper.executeMutation(
         async () => {
@@ -372,6 +378,7 @@ export class SupabaseOrderService implements OrderRepository {
             enabled: true,
             action: "DELETE",
             recordId: id,
+            changedBy,
           },
         }
       );

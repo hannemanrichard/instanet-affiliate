@@ -8,7 +8,9 @@ import type { PartnerEntity } from "../domain";
 const currentPartnerKey = ["partners", "current"];
 
 export const useCurrentPartner = () => {
-  const { isLoaded, isSignedIn } = useUser();
+  const { isLoaded, isSignedIn, user } = useUser();
+  const role = user?.publicMetadata?.role;
+  const isAdmin = role === "admin";
 
   const query = useStandardQuery(
     currentPartnerKey,
@@ -17,7 +19,7 @@ export const useCurrentPartner = () => {
         (data) => data.partner
       ),
     {
-      enabled: isLoaded && Boolean(isSignedIn),
+      enabled: isLoaded && Boolean(isSignedIn) && !isAdmin,
       staleTime: 10 * 60 * 1000,
     }
   );
@@ -25,7 +27,7 @@ export const useCurrentPartner = () => {
   return {
     partner: query.data ?? null,
     partnerId: query.data?.id ?? null,
-    isLoading: !isLoaded || query.isLoading,
+    isLoading: !isLoaded || (!isAdmin && query.isLoading),
     isError: query.isError,
     error: query.error,
     refetch: query.refetch,

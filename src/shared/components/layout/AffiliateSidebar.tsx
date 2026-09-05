@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/shared/components/ui/button";
+import { Badge } from "@/shared/components/ui/badge";
 import { Card, CardContent } from "@/shared/components/ui/card";
 import {
   Collapsible,
@@ -57,17 +58,16 @@ const partnerSection: NavSection = {
   ],
 };
 
-const adminSection: NavSection = {
+const adminMainSection: NavSection = {
   labelKey: "admin",
-  collapsible: true,
-  triggerIconKey: "productPages",
   items: [
-    {
-      key: "productPages",
-      href: "/dashboard/product-pages",
-      iconKey: "productPages",
-    },
+    { key: "dashboard", href: "/dashboard", iconKey: "home" },
+    { key: "products", href: "/dashboard/products", iconKey: "products" },
+    { key: "orders", href: "/dashboard/orders", iconKey: "orders" },
+    { key: "withdrawals", href: "/dashboard/withdrawals", iconKey: "earnings" },
     { key: "inventory", href: "/dashboard/inventory", iconKey: "inventory" },
+    { key: "affiliates", href: "/dashboard/affiliates", iconKey: "products" },
+    { key: "audit", href: "/dashboard/audit", iconKey: "orders" },
   ],
 };
 
@@ -254,12 +254,11 @@ const SidebarUpgradeCard = () => {
 
 export function AffiliateSidebar() {
   const { isRTL } = useI18n();
-  const { isAdmin } = useAuth();
+  const { isAdmin, roleLabel } = useAuth();
   const dir = isRTL ? "rtl" : "ltr";
 
   const sections = useMemo(() => {
-    const next = [partnerSection];
-    if (isAdmin) next.push(adminSection);
+    const next = [isAdmin ? adminMainSection : partnerSection];
     next.push(accountSection);
     return next;
   }, [isAdmin]);
@@ -292,9 +291,19 @@ export function AffiliateSidebar() {
                 />
                 <div className="grid min-w-0 flex-1 text-start text-sm leading-tight">
                   <span className="truncate font-semibold">Instanet</span>
-                  <span className="truncate text-xs text-muted-foreground">
-                    Affiliate
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="truncate text-xs text-muted-foreground">
+                      Affiliate
+                    </span>
+                    {isAdmin ? (
+                      <Badge
+                        variant="secondary"
+                        className="h-5 rounded-full px-2 text-[10px] font-semibold uppercase tracking-wide"
+                      >
+                        {roleLabel ?? "Admin"}
+                      </Badge>
+                    ) : null}
+                  </div>
                 </div>
               </Link>
             </SidebarMenuButton>
@@ -307,9 +316,11 @@ export function AffiliateSidebar() {
           {sections.map((section) => (
             <NavSectionBlock key={section.labelKey} section={section} />
           ))}
-          <div className="mt-2 pt-2">
-            <SidebarUpgradeCard />
-          </div>
+          {!isAdmin ? (
+            <div className="mt-2 pt-2">
+              <SidebarUpgradeCard />
+            </div>
+          ) : null}
         </div>
       </SidebarContent>
 

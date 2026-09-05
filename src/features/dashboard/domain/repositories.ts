@@ -5,7 +5,7 @@ import type {
 
 export interface DashboardStatsRepository {
   getDailySnapshots(
-    partnerId: number,
+    partnerId: number | undefined,
     range: DashboardDateRange
   ): Promise<DailyDashboardSnapshot[]>;
 }

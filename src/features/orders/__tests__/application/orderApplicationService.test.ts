@@ -166,12 +166,6 @@ describe("OrderApplicationService", () => {
   });
 
   describe("getPaginatedOrders", () => {
-    it("requires partner id", async () => {
-      await expect(
-        service.getPaginatedOrders({}, { page: 1, limit: 10 })
-      ).rejects.toMatchObject({ code: "ORDER_PARTNER_REQUIRED" });
-    });
-
     it("returns paginated orders for partner", async () => {
       orderRepository.getPaginated.mockResolvedValue({
         data: [baseOrder],
@@ -191,6 +185,26 @@ describe("OrderApplicationService", () => {
       );
       expect(result.total).toBe(1);
     });
+
+    it("returns paginated orders without partner scoping for admin views", async () => {
+      orderRepository.getPaginated.mockResolvedValue({
+        data: [baseOrder],
+        total: 1,
+        page: 1,
+        limit: 10,
+      });
+
+      const result = await service.getPaginatedOrders(
+        { status: "initial" },
+        { page: 1, limit: 10 }
+      );
+
+      expect(orderRepository.getPaginated).toHaveBeenCalledWith(
+        { status: "initial" },
+        { page: 1, limit: 10 }
+      );
+      expect(result.total).toBe(1);
+    });
   });
 
   describe("createOrder", () => {
@@ -203,6 +217,7 @@ describe("OrderApplicationService", () => {
           delivery_fees: 2,
           shipping_price: 3,
         } as CreateOrderInput,
+        auditActorId: 42,
         items: [
           {
             item_id: 10,
@@ -258,21 +273,29 @@ describe("OrderApplicationService", () => {
           product_price: 5000,
           delivery_fees: 800,
           shipping_price: 800,
-        })
+        }),
+        42
       );
-      expect(orderItemRepository.createMany).toHaveBeenCalledWith(1, payload.items);
+      expect(orderItemRepository.createMany).toHaveBeenCalledWith(
+        1,
+        payload.items,
+        42
+      );
       expect(productRepository.getById).toHaveBeenCalledWith(10);
-      expect(commissionRepository.create).toHaveBeenCalledWith({
-        partner_id: 42,
-        order_id: 1,
-        product_id: 10,
-        product_name: "Serum",
-        quantity: 2,
-        unit_commission: 500,
-        unit_discount: 0,
-        amount: 1000,
-        is_earned: false,
-      });
+      expect(commissionRepository.create).toHaveBeenCalledWith(
+        {
+          partner_id: 42,
+          order_id: 1,
+          product_id: 10,
+          product_name: "Serum",
+          quantity: 2,
+          unit_commission: 500,
+          unit_discount: 0,
+          amount: 1000,
+          is_earned: false,
+        },
+        42
+      );
       expect(deliveryParcelGateway.createParcel).toHaveBeenCalledWith(
         expect.objectContaining({
           orderId: 1,
@@ -286,7 +309,7 @@ describe("OrderApplicationService", () => {
         delivery_company: "zr",
         parcel_id: "parcel-uuid",
         tracking_id: "16-ABC-ZR",
-      });
+      }, 42);
       expect(result.order.tracking_id).toBe("16-ABC-ZR");
       expect(result.items).toHaveLength(1);
     });
@@ -355,10 +378,14 @@ describe("OrderApplicationService", () => {
 
       const result = await service.updateOrder(1, {
         order: { status: "delivered" },
+        auditActorId: 42,
       });
 
       expect(result.order.status).toBe("delivered");
-      expect(commissionRepository.markEarnedByOrderId).toHaveBeenCalledWith(1);
+      expect(commissionRepository.markEarnedByOrderId).toHaveBeenCalledWith(
+        1,
+        42
+      );
     });
   });
 
@@ -386,10 +413,10 @@ describe("OrderApplicationService", () => {
       orderItemRepository.deleteByOrderId.mockResolvedValue(undefined);
       orderRepository.delete.mockResolvedValue(undefined);
 
-      await service.deleteOrder(1);
+      await service.deleteOrder(1, 42);
 
-      expect(orderItemRepository.deleteByOrderId).toHaveBeenCalledWith(1);
-      expect(orderRepository.delete).toHaveBeenCalledWith(1);
+      expect(orderItemRepository.deleteByOrderId).toHaveBeenCalledWith(1, 42);
+      expect(orderRepository.delete).toHaveBeenCalledWith(1, 42);
     });
 
     it("rejects delete when status is not initial", async () => {

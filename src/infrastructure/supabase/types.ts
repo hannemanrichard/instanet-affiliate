@@ -24,7 +24,6 @@ export type Database = {
           old_values: Json | null
           record_id: number | null
           record_uuid: string | null
-          source: string
           table_name: string
         }
         Insert: {
@@ -36,7 +35,6 @@ export type Database = {
           old_values?: Json | null
           record_id?: number | null
           record_uuid?: string | null
-          source?: string
           table_name: string
         }
         Update: {
@@ -48,7 +46,6 @@ export type Database = {
           old_values?: Json | null
           record_id?: number | null
           record_uuid?: string | null
-          source?: string
           table_name?: string
         }
         Relationships: []
@@ -2592,6 +2589,7 @@ export type Database = {
       }
       returns: {
         Row: {
+          code: string
           created_at: string
           id: number
           modified_at: string
@@ -2599,6 +2597,7 @@ export type Database = {
           store_id: number
         }
         Insert: {
+          code: string
           created_at?: string
           id?: number
           modified_at?: string
@@ -2606,6 +2605,7 @@ export type Database = {
           store_id?: number
         }
         Update: {
+          code?: string
           created_at?: string
           id?: number
           modified_at?: string
@@ -2925,6 +2925,7 @@ export type Database = {
           id: number
           is_paid: boolean
           partner_id: number
+          status: string
         }
         Insert: {
           amount: number
@@ -2932,6 +2933,7 @@ export type Database = {
           id?: number
           is_paid?: boolean
           partner_id: number
+          status?: string
         }
         Update: {
           amount?: number
@@ -2939,6 +2941,7 @@ export type Database = {
           id?: number
           is_paid?: boolean
           partner_id?: number
+          status?: string
         }
         Relationships: [
           {

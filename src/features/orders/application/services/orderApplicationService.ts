@@ -39,6 +39,7 @@ export type OrderDeliveryLocationInput = {
 export interface CreateOrderPayload {
   order: CreateOrderInput;
   items?: CreateOrderItemInput[];
+  auditActorId?: number;
   /** Product id used to snapshot commission at order-creation time */
   productId?: number;
   /** ZR territory ids for creating a delivery parcel */
@@ -54,6 +55,7 @@ export interface CreateOrderPayload {
 export interface UpdateOrderPayload {
   order?: UpdateOrderInput;
   items?: UpdateOrderItemInput[];
+  auditActorId?: number;
 }
 
 export class OrderApplicationService {
@@ -92,12 +94,6 @@ export class OrderApplicationService {
     pagination: OrderPaginationParams
   ): Promise<PaginatedOrdersResult> {
     try {
-      if (filters.partnerId == null) {
-        throw new OrderError(
-          "Partner id is required",
-          "ORDER_PARTNER_REQUIRED"
-        );
-      }
       return await this.orderRepository.getPaginated(filters, pagination);
     } catch (error) {
       if (error instanceof OrderError) throw error;
@@ -163,7 +159,10 @@ export class OrderApplicationService {
         delivery_company: payload.order.delivery_company ?? "zr",
       };
 
-      const createdOrder = await this.orderRepository.create(orderInput);
+      const createdOrder = await this.orderRepository.create(
+        orderInput,
+        payload.auditActorId
+      );
       const order: OrderEntity = {
         ...createdOrder,
         product_price: trustedFinancials.productPrice,
@@ -173,14 +172,24 @@ export class OrderApplicationService {
 
       let items: OrderItemEntity[] = [];
       if (payload.items?.length) {
-        items = await this.orderItemRepository.createMany(order.id, payload.items);
+        items = await this.orderItemRepository.createMany(
+          order.id,
+          payload.items,
+          payload.auditActorId
+        );
       }
 
-      await this.createCommissionSnapshot(order, payload.productId, payload.discount);
+      await this.createCommissionSnapshot(
+        order,
+        payload.productId,
+        payload.discount,
+        payload.auditActorId
+      );
 
       const updatedOrder = await this.createDeliveryParcel(
         order,
-        payload.deliveryLocation
+        payload.deliveryLocation,
+        payload.auditActorId
       );
 
       return { order: updatedOrder, items };
@@ -236,12 +245,20 @@ export class OrderApplicationService {
   async updateOrder(orderId: number, payload: UpdateOrderPayload): Promise<OrderWithItems> {
     try {
       if (payload.order) {
-        await this.orderRepository.update(orderId, payload.order);
-        await this.syncCommissionEarnedIfDelivered(orderId, payload.order.status);
+        await this.orderRepository.update(orderId, payload.order, payload.auditActorId);
+        await this.syncCommissionEarnedIfDelivered(
+          orderId,
+          payload.order.status,
+          payload.auditActorId
+        );
       }
 
       if (payload.items) {
-        await this.orderItemRepository.updateMany(orderId, payload.items);
+        await this.orderItemRepository.updateMany(
+          orderId,
+          payload.items,
+          payload.auditActorId
+        );
       }
 
       const updated = await this.orderRepository.getWithItems(orderId);
@@ -280,7 +297,7 @@ export class OrderApplicationService {
     }
   }
 
-  async deleteOrder(orderId: number): Promise<void> {
+  async deleteOrder(orderId: number, changedBy?: number): Promise<void> {
     try {
       const existing = await this.orderRepository.getById(orderId);
       if (!existing) {
@@ -293,8 +310,8 @@ export class OrderApplicationService {
         );
       }
 
-      await this.orderItemRepository.deleteByOrderId(orderId);
-      await this.orderRepository.delete(orderId);
+      await this.orderItemRepository.deleteByOrderId(orderId, changedBy);
+      await this.orderRepository.delete(orderId, changedBy);
     } catch (error) {
       if (error instanceof OrderError) throw error;
       throw new OrderError("Failed to delete order", "ORDER_DELETE_FAILED");
@@ -313,7 +330,8 @@ export class OrderApplicationService {
   private async createCommissionSnapshot(
     order: OrderEntity,
     productId?: number,
-    discount?: number
+    discount?: number,
+    changedBy?: number
   ): Promise<void> {
     if (order.partner_id == null) return;
 
@@ -341,22 +359,29 @@ export class OrderApplicationService {
     // Reduce the customer-facing price stored on the order
     if (safeDiscount > 0) {
       const currentPrice = order.product_price ?? 0;
-      await this.orderRepository.update(order.id, {
-        product_price: currentPrice - safeDiscount,
-      });
+      await this.orderRepository.update(
+        order.id,
+        {
+          product_price: currentPrice - safeDiscount,
+        },
+        changedBy
+      );
     }
 
-    await this.commissionRepository.create({
-      partner_id: order.partner_id,
-      order_id: order.id,
-      product_id: resolvedProductId,
-      product_name: productName,
-      quantity,
-      unit_commission: unitCommission,
-      unit_discount: safeDiscount,
-      amount,
-      is_earned: false,
-    });
+    await this.commissionRepository.create(
+      {
+        partner_id: order.partner_id,
+        order_id: order.id,
+        product_id: resolvedProductId,
+        product_name: productName,
+        quantity,
+        unit_commission: unitCommission,
+        unit_discount: safeDiscount,
+        amount,
+        is_earned: false,
+      },
+      changedBy
+    );
   }
 
   /**
@@ -365,7 +390,8 @@ export class OrderApplicationService {
    */
   private async createDeliveryParcel(
     order: OrderEntity,
-    location?: OrderDeliveryLocationInput
+    location?: OrderDeliveryLocationInput,
+    changedBy?: number
   ): Promise<OrderEntity> {
     if (!location?.wilayaId || !location?.communeId) {
       throw new OrderError(
@@ -427,11 +453,15 @@ export class OrderApplicationService {
       description: descriptionParts.join(" · "),
     });
 
-    return this.orderRepository.update(order.id, {
-      delivery_company: "zr",
-      parcel_id: parcel.parcelId,
-      tracking_id: parcel.trackingNumber,
-    });
+    return this.orderRepository.update(
+      order.id,
+      {
+        delivery_company: "zr",
+        parcel_id: parcel.parcelId,
+        tracking_id: parcel.trackingNumber,
+      },
+      changedBy
+    );
   }
 
   /**
@@ -439,10 +469,11 @@ export class OrderApplicationService {
    */
   private async syncCommissionEarnedIfDelivered(
     orderId: number,
-    status?: string
+    status?: string,
+    changedBy?: number
   ): Promise<void> {
     if ((status ?? "").toLowerCase() !== "delivered") return;
-    await this.commissionRepository.markEarnedByOrderId(orderId);
+    await this.commissionRepository.markEarnedByOrderId(orderId, changedBy);
   }
 }
 

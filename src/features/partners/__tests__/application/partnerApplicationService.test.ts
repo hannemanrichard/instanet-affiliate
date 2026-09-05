@@ -5,7 +5,9 @@ import type { PartnerRepository } from "../../domain/repositories";
 const createPartnerRepositoryMock = (): jest.Mocked<PartnerRepository> => ({
   getByEmail: jest.fn(),
   getById: jest.fn(),
+  listAll: jest.fn(),
   upsertByEmail: jest.fn(),
+  updatePayment: jest.fn(),
 });
 
 describe("PartnerApplicationService", () => {

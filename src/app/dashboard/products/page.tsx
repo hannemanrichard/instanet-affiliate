@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Shell } from "@/shared/components";
 import { DashboardPageHeader } from "@/shared/components/layout/DashboardPageHeader";
-import { AffiliateProductPagesView } from "@/features/products";
+import { ProductsDashboardView } from "./ProductsDashboardView";
 
 export const metadata: Metadata = {
   title: "Products | Instanet",
@@ -13,7 +13,7 @@ export default function ProductsPage() {
     <Shell>
       <div className="space-y-6">
         <DashboardPageHeader section="products" />
-        <AffiliateProductPagesView />
+        <ProductsDashboardView />
       </div>
     </Shell>
   );

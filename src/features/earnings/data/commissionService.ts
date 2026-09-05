@@ -11,7 +11,10 @@ type CommissionRow = Tables["commissions"]["Row"];
 export class SupabaseCommissionService implements CommissionRepository {
   private readonly tableName = "commissions";
 
-  async create(data: CreateCommissionInput): Promise<CommissionEntity> {
+  async create(
+    data: CreateCommissionInput,
+    changedBy?: number
+  ): Promise<CommissionEntity> {
     return withPerformanceTracking("CommissionService", "create", async () => {
       const row = await DatabaseWrapper.executeMutation(
         async () => {
@@ -45,6 +48,7 @@ export class SupabaseCommissionService implements CommissionRepository {
           auditLog: {
             enabled: true,
             action: "INSERT",
+            changedBy,
             newValues: {
               partner_id: data.partner_id,
               order_id: data.order_id,
@@ -117,7 +121,10 @@ export class SupabaseCommissionService implements CommissionRepository {
     );
   }
 
-  async markEarnedByOrderId(orderId: number): Promise<void> {
+  async markEarnedByOrderId(
+    orderId: number,
+    changedBy?: number
+  ): Promise<void> {
     return withPerformanceTracking(
       "CommissionService",
       "markEarnedByOrderId",
@@ -141,6 +148,7 @@ export class SupabaseCommissionService implements CommissionRepository {
             auditLog: {
               enabled: true,
               action: "UPDATE",
+              changedBy,
               newValues: { order_id: orderId, is_earned: true },
             },
           }

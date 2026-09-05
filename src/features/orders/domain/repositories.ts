@@ -25,16 +25,24 @@ export interface OrderRepository {
     filters: OrderFilters,
     pagination: OrderPaginationParams
   ): Promise<PaginatedOrdersResult>;
-  create(data: CreateOrderInput): Promise<OrderEntity>;
-  update(id: number, data: UpdateOrderInput): Promise<OrderEntity>;
-  delete(id: number): Promise<void>;
+  create(data: CreateOrderInput, changedBy?: number): Promise<OrderEntity>;
+  update(id: number, data: UpdateOrderInput, changedBy?: number): Promise<OrderEntity>;
+  delete(id: number, changedBy?: number): Promise<void>;
   getWithItems(id: number): Promise<OrderWithItems | null>;
   getSummary(partnerId?: number): Promise<OrderSummary>;
 }
 
 export interface OrderItemRepository {
   getByOrderId(orderId: number): Promise<OrderItemEntity[]>;
-  createMany(orderId: number, items: CreateOrderItemInput[]): Promise<OrderItemEntity[]>;
-  updateMany(orderId: number, items: UpdateOrderItemInput[]): Promise<OrderItemEntity[]>;
-  deleteByOrderId(orderId: number): Promise<void>;
+  createMany(
+    orderId: number,
+    items: CreateOrderItemInput[],
+    changedBy?: number
+  ): Promise<OrderItemEntity[]>;
+  updateMany(
+    orderId: number,
+    items: UpdateOrderItemInput[],
+    changedBy?: number
+  ): Promise<OrderItemEntity[]>;
+  deleteByOrderId(orderId: number, changedBy?: number): Promise<void>;
 }

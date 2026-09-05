@@ -8,6 +8,9 @@
     "products": "Produits",
     "orders": "Commandes",
     "earnings": "Gains",
+    "withdrawals": "Retraits",
+    "affiliates": "Affilies",
+    "audit": "Audit",
     "parcels": "Colis",
     "stats": "Statistiques",
     "balance": "Solde",
@@ -1209,7 +1212,8 @@
       },
       "status": {
         "paid": "Payé",
-        "pending": "En attente"
+        "pending": "En attente",
+        "denied": "Refusé"
       },
       "withdraw": {
         "title": "Demander un retrait",

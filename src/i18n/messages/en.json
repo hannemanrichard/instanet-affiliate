@@ -8,6 +8,9 @@
     "products": "Products",
     "orders": "Orders",
     "earnings": "Earnings",
+    "withdrawals": "Withdrawals",
+    "affiliates": "Affiliates",
+    "audit": "Audit",
     "parcels": "Parcels",
     "stats": "Stats",
     "balance": "Balance",
@@ -1308,7 +1311,8 @@
       },
       "status": {
         "paid": "Paid",
-        "pending": "Pending"
+        "pending": "Pending",
+        "denied": "Denied"
       },
       "withdraw": {
         "title": "Request withdraw",

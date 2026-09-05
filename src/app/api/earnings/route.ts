@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import { earningsApplicationService } from "@/features/earnings/application/services/earningsApplicationService";
-import { requireCurrentPartner } from "@/shared/server/requireCurrentPartner";
+import { requireDashboardActor } from "@/shared/server/requireDashboardActor";
 import { jsonError } from "@/shared/server/jsonError";
 
 export async function GET() {
   try {
-    const partner = await requireCurrentPartner();
+    const actor = await requireDashboardActor();
     const summary = await earningsApplicationService.getEarningsSummary(
-      partner.id
+      actor.role === "partner" ? actor.partner.id : undefined
     );
     return NextResponse.json(summary);
   } catch (error) {

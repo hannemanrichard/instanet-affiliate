@@ -1,5 +1,4 @@
 import logger from "@/shared/utils/logger";
-import { AUDIT_LOG_SOURCE } from "@/shared/server/auditSource";
 import { AuditLogger } from "./auditLogger";
 
 export interface QueryOptions {
@@ -191,7 +190,6 @@ export class DatabaseWrapper {
     }
 
     await AuditLogger.logAuditEntry({
-      source: AUDIT_LOG_SOURCE,
       table_name: options.table,
       recordId,
       action: auditLog.action,

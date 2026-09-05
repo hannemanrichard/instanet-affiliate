@@ -55,7 +55,8 @@ export class SupabaseOrderItemService implements OrderItemRepository {
 
   async createMany(
     orderId: number,
-    items: CreateOrderItemInput[]
+    items: CreateOrderItemInput[],
+    changedBy?: number
   ): Promise<OrderItemEntity[]> {
     if (!items.length) return [];
 
@@ -93,6 +94,7 @@ export class SupabaseOrderItemService implements OrderItemRepository {
               enabled: true,
               action: "INSERT",
               recordId: orderId,
+              changedBy,
               newValues: { items },
             },
           }
@@ -105,26 +107,28 @@ export class SupabaseOrderItemService implements OrderItemRepository {
 
   async updateMany(
     orderId: number,
-    items: UpdateOrderItemInput[]
+    items: UpdateOrderItemInput[],
+    changedBy?: number
   ): Promise<OrderItemEntity[]> {
     return withPerformanceTracking(
       "OrderItemService",
       "updateMany",
       async () => {
-        await this.deleteByOrderId(orderId);
+        await this.deleteByOrderId(orderId, changedBy);
         return this.createMany(
           orderId,
           items.map((item) => ({
             item_id: item.item_id,
             qty: item.qty,
             product_page_id: item.product_page_id,
-          }))
+          })),
+          changedBy
         );
       }
     );
   }
 
-  async deleteByOrderId(orderId: number): Promise<void> {
+  async deleteByOrderId(orderId: number, changedBy?: number): Promise<void> {
     return withPerformanceTracking(
       "OrderItemService",
       "deleteByOrderId",
@@ -147,6 +151,7 @@ export class SupabaseOrderItemService implements OrderItemRepository {
               enabled: true,
               action: "DELETE",
               recordId: orderId,
+              changedBy,
             },
           }
         );

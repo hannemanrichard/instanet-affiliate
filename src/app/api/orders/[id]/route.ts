@@ -34,7 +34,7 @@ export async function PATCH(
   try {
     const { id: idParam } = await context.params;
     const orderId = parsePositiveIntParam(idParam, "id");
-    await requireOrderAccess(orderId);
+    const { actor } = await requireOrderAccess(orderId);
 
     const body = await parseJsonBody(req, updateOrderBodySchema);
 
@@ -60,6 +60,7 @@ export async function PATCH(
     const payload: UpdateOrderPayload = {
       order: sanitizedOrder,
       items: body.items,
+      auditActorId: actor.role === "partner" ? actor.partner.id : undefined,
     };
 
     const result = await orderApplicationService.updateOrder(orderId, payload);
@@ -76,8 +77,11 @@ export async function DELETE(
   try {
     const { id: idParam } = await context.params;
     const orderId = parsePositiveIntParam(idParam, "id");
-    await requireOrderAccess(orderId);
-    await orderApplicationService.deleteOrder(orderId);
+    const { actor } = await requireOrderAccess(orderId);
+    await orderApplicationService.deleteOrder(
+      orderId,
+      actor.role === "partner" ? actor.partner.id : undefined
+    );
     return NextResponse.json({ success: true });
   } catch (error) {
     return jsonError(error);

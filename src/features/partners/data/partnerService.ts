@@ -66,6 +66,38 @@ export class SupabasePartnerService implements PartnerRepository {
     });
   }
 
+  async listAll(search?: string): Promise<PartnerEntity[]> {
+    return withPerformanceTracking("PartnerService", "listAll", async () => {
+      const normalizedSearch = search?.trim().toLowerCase();
+
+      const rows = await DatabaseWrapper.executeQuery(
+        async () => {
+          let query = supabase
+            .from(this.tableName)
+            .select("*")
+            .order("created_at", { ascending: false });
+
+          if (normalizedSearch) {
+            query = query.or(
+              `email.ilike.%${normalizedSearch}%,fullname.ilike.%${normalizedSearch}%,username.ilike.%${normalizedSearch}%`
+            );
+          }
+
+          const { data, error } = await query;
+          if (error) throw error;
+          return { data: data ?? [], error };
+        },
+        {
+          operation: "listAll",
+          table: this.tableName,
+          metadata: { search: normalizedSearch },
+        }
+      );
+
+      return rows.map(this.mapRowToEntity);
+    });
+  }
+
   async upsertByEmail(data: UpsertPartnerInput): Promise<PartnerEntity> {
     return withPerformanceTracking(
       "PartnerService",

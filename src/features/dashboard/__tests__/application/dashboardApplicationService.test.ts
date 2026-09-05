@@ -91,13 +91,23 @@ describe("DashboardApplicationService", () => {
     ).rejects.toMatchObject({ code: "DASHBOARD_RANGE_INVALID" });
   });
 
-  it("rejects a missing partner id", async () => {
-    await expect(
-      service.getOverview(0, {
-        preset: "last_7_days",
-        fromDate: "2026-08-01",
-        toDate: "2026-08-07",
-      })
-    ).rejects.toMatchObject({ code: "DASHBOARD_PARTNER_REQUIRED" });
+  it("allows platform-wide overview when partner id is omitted", async () => {
+    repository.getDailySnapshots.mockResolvedValue([
+      snapshot("2026-08-01"),
+      snapshot("2026-08-02"),
+    ]);
+
+    const overview = await service.getOverview(undefined, {
+      preset: "last_7_days",
+      fromDate: "2026-08-01",
+      toDate: "2026-08-07",
+    });
+
+    expect(overview.sales.total).toBe(2000);
+    expect(repository.getDailySnapshots).toHaveBeenNthCalledWith(1, undefined, {
+      preset: "last_7_days",
+      fromDate: "2026-08-01",
+      toDate: "2026-08-07",
+    });
   });
 });

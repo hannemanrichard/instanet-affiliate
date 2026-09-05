@@ -8,6 +8,9 @@
     "products": "المنتجات",
     "orders": "الطلبات",
     "earnings": "الأرباح",
+    "withdrawals": "السحوبات",
+    "affiliates": "المسوقون",
+    "audit": "سجل التدقيق",
     "parcels": "الطرود",
     "stats": "الإحصائيات",
     "balance": "الرصيد",
@@ -1209,7 +1212,8 @@
       },
       "status": {
         "paid": "مدفوع",
-        "pending": "معلّق"
+        "pending": "معلّق",
+        "denied": "مرفوض"
       },
       "withdraw": {
         "title": "طلب سحب",

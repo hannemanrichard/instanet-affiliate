@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useAuth } from "@/shared/hooks/use-auth";
 import { cn } from "@/shared/utils/utils";
 import { NavHugeIcon } from "./NavHugeIcon";
 import { navIcons, type NavIconKey } from "./navIcons";
@@ -13,11 +14,19 @@ type TabItem = {
   iconKey: NavIconKey;
 };
 
-const tabItems: TabItem[] = [
+const partnerTabItems: TabItem[] = [
   { key: "home", href: "/dashboard", iconKey: "home" },
   { key: "products", href: "/dashboard/products", iconKey: "products" },
   { key: "orders", href: "/dashboard/orders", iconKey: "orders" },
   { key: "earnings", href: "/dashboard/earnings", iconKey: "earnings" },
+  { key: "settings", href: "/dashboard/settings", iconKey: "settings" },
+];
+
+const adminTabItems: TabItem[] = [
+  { key: "dashboard", href: "/dashboard", iconKey: "home" },
+  { key: "products", href: "/dashboard/products", iconKey: "products" },
+  { key: "orders", href: "/dashboard/orders", iconKey: "orders" },
+  { key: "withdrawals", href: "/dashboard/withdrawals", iconKey: "earnings" },
   { key: "settings", href: "/dashboard/settings", iconKey: "settings" },
 ];
 
@@ -28,6 +37,8 @@ const isActive = (pathname: string, href: string) =>
 export const MobileTabBar = () => {
   const pathname = usePathname();
   const t = useTranslations("navigation");
+  const { isAdmin } = useAuth();
+  const tabItems = isAdmin ? adminTabItems : partnerTabItems;
 
   return (
     <nav

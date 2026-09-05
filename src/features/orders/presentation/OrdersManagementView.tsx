@@ -32,6 +32,7 @@ import { uiIcons } from "@/shared/components/layout/navIcons";
 import { cn } from "@/shared/utils/utils";
 import { formatRelativeDate } from "@/shared/utils/formatRelativeDate";
 import { useCurrentPartner } from "@/features/partners";
+import { useAuth } from "@/shared/hooks/use-auth";
 import { useOrderSummary, usePaginatedOrders } from "../application";
 import type { OrderEntity } from "../domain";
 import { ORDER_STATUS_OPTIONS } from "../domain";
@@ -61,6 +62,7 @@ export const OrdersManagementView = () => {
   const t = useTranslations("affiliateDashboard.orders");
   const tDash = useTranslations("affiliateDashboard");
   const locale = useLocale();
+  const { isAdmin, isLoaded } = useAuth();
   const { partnerId, isLoading: partnerLoading } = useCurrentPartner();
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState<string>("all");
@@ -76,7 +78,8 @@ export const OrdersManagementView = () => {
     [appliedSearch, status]
   );
 
-  const ordersEnabled = !partnerLoading && partnerId != null;
+  const ordersEnabled =
+    isLoaded && (isAdmin || (!partnerLoading && partnerId != null));
   const ordersQuery = usePaginatedOrders(
     filters,
     page,
@@ -163,7 +166,7 @@ export const OrdersManagementView = () => {
     },
   ];
 
-  if (partnerLoading) {
+  if (!isLoaded || (!isAdmin && partnerLoading)) {
     return (
       <div className="min-w-0 space-y-4">
         <div className="grid grid-cols-3 gap-2 sm:gap-3">
@@ -181,7 +184,7 @@ export const OrdersManagementView = () => {
     );
   }
 
-  if (partnerId == null) {
+  if (!isAdmin && partnerId == null) {
     return (
       <Alert>
         <AlertDescription>{t("partnerUnresolved")}</AlertDescription>
@@ -280,16 +283,18 @@ export const OrdersManagementView = () => {
                 </Select>
               </div>
             </div>
-            <Button
-              type="button"
-              size="lg"
-              className="h-11 w-full shrink-0 gap-2 font-semibold shadow-md sm:h-10 sm:w-auto sm:px-5"
-              onClick={() => setIsCreateOpen(true)}
-              aria-label={t("createOrderAria")}
-            >
-              <AppIcon icon={uiIcons.newOrder} size={18} />
-              {t("createOrder")}
-            </Button>
+            {!isAdmin ? (
+              <Button
+                type="button"
+                size="lg"
+                className="h-11 w-full shrink-0 gap-2 font-semibold shadow-md sm:h-10 sm:w-auto sm:px-5"
+                onClick={() => setIsCreateOpen(true)}
+                aria-label={t("createOrderAria")}
+              >
+                <AppIcon icon={uiIcons.newOrder} size={18} />
+                {t("createOrder")}
+              </Button>
+            ) : null}
           </div>
         </CardHeader>
         <CardContent className="p-0">
@@ -321,7 +326,9 @@ export const OrdersManagementView = () => {
         </CardContent>
       </Card>
 
-      <CreateOrderDialog open={isCreateOpen} onOpenChange={setIsCreateOpen} />
+      {!isAdmin ? (
+        <CreateOrderDialog open={isCreateOpen} onOpenChange={setIsCreateOpen} />
+      ) : null}
     </div>
   );
 };

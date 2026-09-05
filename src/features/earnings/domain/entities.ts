@@ -1,4 +1,5 @@
 export type EarningBucket = "ready" | "not_ready";
+export type WithdrawStatus = "pending" | "approved" | "denied";
 
 export interface CommissionEntity {
   id: number;
@@ -51,14 +52,27 @@ export interface EarningLine {
 export interface WithdrawEntity {
   id: number;
   partner_id: number;
+  partner_avatar?: string;
+  partner_name?: string;
+  partner_email?: string;
+  partner_username?: string;
+  partner_baridimob_rib?: string;
+  partner_redotpay_account?: string;
+  partner_usdt_address?: string;
   amount: number;
   is_paid: boolean;
+  status: WithdrawStatus;
   created_at: string;
 }
 
 export interface CreateWithdrawInput {
   partner_id: number;
   amount: number;
+}
+
+export interface UpdateWithdrawStatusInput {
+  id: number;
+  status: WithdrawStatus;
 }
 
 export interface EarningsSummary {

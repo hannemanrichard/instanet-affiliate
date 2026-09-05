@@ -1,25 +1,39 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import {
   Banknote,
   CircleDollarSign,
   Clock3,
+  CreditCard,
+  Eye,
   Wallet,
 } from "lucide-react";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/shared/components/ui/card";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/shared/components/ui/dialog";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import StatsCard from "@/shared/components/ui/StatsCard";
 import { DataTable } from "@/shared/components/ui/data-table/data-table";
 import { formatRelativeDate } from "@/shared/utils/formatRelativeDate";
 import { useCurrentPartner } from "@/features/partners";
-import { useEarningsSummary } from "../application";
+import { useAuth } from "@/shared/hooks/use-auth";
+import {
+  useEarningsSummary,
+  useRequestWithdraw,
+  useUpdateWithdrawStatus,
+} from "../application";
 import type { EarningLine, WithdrawEntity } from "../domain";
-import { WithdrawRequestDialog } from "./WithdrawRequestDialog";
 
 const formatAmount = (amount: number) =>
   new Intl.NumberFormat("en-US", {
@@ -30,6 +44,113 @@ const formatAmount = (amount: number) =>
 const formatAbsoluteDate = (value?: string) => {
   if (!value) return "—";
   return new Date(value).toLocaleDateString("en-GB");
+};
+
+const getPartnerInitials = (withdraw: WithdrawEntity) => {
+  const label =
+    withdraw.partner_name?.trim() ||
+    withdraw.partner_username?.trim() ||
+    String(withdraw.partner_id);
+
+  return label
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? "")
+    .join("");
+};
+
+const PaymentDetailsDialog = ({ withdraw }: { withdraw: WithdrawEntity }) => {
+  const partnerLabel =
+    withdraw.partner_name?.trim() ||
+    withdraw.partner_username?.trim() ||
+    `Affiliate #${withdraw.partner_id}`;
+  const paymentMethods = [
+    {
+      label: "BaridiMob RIB",
+      value: withdraw.partner_baridimob_rib?.trim(),
+    },
+    {
+      label: "RedotPay account",
+      value: withdraw.partner_redotpay_account?.trim(),
+    },
+    {
+      label: "USDT address",
+      value: withdraw.partner_usdt_address?.trim(),
+    },
+  ].filter((method) => Boolean(method.value));
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="size-8"
+          aria-label={`View payment details for ${partnerLabel}`}
+        >
+          <Eye className="size-4" />
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-xl">
+        <DialogHeader>
+          <DialogTitle>Payment details</DialogTitle>
+          <DialogDescription>
+            Review payout information for {partnerLabel}.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-4">
+          <div className="flex items-center gap-3 rounded-xl border bg-muted/30 p-4">
+            {withdraw.partner_avatar ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={withdraw.partner_avatar}
+                alt=""
+                className="size-12 shrink-0 rounded-full object-cover ring-1 ring-border"
+              />
+            ) : (
+              <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-muted text-sm font-semibold text-muted-foreground ring-1 ring-border">
+                {getPartnerInitials(withdraw)}
+              </div>
+            )}
+            <div className="min-w-0">
+              <p className="truncate font-semibold text-foreground">
+                {partnerLabel}
+              </p>
+              <p className="truncate text-sm text-muted-foreground">
+                {withdraw.partner_email?.trim() || "No email available"}
+              </p>
+            </div>
+          </div>
+
+          {paymentMethods.length > 0 ? (
+            <div className="grid gap-3">
+              {paymentMethods.map((method) => (
+                <div
+                  key={method.label}
+                  className="rounded-xl border bg-card p-4 shadow-sm"
+                >
+                  <div className="mb-2 flex items-center gap-2 text-sm font-medium text-foreground">
+                    <CreditCard className="size-4 text-primary" />
+                    <span>{method.label}</span>
+                  </div>
+                  <p className="break-all rounded-lg bg-muted/50 px-3 py-2 font-mono text-sm text-foreground">
+                    {method.value}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-xl border border-dashed bg-muted/20 p-6 text-sm text-muted-foreground">
+              No payment details have been added for this affiliate yet.
+            </div>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
 };
 
 const EarningsLinesTable = ({
@@ -190,6 +311,11 @@ const WithdrawsTable = ({
   dateLabel,
   paidLabel,
   pendingLabel,
+  deniedLabel,
+  isAdmin,
+  onApprove,
+  onDeny,
+  isUpdating,
 }: {
   withdraws: WithdrawEntity[];
   emptyLabel: string;
@@ -199,11 +325,50 @@ const WithdrawsTable = ({
   dateLabel: string;
   paidLabel: string;
   pendingLabel: string;
+  deniedLabel: string;
+  isAdmin: boolean;
+  onApprove: (withdrawId: number) => void;
+  onDeny: (withdrawId: number) => void;
+  isUpdating: boolean;
 }) => {
   const locale = useLocale();
 
   const columns = useMemo(
     () => [
+      ...(isAdmin
+        ? [
+            {
+              key: "partner",
+              label: "Affiliate",
+              render: (withdraw: WithdrawEntity) => (
+                <div className="flex min-w-0 items-center gap-3">
+                  {withdraw.partner_avatar ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={withdraw.partner_avatar}
+                      alt=""
+                      className="size-9 shrink-0 rounded-full object-cover ring-1 ring-border"
+                    />
+                  ) : (
+                    <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-semibold text-muted-foreground ring-1 ring-border">
+                      {getPartnerInitials(withdraw)}
+                    </div>
+                  )}
+                  <div className="min-w-0">
+                    <p className="truncate font-medium">
+                      {withdraw.partner_name?.trim() ||
+                        withdraw.partner_username?.trim() ||
+                        `#${withdraw.partner_id}`}
+                    </p>
+                    <p className="truncate text-xs text-muted-foreground">
+                      {withdraw.partner_email?.trim() || "—"}
+                    </p>
+                  </div>
+                </div>
+              ),
+            },
+          ]
+        : []),
       {
         key: "date",
         label: dateLabel,
@@ -231,17 +396,73 @@ const WithdrawsTable = ({
         key: "status",
         label: statusLabel,
         render: (withdraw: WithdrawEntity) => (
-          <Badge variant={withdraw.is_paid ? "secondary" : "outline"}>
-            {withdraw.is_paid ? paidLabel : pendingLabel}
+          <Badge
+            variant={
+              withdraw.status === "approved"
+                ? "secondary"
+                : withdraw.status === "denied"
+                  ? "destructive"
+                  : "outline"
+            }
+          >
+            {withdraw.status === "approved"
+              ? paidLabel
+              : withdraw.status === "denied"
+                ? deniedLabel
+                : pendingLabel}
           </Badge>
         ),
       },
+      ...(isAdmin
+        ? [
+            {
+              key: "paymentDetails",
+              label: "Payment details",
+              render: (withdraw: WithdrawEntity) => (
+                <PaymentDetailsDialog withdraw={withdraw} />
+              ),
+            },
+            {
+              key: "actions",
+              label: "Actions",
+              render: (withdraw: WithdrawEntity) =>
+                withdraw.status === "pending" ? (
+                  <div className="flex gap-2">
+                    <Button
+                      type="button"
+                      size="sm"
+                      onClick={() => onApprove(withdraw.id)}
+                      disabled={isUpdating}
+                    >
+                      Approve
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      onClick={() => onDeny(withdraw.id)}
+                      disabled={isUpdating}
+                    >
+                      Deny
+                    </Button>
+                  </div>
+                ) : (
+                  <span className="text-xs text-muted-foreground">—</span>
+                ),
+            },
+          ]
+        : []),
     ],
     [
       amountLabel,
       currency,
       dateLabel,
+      deniedLabel,
+      isAdmin,
+      isUpdating,
       locale,
+      onApprove,
+      onDeny,
       paidLabel,
       pendingLabel,
       statusLabel,
@@ -271,16 +492,23 @@ const WithdrawsTable = ({
   );
 };
 
-export const EarningsManagementView = () => {
+export const EarningsManagementView = ({
+  showEarningTables = true,
+}: {
+  showEarningTables?: boolean;
+}) => {
   const t = useTranslations("affiliateDashboard.earnings");
   const tDash = useTranslations("affiliateDashboard");
   const currency = tDash("currencySymbol");
+  const { isAdmin, isLoaded } = useAuth();
   const { partnerId, isLoading: partnerLoading } = useCurrentPartner();
-  const earningsEnabled = !partnerLoading && partnerId != null;
+  const earningsEnabled =
+    isLoaded && (isAdmin || (!partnerLoading && partnerId != null));
   const earningsQuery = useEarningsSummary(earningsEnabled);
-  const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
+  const requestWithdraw = useRequestWithdraw();
+  const updateWithdrawStatus = useUpdateWithdrawStatus();
 
-  if (partnerLoading || earningsQuery.isLoading) {
+  if (!isLoaded || (!isAdmin && partnerLoading) || earningsQuery.isLoading) {
     return (
       <div className="space-y-4">
         <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
@@ -300,7 +528,7 @@ export const EarningsManagementView = () => {
     );
   }
 
-  if (partnerId == null) {
+  if (!isAdmin && partnerId == null) {
     return (
       <Alert>
         <AlertDescription>{t("partnerUnresolved")}</AlertDescription>
@@ -309,6 +537,18 @@ export const EarningsManagementView = () => {
   }
 
   const summary = earningsQuery.data;
+  const handleApproveWithdraw = (withdrawId: number) => {
+    updateWithdrawStatus.mutate({ withdrawId, status: "approved" });
+  };
+  const handleDenyWithdraw = (withdrawId: number) => {
+    updateWithdrawStatus.mutate({ withdrawId, status: "denied" });
+  };
+  const handleRequestWithdraw = () => {
+    const amount = summary?.availableToWithdraw ?? 0;
+    if (amount <= 0 || requestWithdraw.isPending) return;
+
+    requestWithdraw.mutate(amount);
+  };
 
   const sharedLineProps = {
     currency,
@@ -350,52 +590,61 @@ export const EarningsManagementView = () => {
           displayValue={`${formatAmount(summary?.availableToWithdraw ?? 0)} ${currency}`}
           icon={Wallet}
           action={
-            <Button
-              type="button"
-              size="sm"
-              disabled={(summary?.availableToWithdraw ?? 0) <= 0}
-              onClick={() => setIsWithdrawOpen(true)}
-              aria-label={t("requestWithdrawAria")}
-            >
-              {t("requestWithdraw")}
-            </Button>
+            !isAdmin ? (
+              <Button
+                type="button"
+                size="sm"
+                disabled={
+                  (summary?.availableToWithdraw ?? 0) <= 0 ||
+                  requestWithdraw.isPending
+                }
+                onClick={handleRequestWithdraw}
+                aria-label={t("requestWithdrawAria")}
+              >
+                {requestWithdraw.isPending ? t("withdraw.submitting") : t("requestWithdraw")}
+              </Button>
+            ) : undefined
           }
         />
       </div>
 
-      <section className="space-y-3">
-        <div>
-          <h2 className="text-lg font-semibold tracking-tight">
-            {t("sections.readyTitle")}
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            {t("sections.readyDescription")}
-          </p>
-        </div>
-        <EarningsLinesTable
-          {...sharedLineProps}
-          lines={summary?.readyLines ?? []}
-          emptyLabel={t("empty.ready")}
-          showFulfillmentStatus={false}
-        />
-      </section>
+      {showEarningTables ? (
+        <>
+          <section className="space-y-3">
+            <div>
+              <h2 className="text-lg font-semibold tracking-tight">
+                {t("sections.readyTitle")}
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                {t("sections.readyDescription")}
+              </p>
+            </div>
+            <EarningsLinesTable
+              {...sharedLineProps}
+              lines={summary?.readyLines ?? []}
+              emptyLabel={t("empty.ready")}
+              showFulfillmentStatus={false}
+            />
+          </section>
 
-      <section className="space-y-3">
-        <div>
-          <h2 className="text-lg font-semibold tracking-tight">
-            {t("sections.notReadyTitle")}
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            {t("sections.notReadyDescription")}
-          </p>
-        </div>
-        <EarningsLinesTable
-          {...sharedLineProps}
-          lines={summary?.notReadyLines ?? []}
-          emptyLabel={t("empty.notReady")}
-          showFulfillmentStatus
-        />
-      </section>
+          <section className="space-y-3">
+            <div>
+              <h2 className="text-lg font-semibold tracking-tight">
+                {t("sections.notReadyTitle")}
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                {t("sections.notReadyDescription")}
+              </p>
+            </div>
+            <EarningsLinesTable
+              {...sharedLineProps}
+              lines={summary?.notReadyLines ?? []}
+              emptyLabel={t("empty.notReady")}
+              showFulfillmentStatus
+            />
+          </section>
+        </>
+      ) : null}
 
       <section className="space-y-3">
         <div>
@@ -415,14 +664,13 @@ export const EarningsManagementView = () => {
           dateLabel={t("columns.date")}
           paidLabel={t("status.paid")}
           pendingLabel={t("status.pending")}
+          deniedLabel={t("status.denied")}
+          isAdmin={isAdmin}
+          onApprove={handleApproveWithdraw}
+          onDeny={handleDenyWithdraw}
+          isUpdating={updateWithdrawStatus.isPending}
         />
       </section>
-
-      <WithdrawRequestDialog
-        open={isWithdrawOpen}
-        onOpenChange={setIsWithdrawOpen}
-        availableAmount={summary?.availableToWithdraw ?? 0}
-      />
     </div>
   );
 };

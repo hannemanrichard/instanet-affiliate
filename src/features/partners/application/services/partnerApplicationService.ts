@@ -22,6 +22,15 @@ export class PartnerApplicationService {
     }
   }
 
+  async listAll(search?: string): Promise<PartnerEntity[]> {
+    try {
+      return await this.partnerRepository.listAll(search?.trim());
+    } catch (error) {
+      if (error instanceof PartnerError) throw error;
+      throw new PartnerError("Failed to load partners", "PARTNER_FETCH_FAILED");
+    }
+  }
+
   async getOrCreatePartner(input: UpsertPartnerInput): Promise<PartnerEntity> {
     try {
       if (!input.email.trim()) {

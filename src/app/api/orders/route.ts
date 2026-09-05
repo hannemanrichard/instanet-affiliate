@@ -7,7 +7,7 @@ import {
   listOrdersQuerySchema,
   sanitizePartnerOrderCreate,
 } from "@/features/orders/domain";
-import { requireCurrentPartner } from "@/shared/server/requireCurrentPartner";
+import { requireDashboardActor } from "@/shared/server/requireDashboardActor";
 import { jsonError } from "@/shared/server/jsonError";
 import {
   parseJsonBody,
@@ -16,7 +16,7 @@ import {
 
 export async function GET(req: NextRequest) {
   try {
-    const partner = await requireCurrentPartner();
+    const actor = await requireDashboardActor();
     const query = parseSearchParams(
       req.nextUrl.searchParams,
       listOrdersQuerySchema
@@ -24,7 +24,7 @@ export async function GET(req: NextRequest) {
 
     const result = await orderApplicationService.getPaginatedOrders(
       {
-        partnerId: partner.id,
+        partnerId: actor.role === "partner" ? actor.partner.id : undefined,
         status: query.status,
         search: query.search,
       },
@@ -39,7 +39,13 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const partner = await requireCurrentPartner();
+    const actor = await requireDashboardActor();
+    if (actor.role !== "partner") {
+      return NextResponse.json(
+        { error: "Admins cannot create affiliate orders" },
+        { status: 403 }
+      );
+    }
     const body = await parseJsonBody(req, createOrderBodySchema);
 
     // Drop status / dc_recent_status / partner_id / tracking / etc.
@@ -48,7 +54,7 @@ export async function POST(req: NextRequest) {
     const payload: CreateOrderPayload = {
       order: {
         ...(orderFields as CreateOrderInput),
-        partner_id: partner.id,
+        partner_id: actor.partner.id,
         // Always start as initial — partners cannot create delivered/encaissé orders
         status: "initial",
         product_qty: Number(orderFields.product_qty) || 1,
@@ -58,6 +64,7 @@ export async function POST(req: NextRequest) {
         return_processed: false,
       },
       items: body.items,
+      auditActorId: actor.partner.id,
       productId: body.productId,
       deliveryLocation: body.deliveryLocation,
       discount:

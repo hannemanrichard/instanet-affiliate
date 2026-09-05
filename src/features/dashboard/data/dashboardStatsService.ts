@@ -17,7 +17,7 @@ export class SupabaseDashboardStatsRepository
   private readonly tableName = "orders";
 
   async getDailySnapshots(
-    partnerId: number,
+    partnerId: number | undefined,
     range: DashboardDateRange
   ): Promise<DailyDashboardSnapshot[]> {
     return withPerformanceTracking(
@@ -26,13 +26,18 @@ export class SupabaseDashboardStatsRepository
       async () => {
         const rows = await DatabaseWrapper.executeQuery(
           async () => {
-            const { data, error } = await supabase
+            let query = supabase
               .from(this.tableName)
               .select("created_at, status, product_price, product_qty")
-              .eq("partner_id", partnerId)
               .gte("created_at", `${range.fromDate}T00:00:00.000Z`)
               .lte("created_at", `${range.toDate}T23:59:59.999Z`)
               .order("created_at", { ascending: true });
+
+            if (partnerId != null) {
+              query = query.eq("partner_id", partnerId);
+            }
+
+            const { data, error } = await query;
 
             if (error) throw error;
             return { data: (data ?? []) as DashboardOrderRow[], error };

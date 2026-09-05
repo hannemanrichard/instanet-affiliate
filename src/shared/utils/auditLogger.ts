@@ -1,6 +1,5 @@
 import "server-only";
 import { supabaseServer } from "@/infrastructure/supabase/server";
-import { AUDIT_LOG_SOURCE } from "@/shared/server/auditSource";
 import { errorHandlers } from "@/shared/utils/errorHandler";
 import logger from "@/shared/utils/logger";
 import { getAuditLogField } from "./idUtils";
@@ -8,7 +7,6 @@ import { getAuditLogField } from "./idUtils";
 export interface AuditEntry {
   table_name: string;
   recordId: number | string;
-  source?: string;
   action: "INSERT" | "UPDATE" | "DELETE";
   old_values?: Record<string, any>;
   new_values?: Record<string, any>;
@@ -22,7 +20,6 @@ export class AuditLogger {
   static async logAuditEntry(entry: AuditEntry): Promise<void> {
     try {
       const insertData: any = {
-        source: entry.source ?? AUDIT_LOG_SOURCE,
         table_name: entry.table_name,
         action: entry.action,
         old_values: entry.old_values ? JSON.stringify(entry.old_values) : null,

@@ -14,7 +14,9 @@ const createEarningsRepositoryMock = (): jest.Mocked<EarningsRepository> => ({
 
 const createWithdrawRepositoryMock = (): jest.Mocked<WithdrawRepository> => ({
   getByPartnerId: jest.fn(),
+  getById: jest.fn(),
   create: jest.fn(),
+  updateStatus: jest.fn(),
 });
 
 describe("EarningsApplicationService", () => {
@@ -69,6 +71,7 @@ describe("EarningsApplicationService", () => {
         partner_id: 42,
         amount: 200,
         is_paid: true,
+        status: "approved",
         created_at: "2026-01-01",
       },
       {
@@ -76,6 +79,7 @@ describe("EarningsApplicationService", () => {
         partner_id: 42,
         amount: 100,
         is_paid: false,
+        status: "pending",
         created_at: "2026-01-02",
       },
     ] as WithdrawEntity[]);
@@ -86,6 +90,30 @@ describe("EarningsApplicationService", () => {
     expect(summary.notReadyTotal).toBe(500);
     expect(summary.withdrawnTotal).toBe(300);
     expect(summary.availableToWithdraw).toBe(700);
+  });
+
+  it("computes platform earnings summary when partner id is omitted", async () => {
+    earningsRepository.getEarningLines.mockResolvedValue([
+      readyLine,
+      notReadyLine,
+    ]);
+    withdrawRepository.getByPartnerId.mockResolvedValue([
+      {
+        id: 1,
+        partner_id: 42,
+        amount: 100,
+        is_paid: false,
+        status: "pending",
+        created_at: "2026-01-02",
+      },
+    ] as WithdrawEntity[]);
+
+    const summary = await service.getEarningsSummary();
+
+    expect(earningsRepository.getEarningLines).toHaveBeenCalledWith(undefined);
+    expect(withdrawRepository.getByPartnerId).toHaveBeenCalledWith(undefined);
+    expect(summary.readyTotal).toBe(1000);
+    expect(summary.pendingWithdrawTotal).toBe(100);
   });
 
   it("rejects withdraw above available balance", async () => {
@@ -105,6 +133,7 @@ describe("EarningsApplicationService", () => {
       partner_id: 42,
       amount: 400,
       is_paid: false,
+      status: "pending",
       created_at: "2026-01-03",
     });
 
@@ -118,5 +147,35 @@ describe("EarningsApplicationService", () => {
       amount: 400,
     });
     expect(result.id).toBe(10);
+  });
+
+  it("allows admin to approve a pending withdraw request", async () => {
+    withdrawRepository.getById.mockResolvedValue({
+      id: 15,
+      partner_id: 42,
+      amount: 500,
+      is_paid: false,
+      status: "pending",
+      created_at: "2026-01-03",
+    });
+    withdrawRepository.updateStatus.mockResolvedValue({
+      id: 15,
+      partner_id: 42,
+      amount: 500,
+      is_paid: true,
+      status: "approved",
+      created_at: "2026-01-03",
+    });
+
+    const result = await service.updateWithdrawStatus({
+      id: 15,
+      status: "approved",
+    });
+
+    expect(withdrawRepository.updateStatus).toHaveBeenCalledWith({
+      id: 15,
+      status: "approved",
+    });
+    expect(result.status).toBe("approved");
   });
 });
