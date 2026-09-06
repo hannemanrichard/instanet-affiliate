@@ -592,7 +592,7 @@ export class SupabaseInventoryService implements InventoryRepository {
       "InventoryService",
       "refreshPhaseDetailsView",
       async () => {
-        await DatabaseWrapper.executeQuery(
+        await DatabaseWrapper.executeMutation(
           async () => {
             const { error } = await supabase.rpc(
               "refresh_product_inventory_phase_details"
@@ -604,11 +604,25 @@ export class SupabaseInventoryService implements InventoryRepository {
                 "Failed to refresh inventory phase details view"
               );
             }
-            return { data: null, error };
+            return {
+              data: {
+                recordId: -1,
+                refreshed: true,
+              },
+              error,
+            };
           },
           {
             operation: "refreshPhaseDetailsView",
             table: this.phaseDetailsView,
+            auditLog: {
+              enabled: true,
+              action: "UPDATE",
+              recordId: -1,
+              newValues: {
+                operation: "refresh_product_inventory_phase_details",
+              },
+            },
           }
         );
       }

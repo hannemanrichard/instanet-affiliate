@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { inventoryApplicationService } from "@/features/inventory/application/services/inventoryApplicationService";
 import { updateInventoryQuantityBodySchema } from "@/features/inventory/domain/validations";
+import { withAuditActor } from "@/shared/server/auditActorContext";
+import { requireAuditActorPartnerId } from "@/shared/server/requireAuditActorPartnerId";
 import { requireAdminActor } from "@/shared/server/requireDashboardActor";
 import { jsonError } from "@/shared/server/jsonError";
 import {
@@ -14,13 +16,18 @@ export async function PATCH(
 ) {
   try {
     await requireAdminActor();
+    const auditActorId = await requireAuditActorPartnerId();
     const { id: idParam } = await context.params;
     const inventoryId = parsePositiveIntParam(idParam, "id");
     const body = await parseJsonBody(req, updateInventoryQuantityBodySchema);
 
-    const inventory = await inventoryApplicationService.updateInventoryQuantity(
-      inventoryId,
-      body.quantity
+    const inventory = await withAuditActor(
+      auditActorId,
+      () =>
+        inventoryApplicationService.updateInventoryQuantity(
+          inventoryId,
+          body.quantity
+        )
     );
 
     return NextResponse.json({ inventory });

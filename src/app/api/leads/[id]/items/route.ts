@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { leadApplicationService } from "@/features/leads/application/services/leadApplicationService";
 import { replaceLeadItemsBodySchema } from "@/features/leads/domain";
+import { withAuditActor } from "@/shared/server/auditActorContext";
 import { requireLeadAccess } from "@/shared/server/requireLeadAccess";
 import { jsonError } from "@/shared/server/jsonError";
 import {
@@ -30,12 +31,16 @@ export async function PUT(
   try {
     const { id: idParam } = await context.params;
     const leadId = parsePositiveIntParam(idParam, "id");
-    await requireLeadAccess(leadId);
+    const { actor } = await requireLeadAccess(leadId);
     const body = await parseJsonBody(req, replaceLeadItemsBodySchema);
 
-    const items = await leadApplicationService.replaceLeadItems(
-      leadId,
-      body.items
+    const items = await withAuditActor(
+      actor.role === "partner" ? actor.partner.id : undefined,
+      () =>
+        leadApplicationService.replaceLeadItems(
+          leadId,
+          body.items
+        )
     );
     return NextResponse.json(items);
   } catch (error) {

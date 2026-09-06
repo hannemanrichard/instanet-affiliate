@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { leadHopApplicationService } from "@/features/leads/application/services/leadHopApplicationService";
 import { updateLeadHopBodySchema } from "@/features/leads/domain";
+import { withAuditActor } from "@/shared/server/auditActorContext";
 import { requireLeadAccess } from "@/shared/server/requireLeadAccess";
 import { jsonError } from "@/shared/server/jsonError";
 import {
@@ -38,12 +39,16 @@ export async function PATCH(
 ) {
   try {
     const { leadId, agentId } = await parseIds(context);
-    await requireLeadAccess(leadId);
+    const { actor } = await requireLeadAccess(leadId);
     const body = await parseJsonBody(req, updateLeadHopBodySchema);
-    const hop = await leadHopApplicationService.updateLeadHop(
-      leadId,
-      agentId,
-      body
+    const hop = await withAuditActor(
+      actor.role === "partner" ? actor.partner.id : undefined,
+      () =>
+        leadHopApplicationService.updateLeadHop(
+          leadId,
+          agentId,
+          body
+        )
     );
     return NextResponse.json(hop);
   } catch (error) {
@@ -57,8 +62,11 @@ export async function DELETE(
 ) {
   try {
     const { leadId, agentId } = await parseIds(context);
-    await requireLeadAccess(leadId);
-    await leadHopApplicationService.deleteLeadHop(leadId, agentId);
+    const { actor } = await requireLeadAccess(leadId);
+    await withAuditActor(
+      actor.role === "partner" ? actor.partner.id : undefined,
+      () => leadHopApplicationService.deleteLeadHop(leadId, agentId)
+    );
     return NextResponse.json({ success: true });
   } catch (error) {
     return jsonError(error);

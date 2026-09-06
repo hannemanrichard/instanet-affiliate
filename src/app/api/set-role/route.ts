@@ -2,6 +2,7 @@ import logger from "@/shared/utils/logger";
 import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import { partnerApplicationService } from "@/features/partners/application/services/partnerApplicationService";
+import { AuditLogger } from "@/shared/utils/auditLogger";
 
 export async function GET(req: NextRequest) {
   const { userId } = await auth();
@@ -42,11 +43,23 @@ export async function GET(req: NextRequest) {
       return new NextResponse("User email is required", { status: 400 });
     }
 
-    await partnerApplicationService.getOrCreatePartner({
+    const partner = await partnerApplicationService.getOrCreatePartner({
       email,
       fullname: [user.firstName, user.lastName].filter(Boolean).join(" "),
       username: email.split("@")[0],
       avatar: user.imageUrl,
+    });
+
+    await AuditLogger.logAuditEntry({
+      table_name: "clerk_users",
+      recordId: partner.id,
+      action: "UPDATE",
+      changed_by: partner.id,
+      new_values: {
+        clerk_user_id: user.id,
+        role,
+        onboardingComplete: true,
+      },
     });
 
     return NextResponse.json({ success: true });

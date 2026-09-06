@@ -8,6 +8,7 @@ import {
   requireAdminActor,
   requireDashboardActor,
 } from "@/shared/server/requireDashboardActor";
+import { withAuditActor } from "@/shared/server/auditActorContext";
 import { requireLeadAccess } from "@/shared/server/requireLeadAccess";
 import { jsonError } from "@/shared/server/jsonError";
 import {
@@ -60,12 +61,16 @@ export async function POST(req: NextRequest) {
   try {
     await requireDashboardActor();
     const body = await parseJsonBody(req, createLeadHopBodySchema);
-    await requireLeadAccess(body.lead_id);
+    const { actor } = await requireLeadAccess(body.lead_id);
 
-    const hop = await leadHopApplicationService.createLeadHop({
-      lead_id: body.lead_id,
-      agent_id: body.agent_id,
-    });
+    const hop = await withAuditActor(
+      actor.role === "partner" ? actor.partner.id : undefined,
+      () =>
+        leadHopApplicationService.createLeadHop({
+          lead_id: body.lead_id,
+          agent_id: body.agent_id,
+        })
+    );
     return NextResponse.json(hop, { status: 201 });
   } catch (error) {
     return jsonError(error);

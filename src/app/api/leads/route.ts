@@ -9,6 +9,7 @@ import {
   type CreateLeadInput,
 } from "@/features/leads/domain";
 import { requireDashboardActor } from "@/shared/server/requireDashboardActor";
+import { withAuditActor } from "@/shared/server/auditActorContext";
 import { jsonError } from "@/shared/server/jsonError";
 import {
   parseJsonBody,
@@ -57,7 +58,10 @@ export async function POST(req: NextRequest) {
       items: body.items,
     };
 
-    const result = await leadApplicationService.createLead(payload);
+    const result = await withAuditActor(
+      actor.role === "partner" ? actor.partner.id : undefined,
+      () => leadApplicationService.createLead(payload)
+    );
     return NextResponse.json(result, { status: 201 });
   } catch (error) {
     return jsonError(error);

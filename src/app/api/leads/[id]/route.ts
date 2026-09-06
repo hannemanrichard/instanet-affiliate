@@ -8,6 +8,7 @@ import {
   type UpdateLeadInput,
 } from "@/features/leads/domain";
 import { requireLeadAccess } from "@/shared/server/requireLeadAccess";
+import { withAuditActor } from "@/shared/server/auditActorContext";
 import { jsonError } from "@/shared/server/jsonError";
 import {
   parseJsonBody,
@@ -35,7 +36,7 @@ export async function PATCH(
   try {
     const { id: idParam } = await context.params;
     const leadId = parsePositiveIntParam(idParam, "id");
-    await requireLeadAccess(leadId);
+    const { actor } = await requireLeadAccess(leadId);
     const body = await parseJsonBody(req, updateLeadBodySchema);
 
     const leadFields = body.lead
@@ -50,7 +51,10 @@ export async function PATCH(
       items: body.items,
     };
 
-    const result = await leadApplicationService.updateLead(leadId, payload);
+    const result = await withAuditActor(
+      actor.role === "partner" ? actor.partner.id : undefined,
+      () => leadApplicationService.updateLead(leadId, payload)
+    );
     return NextResponse.json(result);
   } catch (error) {
     return jsonError(error);
@@ -64,8 +68,11 @@ export async function DELETE(
   try {
     const { id: idParam } = await context.params;
     const leadId = parsePositiveIntParam(idParam, "id");
-    await requireLeadAccess(leadId);
-    await leadApplicationService.deleteLead(leadId);
+    const { actor } = await requireLeadAccess(leadId);
+    await withAuditActor(
+      actor.role === "partner" ? actor.partner.id : undefined,
+      () => leadApplicationService.deleteLead(leadId)
+    );
     return NextResponse.json({ success: true });
   } catch (error) {
     return jsonError(error);

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { productApplicationService } from "@/features/products/application/services/productApplicationService";
 import { updateProductWithRelationsBodySchema } from "@/features/products/domain/validations";
+import { withAuditActor } from "@/shared/server/auditActorContext";
+import { requireAuditActorPartnerId } from "@/shared/server/requireAuditActorPartnerId";
 import { requireAdminActor, requireDashboardActor } from "@/shared/server/requireDashboardActor";
 import { jsonError } from "@/shared/server/jsonError";
 import {
@@ -29,10 +31,13 @@ export async function PATCH(
 ) {
   try {
     await requireAdminActor();
+    const auditActorId = await requireAuditActorPartnerId();
     const { id } = await context.params;
     const productId = parsePositiveIntParam(id, "id");
     const payload = await parseJsonBody(req, updateProductWithRelationsBodySchema);
-    await productApplicationService.updateProductWithRelations(productId, payload);
+    await withAuditActor(auditActorId, () =>
+      productApplicationService.updateProductWithRelations(productId, payload)
+    );
     return NextResponse.json({ success: true });
   } catch (error) {
     return jsonError(error);

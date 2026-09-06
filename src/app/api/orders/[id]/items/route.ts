@@ -30,12 +30,13 @@ export async function PUT(
   try {
     const { id: idParam } = await context.params;
     const orderId = parsePositiveIntParam(idParam, "id");
-    await requireOrderAccess(orderId);
+    const { actor } = await requireOrderAccess(orderId);
 
     const body = await parseJsonBody(req, replaceOrderItemsBodySchema);
     const items = await orderApplicationService.replaceOrderItems(
       orderId,
-      body.items
+      body.items,
+      actor.role === "partner" ? actor.partner.id : undefined
     );
     return NextResponse.json({ items });
   } catch (error) {

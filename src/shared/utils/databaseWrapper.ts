@@ -1,4 +1,6 @@
 import logger from "@/shared/utils/logger";
+import { AUDIT_LOG_SOURCE } from "@/shared/server/auditSource";
+import { getAuditActorId } from "@/shared/server/auditActorContext";
 import { AuditLogger } from "./auditLogger";
 
 export interface QueryOptions {
@@ -190,12 +192,13 @@ export class DatabaseWrapper {
     }
 
     await AuditLogger.logAuditEntry({
+      source: AUDIT_LOG_SOURCE,
       table_name: options.table,
       recordId,
       action: auditLog.action,
       old_values: auditLog.oldValues,
       new_values: auditLog.newValues || (data as Record<string, any>),
-      changed_by: auditLog.changedBy,
+      changed_by: auditLog.changedBy ?? getAuditActorId(),
     });
   }
 

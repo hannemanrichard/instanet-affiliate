@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireCurrentPartner } from "@/shared/server/requireCurrentPartner";
+import { withAuditActor } from "@/shared/server/auditActorContext";
 import { jsonError } from "@/shared/server/jsonError";
 import { partnerApplicationService } from "@/features/partners/application/services/partnerApplicationService";
 import { updatePartnerPaymentBodySchema } from "@/features/partners/domain/validations";
@@ -10,11 +11,13 @@ export async function PATCH(request: NextRequest) {
     const partner = await requireCurrentPartner();
     const body = await parseJsonBody(request, updatePartnerPaymentBodySchema);
 
-    const updated = await partnerApplicationService.updatePayment(partner.id, {
-      baridimob_rib: body.baridimob_rib,
-      redotpay_account: body.redotpay_account,
-      usdt_address: body.usdt_address,
-    });
+    const updated = await withAuditActor(partner.id, () =>
+      partnerApplicationService.updatePayment(partner.id, {
+        baridimob_rib: body.baridimob_rib,
+        redotpay_account: body.redotpay_account,
+        usdt_address: body.usdt_address,
+      })
+    );
 
     return NextResponse.json({ partner: updated });
   } catch (error) {

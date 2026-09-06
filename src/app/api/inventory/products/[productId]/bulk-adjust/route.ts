@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { inventoryApplicationService } from "@/features/inventory/application/services/inventoryApplicationService";
 import { inventoryAdjustmentsBodySchema } from "@/features/inventory/domain/validations";
+import { withAuditActor } from "@/shared/server/auditActorContext";
+import { requireAuditActorPartnerId } from "@/shared/server/requireAuditActorPartnerId";
 import { requireAdminActor } from "@/shared/server/requireDashboardActor";
 import { jsonError } from "@/shared/server/jsonError";
 import {
@@ -14,15 +16,19 @@ export async function POST(
 ) {
   try {
     await requireAdminActor();
+    const auditActorId = await requireAuditActorPartnerId();
     const { productId: productIdParam } = await context.params;
     const productId = parsePositiveIntParam(productIdParam, "productId");
     const body = await parseJsonBody(req, inventoryAdjustmentsBodySchema);
 
-    const summary =
-      await inventoryApplicationService.bulkAdjustProductInventory(
-        productId,
-        body.adjustments
-      );
+    const summary = await withAuditActor(
+      auditActorId,
+      () =>
+        inventoryApplicationService.bulkAdjustProductInventory(
+          productId,
+          body.adjustments
+        )
+    );
 
     return NextResponse.json({ summary });
   } catch (error) {

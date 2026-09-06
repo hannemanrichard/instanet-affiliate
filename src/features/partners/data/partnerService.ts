@@ -104,17 +104,32 @@ export class SupabasePartnerService implements PartnerRepository {
       "upsertByEmail",
       async () => {
         const email = data.email.trim().toLowerCase();
+        const nextFullname = data.fullname?.trim() || undefined;
+        const nextUsername = data.username?.trim() || undefined;
+        const nextAvatar = data.avatar?.trim() || undefined;
         const existing = await this.getByEmail(email);
 
         if (existing) {
+          const hasChanges =
+            (nextFullname ?? existing.fullname ?? undefined) !==
+              (existing.fullname ?? undefined) ||
+            (nextUsername ?? existing.username ?? undefined) !==
+              (existing.username ?? undefined) ||
+            (nextAvatar ?? existing.avatar ?? undefined) !==
+              (existing.avatar ?? undefined);
+
+          if (!hasChanges) {
+            return existing;
+          }
+
           const row = await DatabaseWrapper.executeMutation(
             async () => {
               const { data: updated, error } = await supabase
                 .from(this.tableName)
                 .update({
-                  fullname: data.fullname ?? existing.fullname ?? null,
-                  username: data.username ?? existing.username ?? null,
-                  avatar: data.avatar ?? existing.avatar ?? null,
+                  fullname: nextFullname ?? existing.fullname ?? null,
+                  username: nextUsername ?? existing.username ?? null,
+                  avatar: nextAvatar ?? existing.avatar ?? null,
                 })
                 .eq("id", existing.id)
                 .select()
@@ -131,6 +146,16 @@ export class SupabasePartnerService implements PartnerRepository {
                 enabled: true,
                 action: "UPDATE",
                 recordId: existing.id,
+                oldValues: {
+                  fullname: existing.fullname ?? null,
+                  username: existing.username ?? null,
+                  avatar: existing.avatar ?? null,
+                },
+                newValues: {
+                  fullname: nextFullname ?? existing.fullname ?? null,
+                  username: nextUsername ?? existing.username ?? null,
+                  avatar: nextAvatar ?? existing.avatar ?? null,
+                },
               },
             }
           );
@@ -144,10 +169,10 @@ export class SupabasePartnerService implements PartnerRepository {
               .from(this.tableName)
               .insert({
                 email,
-                fullname: data.fullname ?? null,
+                fullname: nextFullname ?? null,
                 username:
-                  data.username ?? email.split("@")[0] ?? null,
-                avatar: data.avatar ?? null,
+                  nextUsername ?? email.split("@")[0] ?? null,
+                avatar: nextAvatar ?? null,
                 status: "active",
               })
               .select()

@@ -273,10 +273,18 @@ export class OrderApplicationService {
     }
   }
 
-  async updateOrderStatus(orderId: number, status: string): Promise<OrderEntity> {
+  async updateOrderStatus(
+    orderId: number,
+    status: string,
+    changedBy?: number
+  ): Promise<OrderEntity> {
     try {
-      const order = await this.orderRepository.update(orderId, { status });
-      await this.syncCommissionEarnedIfDelivered(orderId, status);
+      const order = await this.orderRepository.update(
+        orderId,
+        { status },
+        changedBy
+      );
+      await this.syncCommissionEarnedIfDelivered(orderId, status, changedBy);
       return order;
     } catch {
       throw new OrderError("Failed to update order status", "ORDER_STATUS_UPDATE_FAILED");
@@ -285,10 +293,11 @@ export class OrderApplicationService {
 
   async replaceOrderItems(
     orderId: number,
-    items: UpdateOrderItemInput[]
+    items: UpdateOrderItemInput[],
+    changedBy?: number
   ): Promise<OrderItemEntity[]> {
     try {
-      return await this.orderItemRepository.updateMany(orderId, items);
+      return await this.orderItemRepository.updateMany(orderId, items, changedBy);
     } catch {
       throw new OrderItemError(
         "Failed to update order items",

@@ -7,6 +7,8 @@ import { parseSearchParams } from "@/shared/server/parseRequest";
 
 const auditQuerySchema = z.object({
   table: z.string().trim().max(100).optional(),
+  from: z.string().trim().datetime({ offset: true }).optional(),
+  to: z.string().trim().datetime({ offset: true }).optional(),
   limit: z.coerce.number().int().positive().max(200).optional().default(50),
 });
 
@@ -25,6 +27,14 @@ export async function GET(req: NextRequest) {
       auditQuery = auditQuery.eq("table_name", query.table);
     }
 
+    if (query.from) {
+      auditQuery = auditQuery.gte("created_at", query.from);
+    }
+
+    if (query.to) {
+      auditQuery = auditQuery.lte("created_at", query.to);
+    }
+
     const { data, error } = await auditQuery;
     if (error) {
       throw error;
@@ -41,13 +51,19 @@ export async function GET(req: NextRequest) {
 
     let partnersById = new Map<
       number,
-      { id: number; fullname: string | null; username: string | null; avatar: string | null }
+      {
+        id: number;
+        fullname: string | null;
+        username: string | null;
+        email: string | null;
+        avatar: string | null;
+      }
     >();
 
     if (changedByIds.length > 0) {
       const { data: partners, error: partnersError } = await supabaseServer
         .from("partners")
-        .select("id, fullname, username, avatar")
+        .select("id, fullname, username, email, avatar")
         .in("id", changedByIds);
 
       if (partnersError) {
@@ -61,6 +77,7 @@ export async function GET(req: NextRequest) {
             id: partner.id,
             fullname: partner.fullname,
             username: partner.username,
+            email: partner.email,
             avatar: partner.avatar,
           },
         ])

@@ -124,6 +124,11 @@ export class SupabaseSettingsService implements SettingsRepository {
           operation: "update",
           table: this.tableName,
           metadata: { key },
+          auditLog: {
+            enabled: true,
+            action: "UPDATE",
+            newValues: updateData,
+          },
         }
       );
 
