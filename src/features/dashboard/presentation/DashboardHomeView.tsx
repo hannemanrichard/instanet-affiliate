@@ -7,6 +7,7 @@ import { Shell } from "@/shared/components/shells/Shell";
 import { DashboardPageHeader } from "@/shared/components/layout/DashboardPageHeader";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
 import { Skeleton } from "@/shared/components/ui/skeleton";
+import { useAuth } from "@/shared/hooks/use-auth";
 import { useDashboardOverview } from "../application";
 import {
   resolveDashboardDateRange,
@@ -35,9 +36,11 @@ const DashboardHomeSkeleton = () => (
 export const DashboardHomeView = () => {
   const t = useTranslations("affiliateDashboard.home");
   const currency = useTranslations("affiliateDashboard")("currencySymbol");
+  const { isAdmin } = useAuth();
   const [preset, setPreset] = useState<DashboardDateRangePreset>("last_30_days");
   const range = useMemo(() => resolveDashboardDateRange(preset), [preset]);
-  const overviewQuery = useDashboardOverview(range);
+  const overviewScope = isAdmin ? "platform" : "partner";
+  const overviewQuery = useDashboardOverview(overviewScope, range);
   const overview = overviewQuery.data;
 
   const handlePresetChange = (nextPreset: DashboardDateRangePreset) => {

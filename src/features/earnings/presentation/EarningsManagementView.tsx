@@ -33,7 +33,7 @@ import {
   useRequestWithdraw,
   useUpdateWithdrawStatus,
 } from "../application";
-import type { EarningLine, WithdrawEntity } from "../domain";
+import type { WithdrawEntity } from "../domain";
 
 const formatAmount = (amount: number) =>
   new Intl.NumberFormat("en-US", {
@@ -150,155 +150,6 @@ const PaymentDetailsDialog = ({ withdraw }: { withdraw: WithdrawEntity }) => {
         </div>
       </DialogContent>
     </Dialog>
-  );
-};
-
-const EarningsLinesTable = ({
-  lines,
-  emptyLabel,
-  currency,
-  productLabel,
-  qtyLabel,
-  rateLabel,
-  commissionLabel,
-  statusLabel,
-  dateLabel,
-  productFallback,
-  discountAppliedLabel,
-  readyStatusLabel,
-  notReadyStatusLabel,
-  showFulfillmentStatus,
-}: {
-  lines: EarningLine[];
-  emptyLabel: string;
-  currency: string;
-  productLabel: string;
-  qtyLabel: string;
-  rateLabel: string;
-  commissionLabel: string;
-  statusLabel: string;
-  dateLabel: string;
-  productFallback: string;
-  discountAppliedLabel: (amount: string) => string;
-  readyStatusLabel: string;
-  notReadyStatusLabel: string;
-  showFulfillmentStatus: boolean;
-}) => {
-  const locale = useLocale();
-
-  const columns = useMemo(
-    () => [
-      {
-        key: "product",
-        label: productLabel,
-        render: (line: EarningLine) => (
-          <div className="min-w-0 max-w-[16rem]">
-            <p className="truncate font-medium text-foreground">
-              {line.productName?.trim() || productFallback}
-            </p>
-            {line.unitDiscount > 0 ? (
-              <p className="truncate text-xs text-muted-foreground">
-                {discountAppliedLabel(formatAmount(line.unitDiscount))}
-              </p>
-            ) : null}
-          </div>
-        ),
-      },
-      {
-        key: "quantity",
-        label: qtyLabel,
-        render: (line: EarningLine) => (
-          <span className="tabular-nums text-muted-foreground">
-            {line.quantity}
-          </span>
-        ),
-      },
-      {
-        key: "rate",
-        label: rateLabel,
-        render: (line: EarningLine) => (
-          <span className="tabular-nums text-muted-foreground">
-            {formatAmount(line.commissionRate)} {currency}
-          </span>
-        ),
-      },
-      {
-        key: "commission",
-        label: commissionLabel,
-        render: (line: EarningLine) => (
-          <span className="font-medium tabular-nums">
-            {formatAmount(line.commissionAmount)} {currency}
-          </span>
-        ),
-      },
-      ...(showFulfillmentStatus
-        ? [
-            {
-              key: "status",
-              label: statusLabel,
-              render: (line: EarningLine) => {
-                const isReady = line.bucket === "ready";
-                return (
-                  <Badge variant={isReady ? "secondary" : "outline"}>
-                    {isReady ? readyStatusLabel : notReadyStatusLabel}
-                  </Badge>
-                );
-              },
-            },
-          ]
-        : []),
-      {
-        key: "date",
-        label: dateLabel,
-        render: (line: EarningLine) => (
-          <span
-            className="text-muted-foreground"
-            title={formatAbsoluteDate(line.createdAt)}
-          >
-            {line.createdAt
-              ? formatRelativeDate(line.createdAt, locale)
-              : "—"}
-          </span>
-        ),
-      },
-    ],
-    [
-      commissionLabel,
-      currency,
-      dateLabel,
-      discountAppliedLabel,
-      locale,
-      notReadyStatusLabel,
-      productFallback,
-      productLabel,
-      qtyLabel,
-      rateLabel,
-      readyStatusLabel,
-      showFulfillmentStatus,
-      statusLabel,
-    ]
-  );
-
-  if (lines.length === 0) {
-    return (
-      <Alert>
-        <AlertDescription>{emptyLabel}</AlertDescription>
-      </Alert>
-    );
-  }
-
-  return (
-    <Card className="min-w-0 overflow-hidden">
-      <CardContent className="p-0">
-        <DataTable
-          columns={columns}
-          data={lines as Array<EarningLine & Record<string, unknown>>}
-          emptyLabel={emptyLabel}
-          showToolbar={false}
-          embedded
-        />
-      </CardContent>
-    </Card>
   );
 };
 
@@ -493,7 +344,7 @@ const WithdrawsTable = ({
 };
 
 export const EarningsManagementView = ({
-  showEarningTables = true,
+  showEarningTables = false,
 }: {
   showEarningTables?: boolean;
 }) => {
@@ -504,8 +355,9 @@ export const EarningsManagementView = ({
   const { partnerId, isLoading: partnerLoading } = useCurrentPartner();
   const earningsEnabled =
     isLoaded && (isAdmin || (!partnerLoading && partnerId != null));
-  const earningsQuery = useEarningsSummary(earningsEnabled);
-  const requestWithdraw = useRequestWithdraw();
+  const earningsScope = isAdmin ? "platform" : `partner-${partnerId ?? "unknown"}`;
+  const earningsQuery = useEarningsSummary(earningsScope, earningsEnabled);
+  const requestWithdraw = useRequestWithdraw(earningsScope);
   const updateWithdrawStatus = useUpdateWithdrawStatus();
 
   if (!isLoaded || (!isAdmin && partnerLoading) || earningsQuery.isLoading) {
@@ -548,21 +400,6 @@ export const EarningsManagementView = ({
     if (amount <= 0 || requestWithdraw.isPending) return;
 
     requestWithdraw.mutate(amount);
-  };
-
-  const sharedLineProps = {
-    currency,
-    productLabel: t("columns.product"),
-    qtyLabel: t("columns.qty"),
-    rateLabel: t("columns.rate"),
-    commissionLabel: t("columns.commission"),
-    statusLabel: t("columns.status"),
-    dateLabel: t("columns.date"),
-    productFallback: t("productFallback"),
-    discountAppliedLabel: (amount: string) =>
-      t("discountApplied", { amount, currency }),
-    readyStatusLabel: t("lineStatus.ready"),
-    notReadyStatusLabel: t("lineStatus.notReady"),
   };
 
   return (
@@ -608,43 +445,7 @@ export const EarningsManagementView = ({
         />
       </div>
 
-      {showEarningTables ? (
-        <>
-          <section className="space-y-3">
-            <div>
-              <h2 className="text-lg font-semibold tracking-tight">
-                {t("sections.readyTitle")}
-              </h2>
-              <p className="text-sm text-muted-foreground">
-                {t("sections.readyDescription")}
-              </p>
-            </div>
-            <EarningsLinesTable
-              {...sharedLineProps}
-              lines={summary?.readyLines ?? []}
-              emptyLabel={t("empty.ready")}
-              showFulfillmentStatus={false}
-            />
-          </section>
-
-          <section className="space-y-3">
-            <div>
-              <h2 className="text-lg font-semibold tracking-tight">
-                {t("sections.notReadyTitle")}
-              </h2>
-              <p className="text-sm text-muted-foreground">
-                {t("sections.notReadyDescription")}
-              </p>
-            </div>
-            <EarningsLinesTable
-              {...sharedLineProps}
-              lines={summary?.notReadyLines ?? []}
-              emptyLabel={t("empty.notReady")}
-              showFulfillmentStatus
-            />
-          </section>
-        </>
-      ) : null}
+      {showEarningTables ? null : null}
 
       <section className="space-y-3">
         <div>

@@ -9,3 +9,7 @@ export const updatePartnerPaymentBodySchema = z.object({
   redotpay_account: optionalNullableString,
   usdt_address: optionalNullableString,
 });
+
+export const updatePartnerStatusBodySchema = z.object({
+  status: z.enum(["active", "inactive"]),
+});

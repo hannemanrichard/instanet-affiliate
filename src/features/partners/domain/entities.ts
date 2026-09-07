@@ -24,3 +24,7 @@ export interface UpdatePaymentInput {
   redotpay_account?: string | null;
   usdt_address?: string | null;
 }
+
+export interface UpdatePartnerStatusInput {
+  status: "active" | "inactive";
+}

@@ -2,6 +2,7 @@ import type {
   PartnerEntity,
   UpsertPartnerInput,
   UpdatePaymentInput,
+  UpdatePartnerStatusInput,
 } from "./entities";
 
 export interface PartnerRepository {
@@ -10,4 +11,5 @@ export interface PartnerRepository {
   listAll(search?: string): Promise<PartnerEntity[]>;
   upsertByEmail(data: UpsertPartnerInput): Promise<PartnerEntity>;
   updatePayment(id: number, data: UpdatePaymentInput): Promise<PartnerEntity>;
+  updateStatus(id: number, data: UpdatePartnerStatusInput): Promise<PartnerEntity>;
 }

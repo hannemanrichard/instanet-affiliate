@@ -3,12 +3,24 @@ import type {
   PartnerEntity,
   UpsertPartnerInput,
   UpdatePaymentInput,
+  UpdatePartnerStatusInput,
 } from "../../domain";
 import { PartnerError } from "../../domain";
 import type { PartnerRepository } from "../../domain/repositories";
 
 export class PartnerApplicationService {
   constructor(private readonly partnerRepository: PartnerRepository) {}
+
+  async getById(id: number): Promise<PartnerEntity | null> {
+    try {
+      return await this.partnerRepository.getById(id);
+    } catch {
+      throw new PartnerError(
+        "Failed to load partner",
+        "PARTNER_FETCH_FAILED"
+      );
+    }
+  }
 
   async getByEmail(email: string): Promise<PartnerEntity | null> {
     try {
@@ -59,6 +71,21 @@ export class PartnerApplicationService {
       throw new PartnerError(
         "Failed to update payment settings",
         "PARTNER_PAYMENT_UPDATE_FAILED"
+      );
+    }
+  }
+
+  async updateStatus(
+    partnerId: number,
+    input: UpdatePartnerStatusInput
+  ): Promise<PartnerEntity> {
+    try {
+      return await this.partnerRepository.updateStatus(partnerId, input);
+    } catch (error) {
+      if (error instanceof PartnerError) throw error;
+      throw new PartnerError(
+        "Failed to update partner status",
+        "PARTNER_STATUS_UPDATE_FAILED"
       );
     }
   }

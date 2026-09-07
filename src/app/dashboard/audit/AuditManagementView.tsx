@@ -2,8 +2,10 @@
 
 import { useMemo, useState, type KeyboardEvent } from "react";
 import { useLocale } from "next-intl";
-import { Eye, Search, X } from "lucide-react";
+import { FolderDetailsIcon } from "@hugeicons-pro/core-stroke-rounded";
+import { Search, X } from "lucide-react";
 import { Alert, AlertDescription } from "@/shared/components/ui/alert";
+import { AppIcon } from "@/shared/components/layout/AppIcon";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
 import {
@@ -172,6 +174,24 @@ const getPartnerInitials = (log: AuditLogRow) => {
     .join("");
 };
 
+const getAuditActionBadgeClassName = (action: string) => {
+  const normalizedAction = action.trim().toUpperCase();
+
+  if (normalizedAction === "INSERT") {
+    return "border-emerald-200 bg-emerald-50 text-emerald-700";
+  }
+
+  if (normalizedAction === "UPDATE") {
+    return "border-amber-200 bg-amber-50 text-amber-700";
+  }
+
+  if (normalizedAction === "DELETE") {
+    return "border-rose-200 bg-rose-50 text-rose-700";
+  }
+
+  return "border-slate-200 bg-slate-50 text-slate-700";
+};
+
 const buildAuditUrl = (params: {
   table: string;
   from: string;
@@ -236,7 +256,7 @@ const RecordDetailsDialog = ({ log }: { log: AuditLogRow }) => {
           className="size-8"
           aria-label={`View ${log.table_name} record details`}
         >
-          <Eye className="size-4" />
+          <AppIcon icon={FolderDetailsIcon} size={16} />
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-[80vh] overflow-hidden sm:max-w-3xl">
@@ -372,7 +392,10 @@ export const AuditManagementView = () => {
         key: "action",
         label: "Action",
         render: (log: AuditLogRow) => (
-          <Badge variant="outline" className="font-medium">
+          <Badge
+            variant="outline"
+            className={cn("font-medium", getAuditActionBadgeClassName(log.action))}
+          >
             {log.action}
           </Badge>
         ),

@@ -6,6 +6,7 @@ import type {
   PartnerEntity,
   UpsertPartnerInput,
   UpdatePaymentInput,
+  UpdatePartnerStatusInput,
 } from "../domain";
 import type { PartnerRepository } from "../domain/repositories";
 
@@ -229,6 +230,48 @@ export class SupabasePartnerService implements PartnerRepository {
               enabled: true,
               action: "UPDATE",
               recordId: id,
+            },
+          }
+        );
+
+        return this.mapRowToEntity(row);
+      }
+    );
+  }
+
+  async updateStatus(
+    id: number,
+    data: UpdatePartnerStatusInput
+  ): Promise<PartnerEntity> {
+    return withPerformanceTracking(
+      "PartnerService",
+      "updateStatus",
+      async () => {
+        const row = await DatabaseWrapper.executeMutation(
+          async () => {
+            const { data: updated, error } = await supabase
+              .from(this.tableName)
+              .update({
+                status: data.status,
+              })
+              .eq("id", id)
+              .select()
+              .single();
+
+            if (error) throw error;
+            return { data: updated, error };
+          },
+          {
+            operation: "updateStatus",
+            table: this.tableName,
+            metadata: { id, status: data.status },
+            auditLog: {
+              enabled: true,
+              action: "UPDATE",
+              recordId: id,
+              newValues: {
+                status: data.status,
+              },
             },
           }
         );

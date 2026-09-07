@@ -9,9 +9,9 @@ import type { EarningsSummary, WithdrawEntity, WithdrawStatus } from "../domain"
 const earningsKey = ["earnings"];
 const earningsSummaryKey = [...earningsKey, "summary"];
 
-export const useEarningsSummary = (enabled = true) => {
+export const useEarningsSummary = (scope: string, enabled = true) => {
   return useStandardQuery(
-    earningsSummaryKey,
+    [...earningsSummaryKey, scope],
     () => apiFetch<EarningsSummary>("/api/earnings"),
     {
       enabled,
@@ -20,8 +20,9 @@ export const useEarningsSummary = (enabled = true) => {
   );
 };
 
-export const useRequestWithdraw = () => {
+export const useRequestWithdraw = (scope: string) => {
   const queryClient = useQueryClient();
+  const scopedSummaryKey = [...earningsSummaryKey, scope];
 
   return useStandardMutation(
     (amount: number) =>
@@ -31,9 +32,7 @@ export const useRequestWithdraw = () => {
       }),
     {
       onSuccess: (withdraw) => {
-        queryClient.setQueryData<EarningsSummary | undefined>(
-          earningsSummaryKey,
-          (current) => {
+        queryClient.setQueryData<EarningsSummary | undefined>(scopedSummaryKey, (current) => {
             if (!current) return current;
 
             const nextPending = current.pendingWithdrawTotal + withdraw.amount;

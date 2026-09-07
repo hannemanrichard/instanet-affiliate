@@ -2,9 +2,10 @@ import { useStandardQuery } from "@/shared/hooks/useReactQuery";
 import { apiFetch } from "@/shared/utils/apiFetch";
 import type { DashboardDateRange, DashboardOverview } from "../domain";
 
-const dashboardOverviewKey = (range: DashboardDateRange) => [
+const dashboardOverviewKey = (scope: string, range: DashboardDateRange) => [
   "dashboard",
   "overview",
+  scope,
   range.preset,
   range.fromDate,
   range.toDate,
@@ -19,9 +20,12 @@ const buildDashboardUrl = (range: DashboardDateRange) => {
   return `/api/dashboard?${params.toString()}`;
 };
 
-export const useDashboardOverview = (range: DashboardDateRange) => {
+export const useDashboardOverview = (
+  scope: string,
+  range: DashboardDateRange
+) => {
   return useStandardQuery<DashboardOverview>(
-    dashboardOverviewKey(range),
+    dashboardOverviewKey(scope, range),
     () => apiFetch<DashboardOverview>(buildDashboardUrl(range)),
     {
       staleTime: 60 * 1000,
