@@ -38,6 +38,15 @@ export type DashboardMetricStat = {
   changePercent: number;
 };
 
+export type DashboardPerformer = {
+  key: string;
+  label: string;
+  secondaryLabel?: string;
+  imageUrl?: string;
+  salesAmount: number;
+  orderCount: number;
+};
+
 export type DashboardOverview = {
   range: DashboardDateRange;
   delivery: DashboardRateStat;
@@ -45,6 +54,10 @@ export type DashboardOverview = {
   sales: DashboardMetricStat;
   salesSeries: DashboardSeriesPoint[];
   ordersSeries: DashboardSeriesPoint[];
+  topProductsBySales: DashboardPerformer[];
+  topProductsByOrders: DashboardPerformer[];
+  topAffiliatesBySales: DashboardPerformer[];
+  topAffiliatesByOrders: DashboardPerformer[];
 };
 
 export const DASHBOARD_DATE_RANGE_PRESETS: DashboardDateRangePreset[] = [

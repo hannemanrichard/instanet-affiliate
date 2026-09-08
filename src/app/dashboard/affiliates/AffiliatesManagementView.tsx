@@ -32,6 +32,7 @@ import StatsCard from "@/shared/components/ui/StatsCard";
 import { DataTable } from "@/shared/components/ui/data-table/data-table";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { AppIcon } from "@/shared/components/layout/AppIcon";
+import { uiIcons } from "@/shared/components/layout/navIcons";
 import {
   useStandardMutation,
   useStandardQuery,
@@ -40,6 +41,7 @@ import { apiFetch } from "@/shared/utils/apiFetch";
 import { formatRelativeDate } from "@/shared/utils/formatRelativeDate";
 import { cn } from "@/shared/utils/utils";
 import type { PartnerEntity } from "@/features/partners/domain";
+import type { WithdrawEntity } from "@/features/earnings/domain";
 
 type RecentCommission = {
   id: number;
@@ -90,11 +92,104 @@ const getPartnerStatusBadgeClassName = (isActive: boolean) =>
     ? "border-emerald-200 bg-emerald-50 text-emerald-700"
     : "border-rose-200 bg-rose-50 text-rose-700";
 
+const getWithdrawStatusBadgeClassName = (status: WithdrawEntity["status"]) => {
+  if (status === "approved") {
+    return "border-emerald-200 bg-emerald-50 text-emerald-700";
+  }
+
+  if (status === "denied") {
+    return "border-rose-200 bg-rose-50 text-rose-700";
+  }
+
+  return "border-amber-200 bg-amber-50 text-amber-700";
+};
+
 const formatAmount = (amount: number) =>
   new Intl.NumberFormat("en-US", {
     maximumFractionDigits: 0,
     numberingSystem: "latn",
   }).format(amount);
+
+const AffiliateWithdrawHistoryDialog = ({ partner }: { partner: PartnerEntity }) => {
+  const locale = useLocale();
+  const [open, setOpen] = useState(false);
+  const partnerLabel =
+    partner.fullname?.trim() || partner.username?.trim() || `Affiliate #${partner.id}`;
+
+  const withdrawsQuery = useStandardQuery(
+    ["dashboard", "affiliate-withdraws", partner.id],
+    () =>
+      apiFetch<{ withdraws: WithdrawEntity[] }>(
+        `/api/dashboard/affiliates/withdraws?partnerId=${partner.id}`
+      ).then((data) => data.withdraws),
+    {
+      enabled: open,
+      staleTime: 30 * 1000,
+    }
+  );
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="size-8"
+          aria-label={`View withdraw history for ${partnerLabel}`}
+        >
+          <AppIcon icon={uiIcons.wallet} size={16} />
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-h-[85vh] overflow-hidden sm:max-w-2xl">
+        <DialogHeader>
+          <DialogTitle>Payment history</DialogTitle>
+          <DialogDescription>
+            Review withdrawal requests and payout history for {partnerLabel}.
+          </DialogDescription>
+        </DialogHeader>
+
+        {withdrawsQuery.isLoading ? (
+          <div className="flex min-h-48 items-center justify-center">
+            <Loader className="text-muted-foreground" label="Loading payment history" />
+          </div>
+        ) : withdrawsQuery.isError ? (
+          <Alert>
+            <AlertDescription>Unable to load payment history.</AlertDescription>
+          </Alert>
+        ) : (withdrawsQuery.data ?? []).length === 0 ? (
+          <Alert>
+            <AlertDescription>No withdrawal history found for this affiliate.</AlertDescription>
+          </Alert>
+        ) : (
+          <div className="max-h-[60vh] space-y-3 overflow-y-auto pe-1">
+            {(withdrawsQuery.data ?? []).map((withdraw) => (
+              <div
+                key={withdraw.id}
+                className="flex items-center justify-between gap-3 rounded-2xl border bg-background px-4 py-3"
+              >
+                <div className="min-w-0">
+                  <p className="font-semibold text-foreground">
+                    {formatAmount(withdraw.amount)} DA
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {formatRelativeDate(withdraw.created_at, locale)}
+                  </p>
+                </div>
+                <Badge
+                  variant="outline"
+                  className={getWithdrawStatusBadgeClassName(withdraw.status)}
+                >
+                  {withdraw.status}
+                </Badge>
+              </div>
+            ))}
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+};
 
 const AffiliateStatsDialog = ({ partner }: { partner: PartnerEntity }) => {
   const locale = useLocale();
@@ -356,6 +451,13 @@ export const AffiliatesManagementView = () => {
         key: "stats",
         label: "Stats",
         render: (partner: PartnerEntity) => <AffiliateStatsDialog partner={partner} />,
+      },
+      {
+        key: "payments",
+        label: "Payments",
+        render: (partner: PartnerEntity) => (
+          <AffiliateWithdrawHistoryDialog partner={partner} />
+        ),
       },
       {
         key: "actions",

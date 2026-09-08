@@ -100,9 +100,10 @@ export class DashboardApplicationService {
       }
 
       const previousRange = getPreviousDashboardDateRange(range);
-      const [currentSnapshots, previousSnapshots] = await Promise.all([
+      const [currentSnapshots, previousSnapshots, topPerformers] = await Promise.all([
         this.statsRepository.getDailySnapshots(partnerId, range),
         this.statsRepository.getDailySnapshots(partnerId, previousRange),
+        this.statsRepository.getTopPerformers(partnerId, range),
       ]);
 
       return {
@@ -128,6 +129,10 @@ export class DashboardApplicationService {
           date: snapshot.date,
           value: snapshot.orderCount,
         })),
+        topProductsBySales: topPerformers.topProductsBySales,
+        topProductsByOrders: topPerformers.topProductsByOrders,
+        topAffiliatesBySales: topPerformers.topAffiliatesBySales,
+        topAffiliatesByOrders: topPerformers.topAffiliatesByOrders,
       };
     } catch (error) {
       if (error instanceof DashboardError) throw error;
