@@ -19,6 +19,7 @@ export const LandingFooter = () => {
   const links = useMemo<FooterLink[]>(
     () => [
       { label: t("links.terms"), href: "/terms" },
+      { label: "Privacy Policy", href: "/privacy-policy" },
       { label: t("links.signIn"), href: "/sign-in" },
       { label: t("links.dashboard"), href: "/dashboard" },
     ],

@@ -46,7 +46,7 @@ All product decisions for MVP are locked.
 
 ### Done so far
 
-- New repo folder: `bellami-marketplace-extension/` (Chrome MV3, load unpacked for dev)
+- New repo folder: `instanet-marketplace-helper/` (Chrome MV3, load unpacked for dev)
 - Side panel form: title, editable price, wilaya, contact (phone default), description, library photo picker
 - Content bridge on Bellami origins + Marketplace create stub
 - Affiliate products **Publish to Marketplace** action
@@ -55,7 +55,7 @@ All product decisions for MVP are locked.
 
 ### How to run locally
 
-1. `chrome://extensions` → Load unpacked → `bellami-marketplace-extension`
+1. `chrome://extensions` → Load unpacked → `instanet-marketplace-helper`
 2. Run affiliate app on port **3000** or **3001** (update `manifest.json` matches if another port)
 3. Reload the affiliate tab, then use the Marketplace button on Products
 
@@ -178,7 +178,7 @@ Account-safety note: one-click still runs **in the affiliate’s logged-in Chrom
 
 ```
 ┌─────────────────────────────┐
-│  bellami-affiliate (web)    │
+│  instanet-affiliate (web)   │
 │  Products → Marketplace btn │
 └──────────────┬──────────────┘
                │ externally_connectable (Chrome)
@@ -199,7 +199,7 @@ Account-safety note: one-click still runs **in the affiliate’s logged-in Chrom
 ### Repo layout (proposal)
 
 ```
-bellami-marketplace-extension/
+instanet-marketplace-helper/
   manifest.json                 # MV3, Chrome
   src/
     background/

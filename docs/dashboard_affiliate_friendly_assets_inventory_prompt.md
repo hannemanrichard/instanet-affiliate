@@ -1,15 +1,15 @@
 # Prompt: Bellami Stores dashboard — affiliate-friendly pages, assets library UI, inventory autocomplete
 
-> Implementation target: **bellami-stores**. Mirror of `bellami-stores/docs/dashboard_affiliate_friendly_assets_inventory_prompt.md`.
+> Implementation target: **instanet-stores**. Mirror of `instanet-stores/docs/dashboard_affiliate_friendly_assets_inventory_prompt.md`.
 
-Use this document as the implementation brief for **bellami-stores** (Bellami dashboard). Do not invent scope beyond what is listed.
+Use this document as the implementation brief for **instanet-stores** (Instanet dashboard). Do not invent scope beyond what is listed.
 
 ---
 
 ## Context
 
-- App: `bellami-stores` (admin / store dashboard)
-- Related app: `bellami-affiliate` (partners; already reads library assets for zip download; does **not** upload)
+- App: `instanet-stores` (admin / store dashboard)
+- Related app: `instanet-affiliate` (partners; already reads library assets for zip download; does **not** upload)
 - Existing library plan: `docs/product_page_assets_library_plan.md`
 - Existing migration (stores): `database/migrations/044_create_product_page_assets.sql` (affiliate: `045_create_product_page_assets.sql`)
 - Existing API (stores, admin): `/api/product-pages/[id]/assets` (GET / POST / DELETE) + application/data layer already wired
@@ -25,7 +25,7 @@ Admins must be able to flag a product page so affiliates know it is intended for
 **Requirements**
 
 - Add a boolean on `product_pages`, e.g. `is_affiliate_friendly` (default `false`).
-- New SQL migration in **bellami-stores** (and mirror in **bellami-affiliate** if that app reads product pages from the same DB).
+- New SQL migration in **instanet-stores** (and mirror in **instanet-affiliate** if that app reads product pages from the same DB).
 - Update types / domain entity / update payloads / Product Page editor UI.
 - UI: clear toggle or switch in `ProductPageEditor` (same pattern as `is_freeshipping`), labeled for “Affiliate friendly” (i18n en/ar/fr).
 - Persist on save with the rest of the page fields.
@@ -119,7 +119,7 @@ In **dashboard inventory**, replace the product `<Select>` with a searchable aut
 
 ---
 
-## Pointers (bellami-stores)
+## Pointers (instanet-stores)
 
 | Area | Path |
 | --- | --- |

@@ -18,6 +18,7 @@ export const StorefrontFooter = () => {
     () => [
       { label: t("links.catalog"), href: "/search" },
       { label: t("links.terms"), href: "/terms" },
+      { label: "Privacy Policy", href: "/privacy-policy" },
     ],
     [t]
   );

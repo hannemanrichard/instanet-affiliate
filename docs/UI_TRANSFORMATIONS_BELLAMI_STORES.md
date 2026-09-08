@@ -1,6 +1,6 @@
 # UI Transformations Playbook — Bellami Affiliate → Bellami Stores
 
-Use this document to replicate the **bellami-affiliate** UI system in **bellami-stores**.  
+Use this document to replicate the **instanet-affiliate** UI system in **instanet-stores**.
 Source of truth for visual tokens: root [`DESIGN.md`](../DESIGN.md) (Modern Minimal / tweakcn).  
 Runtime tokens: [`src/design-system/tokens.css`](../src/design-system/tokens.css) + [`src/design-system/tokens.ts`](../src/design-system/tokens.ts).
 
@@ -268,7 +268,7 @@ These are smaller but keep apps feeling like one product:
 
 ---
 
-## 7. Suggested port order for bellami-stores
+## 7. Suggested port order for instanet-stores
 
 1. **Tokens + Tailwind + globals + DESIGN.md**
 2. **Fonts** (Inter / Cairo / Serif / Mono)
@@ -343,4 +343,4 @@ After porting stores:
 
 ---
 
-*Generated from the bellami-affiliate UI system for porting to bellami-stores. Keep this doc updated when chrome patterns change.*
+*Generated from the instanet-affiliate UI system for porting to instanet-stores. Keep this doc updated when chrome patterns change.*

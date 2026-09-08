@@ -1356,10 +1356,10 @@
       "publishMarketplace": "Publish to Marketplace",
       "publishMarketplaceAria": "Publish {headline} to Facebook Marketplace",
       "extensionInstall": {
-        "title": "Install Instanet Marketplace extension",
+        "title": "Install Instanet Helper",
         "description": "In development, load the extension from Instanet (not the Chrome Web Store), then reload this page.",
         "step1": "Open chrome://extensions and enable Developer mode",
-        "step2": "Click Load unpacked and select the bellami-marketplace-extension folder",
+        "step2": "Click Load unpacked and select the instanet-marketplace-helper folder",
         "step3": "Reload this Instanet page",
         "step4": "Click Publish to Marketplace again",
         "close": "Got it"
@@ -1399,9 +1399,9 @@
         "marketplaceNoAssetsTitle": "No library photos",
         "marketplaceNoAssetsDescription": "Add images to the product page assets library before publishing.",
         "marketplaceOpenedTitle": "Extension opened",
-        "marketplaceOpenedDescription": "Review the listing in the Instanet Marketplace side panel.",
+        "marketplaceOpenedDescription": "Review the listing in the Instanet Helper side panel.",
         "marketplaceOpenFailedTitle": "Could not open extension",
-        "marketplaceOpenFailedDescription": "Make sure the Instanet Marketplace extension is installed and enabled."
+        "marketplaceOpenFailedDescription": "Make sure Instanet Helper is installed and enabled."
       }
     },
     "settings": {

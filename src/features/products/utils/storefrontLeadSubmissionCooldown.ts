@@ -5,7 +5,7 @@
 
 export const STOREFRONT_LEAD_SUBMISSION_COOLDOWN_MS = 20 * 60 * 1000;
 
-const STORAGE_PREFIX = "bellami_storefront_lead_submitted";
+const STORAGE_PREFIX = "instanet_storefront_lead_submitted";
 
 const getStorageKey = (slug: string) =>
   `${STORAGE_PREFIX}:${encodeURIComponent(slug)}`;

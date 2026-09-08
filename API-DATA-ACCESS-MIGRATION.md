@@ -1,6 +1,6 @@
 # Affiliate API Data-Access Migration
 
-Migrate `bellami-affiliate` to the same server-only Supabase pattern used in `bellami-stores`.
+Migrate `instanet-affiliate` to the same server-only Supabase pattern used in `instanet-stores`.
 
 ## Goal
 
@@ -31,7 +31,7 @@ No RLS on the shared DB for now. CORS alone is not enough; every dashboard/data 
 | Errors | Extend `jsonError` for each domain error (`InventoryError`, `ProductError`, …) |
 | Middleware | Protect every new `/api/<feature>(.*)` in `isProtectedRoute` + `matcher` |
 
-Reference implementation: `bellami-stores` inventory slice (`/api/inventory/*`, `useInventory` via `apiFetch`, `supabaseServer`).
+Reference implementation: `instanet-stores` inventory slice (`/api/inventory/*`, `useInventory` via `apiFetch`, `supabaseServer`).
 
 ---
 
@@ -91,7 +91,7 @@ Public storefront / Meta / UploadThing stay out of this plan unless they touch p
 
 ## Phase 1 — Inventory (first full slice — same as stores)
 
-Mirror `bellami-stores` routes and hook shapes.
+Mirror `instanet-stores` routes and hook shapes.
 
 ### APIs
 
@@ -118,7 +118,7 @@ Mirror `bellami-stores` routes and hook shapes.
 
 **Done when:** Inventory dashboard works with Network tab showing `/api/inventory/*` only; no `inventoryApplicationService` import from hooks.
 
-**Copy-from:** `bellami-stores/src/app/api/inventory/**` and `bellami-stores/src/features/inventory/application/useInventory.ts`.
+**Copy-from:** `instanet-stores/src/app/api/inventory/**` and `instanet-stores/src/features/inventory/application/useInventory.ts`.
 
 ---
 

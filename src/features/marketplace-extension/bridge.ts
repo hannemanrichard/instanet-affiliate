@@ -16,19 +16,76 @@ export type MarketplaceListingDraft = {
   country: "DZ";
 };
 
-const SOURCE_WEB = "bellami-affiliate-web";
-const SOURCE_EXT = "bellami-marketplace-extension";
+const SOURCE_WEB = "instanet-affiliate-web";
+const LEGACY_SOURCE_WEB = "bellami-affiliate-web";
+const SOURCE_EXT = "instanet-helper-extension";
+const LEGACY_SOURCE_EXT = "bellami-marketplace-extension";
+const EXTENSION_DATASET_KEYS = [
+  "instanetHelperExt",
+  "instanetHelperExtension",
+  "instanetMarketplaceExtension",
+  "instanetMarketplaceExt",
+  "instanetAffiliateExtension",
+  "instanetAffiliateExt",
+  "bellamiMarketplaceExt",
+] as const;
 
 const MESSAGE_TYPES = {
-  PING: "BELLAMI_MARKETPLACE_PING",
-  PONG: "BELLAMI_MARKETPLACE_PONG",
-  OPEN_DRAFT: "BELLAMI_MARKETPLACE_OPEN_DRAFT",
-  OPEN_DRAFT_RESULT: "BELLAMI_MARKETPLACE_OPEN_DRAFT_RESULT",
+  PING: ["INSTANET_MARKETPLACE_PING", "BELLAMI_MARKETPLACE_PING"],
+  PONG: ["INSTANET_MARKETPLACE_PONG", "BELLAMI_MARKETPLACE_PONG"],
+  OPEN_DRAFT: [
+    "INSTANET_MARKETPLACE_OPEN_DRAFT",
+    "BELLAMI_MARKETPLACE_OPEN_DRAFT",
+  ],
+  OPEN_DRAFT_RESULT: [
+    "INSTANET_MARKETPLACE_OPEN_DRAFT_RESULT",
+    "BELLAMI_MARKETPLACE_OPEN_DRAFT_RESULT",
+  ],
 } as const;
 
 export const isMarketplaceExtensionInstalled = (): boolean => {
   if (typeof document === "undefined") return false;
-  return document.documentElement.dataset.bellamiMarketplaceExt === "1";
+
+  return EXTENSION_DATASET_KEYS.some(
+    (key) => document.documentElement.dataset[key] === "1"
+  );
+};
+
+const isMarketplaceExtensionSource = (source: unknown): boolean =>
+  source === SOURCE_EXT ||
+  source === LEGACY_SOURCE_EXT ||
+  source === "instanet-affiliate-extension";
+
+const matchesMarketplaceType = (
+  value: unknown,
+  acceptedTypes: readonly string[]
+): boolean => acceptedTypes.includes(String(value));
+
+const postMarketplaceMessage = (
+  messageType: readonly [string, string],
+  payload?: unknown,
+  timeoutMs = 400
+) => {
+  window.postMessage(
+    {
+      source: LEGACY_SOURCE_WEB,
+      type: messageType[1],
+      ...(payload !== undefined ? { payload } : {}),
+    },
+    "*"
+  );
+
+  const fallbackDelay = Math.min(250, Math.max(100, Math.floor(timeoutMs / 2)));
+  window.setTimeout(() => {
+    window.postMessage(
+      {
+        source: SOURCE_WEB,
+        type: messageType[0],
+        ...(payload !== undefined ? { payload } : {}),
+      },
+      "*"
+    );
+  }, fallbackDelay);
 };
 
 export const pingMarketplaceExtension = (timeoutMs = 400): Promise<boolean> => {
@@ -47,15 +104,15 @@ export const pingMarketplaceExtension = (timeoutMs = 400): Promise<boolean> => {
     const onMessage = (event: MessageEvent) => {
       if (event.source !== window) return;
       const data = event.data;
-      if (!data || data.source !== SOURCE_EXT) return;
-      if (data.type !== MESSAGE_TYPES.PONG) return;
+      if (!data || !isMarketplaceExtensionSource(data.source)) return;
+      if (!matchesMarketplaceType(data.type, MESSAGE_TYPES.PONG)) return;
       window.clearTimeout(timer);
       window.removeEventListener("message", onMessage);
       resolve(true);
     };
 
     window.addEventListener("message", onMessage);
-    window.postMessage({ source: SOURCE_WEB, type: MESSAGE_TYPES.PING }, "*");
+    postMarketplaceMessage(MESSAGE_TYPES.PING, undefined, timeoutMs);
   });
 };
 
@@ -79,8 +136,10 @@ export const openMarketplaceDraft = (
     const onMessage = (event: MessageEvent) => {
       if (event.source !== window) return;
       const data = event.data;
-      if (!data || data.source !== SOURCE_EXT) return;
-      if (data.type !== MESSAGE_TYPES.OPEN_DRAFT_RESULT) return;
+      if (!data || !isMarketplaceExtensionSource(data.source)) return;
+      if (!matchesMarketplaceType(data.type, MESSAGE_TYPES.OPEN_DRAFT_RESULT)) {
+        return;
+      }
       window.clearTimeout(timer);
       window.removeEventListener("message", onMessage);
       resolve({
@@ -90,13 +149,6 @@ export const openMarketplaceDraft = (
     };
 
     window.addEventListener("message", onMessage);
-    window.postMessage(
-      {
-        source: SOURCE_WEB,
-        type: MESSAGE_TYPES.OPEN_DRAFT,
-        payload,
-      },
-      "*"
-    );
+    postMarketplaceMessage(MESSAGE_TYPES.OPEN_DRAFT, payload, timeoutMs);
   });
 };
