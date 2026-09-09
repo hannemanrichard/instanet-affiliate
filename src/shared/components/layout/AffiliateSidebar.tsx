@@ -68,6 +68,7 @@ const adminMainSection: NavSection = {
     { key: "inventory", href: "/dashboard/inventory", iconKey: "inventory" },
     { key: "affiliates", href: "/dashboard/affiliates", iconKey: "products" },
     { key: "claims", href: "/dashboard/claims", iconKey: "orders" },
+    { key: "marketplace", href: "/dashboard/marketplace", iconKey: "store" },
     { key: "audit", href: "/dashboard/audit", iconKey: "orders" },
   ],
 };

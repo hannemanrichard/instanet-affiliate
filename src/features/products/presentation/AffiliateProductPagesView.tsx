@@ -443,12 +443,31 @@ export const AffiliateProductPagesView = () => {
       }
 
       const product = productMap.get(productPage.product_id);
+      const title = productPage.headline?.trim() || product?.name || "Product";
+      const price = product?.retail_price ?? 0;
+      const currency = tDash("currencySymbol");
+
+      const tracking = await apiFetch<{
+        attempt_id: number;
+        attempt_token: string;
+        api_base_url: string;
+      }>("/api/marketplace-posts", {
+        method: "POST",
+        body: JSON.stringify({
+          product_page_id: productPage.id,
+          product_title: title,
+          product_price: price,
+          currency,
+          slug: productPage.slug,
+        }),
+      });
+
       const result = await openMarketplaceDraft({
         product_page_id: productPage.id,
         slug: productPage.slug,
-        title: productPage.headline?.trim() || product?.name || "Product",
-        price: product?.retail_price ?? 0,
-        currency: tDash("currencySymbol"),
+        title,
+        price,
+        currency,
         description:
           productPage.subheadline?.trim() ||
           productPage.description?.trim() ||
@@ -458,6 +477,9 @@ export const AffiliateProductPagesView = () => {
         default_contact_method: "phone",
         condition: "new",
         country: "DZ",
+        attempt_id: tracking.attempt_id,
+        attempt_token: tracking.attempt_token,
+        api_base_url: tracking.api_base_url,
       });
 
       if (!result.ok) {

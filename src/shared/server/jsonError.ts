@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { ClaimError } from "@/features/claims/domain";
+import { MarketplacePostError } from "@/features/marketplace-posts/domain";
 import { PartnerError } from "@/features/partners/domain";
 import { OrderError, OrderItemError } from "@/features/orders/domain";
 import { EarningsError } from "@/features/earnings/domain";
@@ -35,6 +36,7 @@ export const jsonError = (error: unknown, fallbackStatus = 500) => {
 
   if (
     error instanceof ClaimError ||
+    error instanceof MarketplacePostError ||
     error instanceof PartnerError ||
     error instanceof OrderError ||
     error instanceof OrderItemError ||
@@ -55,7 +57,8 @@ export const jsonError = (error: unknown, fallbackStatus = 500) => {
           : error.code.includes("NOT_FOUND")
             ? 404
             : error.code.includes("NOT_ALLOWED") ||
-                error.code.includes("FORBIDDEN")
+                error.code.includes("FORBIDDEN") ||
+                error.code.includes("ALREADY_FINALIZED")
               ? 403
               : 500;
 

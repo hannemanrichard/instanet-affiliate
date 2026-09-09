@@ -109,6 +109,81 @@ export type Database = {
           },
         ]
       }
+      affiliate_marketplace_posts: {
+        Row: {
+          created_at: string
+          currency: string
+          draft_opened_at: string
+          error_message: string | null
+          extension_version: string | null
+          id: number
+          location: string | null
+          marketplace_post_url: string | null
+          metadata: Json
+          partner_email: string
+          partner_id: number
+          product_page_id: number
+          product_price: number
+          product_title: string
+          published_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          currency?: string
+          draft_opened_at?: string
+          error_message?: string | null
+          extension_version?: string | null
+          id?: number
+          location?: string | null
+          marketplace_post_url?: string | null
+          metadata?: Json
+          partner_email: string
+          partner_id: number
+          product_page_id: number
+          product_price: number
+          product_title: string
+          published_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          draft_opened_at?: string
+          error_message?: string | null
+          extension_version?: string | null
+          id?: number
+          location?: string | null
+          marketplace_post_url?: string | null
+          metadata?: Json
+          partner_email?: string
+          partner_id?: number
+          product_page_id?: number
+          product_price?: number
+          product_title?: string
+          published_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "affiliate_marketplace_posts_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "affiliate_marketplace_posts_product_page_id_fkey"
+            columns: ["product_page_id"]
+            isOneToOne: false
+            referencedRelation: "product_pages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_logs: {
         Row: {
           action: string

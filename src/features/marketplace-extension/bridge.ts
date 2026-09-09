@@ -14,6 +14,10 @@ export type MarketplaceListingDraft = {
   whatsapp?: string;
   condition?: "new" | "used";
   country: "DZ";
+  /** Tracking fields created by the web app when draft is opened */
+  attempt_id?: number;
+  attempt_token?: string;
+  api_base_url?: string;
 };
 
 const SOURCE_WEB = "instanet-affiliate-web";

@@ -35,7 +35,7 @@ import {
   ShoppingBagAddIcon,
   Download03Icon,
   SparklesIcon as SparklesStroke,
-  Store03Icon,
+  Store03Icon as StoreStroke,
   Wallet01Icon as WalletStroke,
   WarehouseIcon as WarehouseStroke,
 } from "@hugeicons-pro/core-stroke-rounded";
@@ -53,6 +53,7 @@ import {
   Settings01Icon as SettingsSolid,
   ShoppingBag01Icon as ShoppingBagSolid,
   SparklesIcon as SparklesSolid,
+  Store03Icon as StoreSolid,
   Wallet01Icon as WalletSolid,
   WarehouseIcon as WarehouseSolid,
 } from "@hugeicons-pro/core-solid-rounded";
@@ -77,6 +78,7 @@ export const navIcons = {
   productPages: pair(PackageStroke, PackageSolid),
   inventory: pair(WarehouseStroke, WarehouseSolid),
   sparkles: pair(SparklesStroke, SparklesSolid),
+  store: pair(StoreStroke, StoreSolid),
 } as const satisfies Record<string, HugeNavIconPair>;
 
 export type NavIconKey = keyof typeof navIcons;
@@ -86,7 +88,7 @@ export const uiIcons = {
   chevronLeft: ChevronLeftIcon,
   chevronRight: ChevronRightIcon,
   globe: Globe02Icon,
-  store: Store03Icon,
+  store: StoreStroke,
   check: CheckmarkCircle01Icon,
   chevronsUpDown: ArrowUpDownIcon,
   account: CheckmarkBadge01Icon,
