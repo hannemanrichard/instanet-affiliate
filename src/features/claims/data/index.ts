@@ -1,0 +1,1 @@
+export { SupabaseAffiliateClaimService } from "./affiliateClaimService";

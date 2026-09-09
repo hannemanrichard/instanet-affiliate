@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { ClaimError } from "@/features/claims/domain";
 import { PartnerError } from "@/features/partners/domain";
 import { OrderError, OrderItemError } from "@/features/orders/domain";
 import { EarningsError } from "@/features/earnings/domain";
@@ -33,6 +34,7 @@ export const jsonError = (error: unknown, fallbackStatus = 500) => {
   }
 
   if (
+    error instanceof ClaimError ||
     error instanceof PartnerError ||
     error instanceof OrderError ||
     error instanceof OrderItemError ||

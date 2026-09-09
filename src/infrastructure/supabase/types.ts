@@ -14,6 +14,101 @@ export type Database = {
   }
   public: {
     Tables: {
+      affiliate_claim_attachments: {
+        Row: {
+          claim_id: number
+          created_at: string
+          file_name: string | null
+          file_type: string | null
+          file_url: string
+          id: number
+        }
+        Insert: {
+          claim_id: number
+          created_at?: string
+          file_name?: string | null
+          file_type?: string | null
+          file_url: string
+          id?: number
+        }
+        Update: {
+          claim_id?: number
+          created_at?: string
+          file_name?: string | null
+          file_type?: string | null
+          file_url?: string
+          id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "affiliate_claim_attachments_claim_id_fkey"
+            columns: ["claim_id"]
+            isOneToOne: false
+            referencedRelation: "affiliate_claims"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      affiliate_claims: {
+        Row: {
+          admin_notes: string | null
+          category: string
+          created_at: string
+          description: string
+          id: number
+          order_id: number
+          partner_id: number
+          resolved_at: string | null
+          resolved_by: string | null
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          category: string
+          created_at?: string
+          description: string
+          id?: number
+          order_id: number
+          partner_id: number
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          category?: string
+          created_at?: string
+          description?: string
+          id?: number
+          order_id?: number
+          partner_id?: number
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "affiliate_claims_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "affiliate_claims_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_logs: {
         Row: {
           action: string

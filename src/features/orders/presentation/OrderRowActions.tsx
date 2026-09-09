@@ -21,6 +21,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/shared/components/ui/tooltip";
+import { useAuth } from "@/shared/hooks/use-auth";
+import { CreateClaimDialog } from "@/features/claims/presentation/CreateClaimDialog";
 import { useDeleteOrder } from "../application";
 import type { OrderEntity } from "../domain";
 import { canDeleteOrder } from "../domain";
@@ -32,13 +34,20 @@ type OrderRowActionsProps = {
 
 export const OrderRowActions = ({ order }: OrderRowActionsProps) => {
   const t = useTranslations("affiliateDashboard.orders");
+  const { isAdmin } = useAuth();
   const deleteOrder = useDeleteOrder();
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isClaimOpen, setIsClaimOpen] = useState(false);
   const showDelete = canDeleteOrder(order.status);
+  const showClaim = !isAdmin;
 
   const handleOpenDetails = () => {
     setIsDetailsOpen(true);
+  };
+
+  const handleOpenClaim = () => {
+    setIsClaimOpen(true);
   };
 
   const handleOpenDelete = () => {
@@ -94,6 +103,29 @@ export const OrderRowActions = ({ order }: OrderRowActionsProps) => {
           </TooltipContent>
         </Tooltip>
 
+        {showClaim ? (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="size-8 text-muted-foreground hover:text-foreground"
+                onClick={handleOpenClaim}
+                onKeyDown={(event) =>
+                  handleActionKeyDown(event, handleOpenClaim)
+                }
+                aria-label={t("claimAria")}
+              >
+                <AppIcon icon={uiIcons.invoice} size={16} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom" className="font-medium">
+              {t("claimAria")}
+            </TooltipContent>
+          </Tooltip>
+        ) : null}
+
         {showDelete ? (
           <Tooltip>
             <TooltipTrigger asChild>
@@ -124,6 +156,15 @@ export const OrderRowActions = ({ order }: OrderRowActionsProps) => {
         open={isDetailsOpen}
         onOpenChange={setIsDetailsOpen}
       />
+
+      {showClaim ? (
+        <CreateClaimDialog
+          orderId={order.id}
+          open={isClaimOpen}
+          onOpenChange={setIsClaimOpen}
+          showDefaultTrigger={false}
+        />
+      ) : null}
 
       <AlertDialog open={isDeleteOpen} onOpenChange={setIsDeleteOpen}>
         <AlertDialogContent>

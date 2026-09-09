@@ -11,6 +11,7 @@ const isProtectedRoute = createRouteMatcher([
   "/api/partner(.*)",
   "/api/orders(.*)",
   "/api/earnings(.*)",
+  "/api/claims(.*)",
   "/api/dashboard(.*)",
   "/api/inventory(.*)",
   "/api/settings(.*)",
@@ -71,13 +72,15 @@ export const config = {
     "/api/partner(.*)",
     "/api/orders(.*)",
     "/api/earnings(.*)",
+    "/api/claims(.*)",
     "/api/dashboard(.*)",
     "/api/inventory(.*)",
     "/api/settings(.*)",
     "/api/leads(.*)",
     "/api/products(.*)",
     "/api/product-pages(.*)",
-    // Intentionally omit /api/uploadthing — UT server callbacks have no Clerk
-    // session. Auth is enforced in api/uploadthing/core.ts route middleware.
+    // Include uploadthing so auth() works for client uploads.
+    // Do NOT add it to isProtectedRoute — UT server callbacks have no session.
+    "/api/uploadthing(.*)",
   ],
 };

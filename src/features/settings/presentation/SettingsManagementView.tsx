@@ -23,6 +23,7 @@ import { useAuth } from "@/shared/hooks/use-auth";
 import { AppIcon } from "@/shared/components/layout/AppIcon";
 import { uiIcons } from "@/shared/components/layout/navIcons";
 import { AnalyticsSettingsSection } from "./AnalyticsSettingsSection";
+import { ClaimsSettingsSection } from "./ClaimsSettingsSection";
 import { PaymentSettingsSection } from "./PaymentSettingsSection";
 
 const LANGUAGES = [
@@ -159,6 +160,8 @@ export const SettingsManagementView = () => {
       </Card>
 
       <PaymentSettingsSection />
+
+      {!isAdmin ? <ClaimsSettingsSection /> : null}
 
       {isAdmin ? <AnalyticsSettingsSection /> : null}
     </div>

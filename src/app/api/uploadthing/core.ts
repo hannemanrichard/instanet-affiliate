@@ -88,6 +88,36 @@ export const ourFileRouter = {
       });
       return { url: file.url };
     }),
+
+  claimAttachment: f({
+    image: { maxFileSize: "4MB", maxFileCount: 5 },
+    pdf: { maxFileSize: "8MB", maxFileCount: 5 },
+  })
+    .middleware(async () => {
+      try {
+        return await requireAuthenticatedUpload();
+      } catch (error) {
+        if (error instanceof UploadThingError) throw error;
+        logger.error(
+          "claimAttachment middleware failed",
+          error instanceof Error ? error : new Error(String(error))
+        );
+        throw new UploadThingError("Upload authentication failed");
+      }
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      const url = file.ufsUrl || file.url;
+      logger.info("Upload complete for claim attachment", {
+        userId: metadata.userId,
+        url,
+        name: file.name,
+      });
+      return {
+        url,
+        name: file.name,
+        type: file.type,
+      };
+    }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;
