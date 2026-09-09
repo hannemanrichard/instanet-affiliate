@@ -1267,11 +1267,11 @@
       "publishMarketplaceAria": "Publier {headline} sur Facebook Marketplace",
       "extensionInstall": {
         "title": "Installer Instanet Helper",
-        "description": "En développement, chargez l'extension depuis Instanet (pas le Chrome Web Store), puis rechargez cette page.",
-        "step1": "Ouvrez chrome://extensions et activez le mode développeur",
-        "step2": "Cliquez sur Charger l'extension non empaquetée et sélectionnez le dossier instanet-marketplace-helper",
-        "step3": "Rechargez cette page Instanet",
-        "step4": "Cliquez à nouveau sur Publier sur Marketplace",
+        "description": "Instanet Helper est requis pour publier des produits sur Facebook Marketplace. Installez-la depuis le Chrome Web Store, puis rechargez cette page.",
+        "step1": "Installez Instanet Helper depuis le Chrome Web Store",
+        "step2": "Rechargez cette page Instanet",
+        "step3": "Cliquez à nouveau sur Publier sur Marketplace",
+        "install": "Installer depuis le Chrome Web Store",
         "close": "Compris"
       },
       "copyLink": "Copier le lien",

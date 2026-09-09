@@ -5,4 +5,7 @@ export {
   type MarketplaceListingDraft,
   type MarketplaceContactMethod,
 } from "./bridge";
-export { MarketplaceExtensionInstallDialog } from "./MarketplaceExtensionInstallDialog";
+export {
+  MarketplaceExtensionInstallDialog,
+  INSTANET_HELPER_CHROME_STORE_URL,
+} from "./MarketplaceExtensionInstallDialog";

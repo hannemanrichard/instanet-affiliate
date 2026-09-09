@@ -663,8 +663,8 @@ export const AffiliateProductPagesView = () => {
           t("extensionInstall.step1"),
           t("extensionInstall.step2"),
           t("extensionInstall.step3"),
-          t("extensionInstall.step4"),
         ]}
+        installLabel={t("extensionInstall.install")}
         closeLabel={t("extensionInstall.close")}
       />
     </div>
